@@ -41,8 +41,9 @@ names(pt.data)<-"id"
 #define true GS
 pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
 
+pt.data
 tx.data
-filter(tx.data, id == pt.data)
+filter(tx.data, id%in%pt.data$id)
 
 for(i in 1:n){
   if(pt.data$id[i]%in%tx.data$id){
