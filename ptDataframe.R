@@ -15,20 +15,15 @@ workflow <- function() {
   
   pt.data<-as.data.frame(demo.data$id)
   names(pt.data)<-"id"
-
   ptDataload(pt.data)
   addPSA(pt.data)
   biopsy(pt.data)
   
-  #I'm saving the workspace here so you can see what the data frames looked like when I finished, but you will want to define these objects in some simple, easy to understand, efficient way
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-
 }
 
 loadData <- function(pt.data) {
   (n<-dim(demo.data)[1]) #1000 patients in this data
-  
-  
   #psa data. one record per PSA test per patient
   psa.data<-read.csv("julia-psa-data.csv")
   names(psa.data)
@@ -126,7 +121,8 @@ addPSA <- function (pt.data) {
   #age at each test
   psa.data$age<-vector(length=n_psa)
   for(i in 1:n){
-    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365}
+    temp <- pt.data$dob.num[i]
+    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - temp)/365}
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
   
   #pt-level prostate volume

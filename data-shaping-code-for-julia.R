@@ -63,7 +63,7 @@ names(tx.data)
 # Finally, we will order patients based on their observed GS. This is done to make estimation in JAGS easier. We assign a new sequential unique patient identifier for this ordering ("subj")
 
 #define data frame
-pt.data<-setClass("ptData")
+#pt.data<-setClass("ptData")
 
 
 pt.data<-as.data.frame(demo.data$id)
