@@ -1,4 +1,4 @@
-workflow <- function() {
+ptDataframe <- function() {
   rm(list=ls())
 
   ##WORKFLOW
@@ -103,9 +103,9 @@ ptDataload <- function(pt.data) {
   pt.data<-pt.data[order(pt.data$true.gs),]
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
-  
+  return(pt.data)
 }
-addPSA <- function (pt.data, temp) {
+addPSA <- function (pt.data) {
   #log-PSA
   psa.data$log.psa<-log(psa.data$psa + 0.01) #necessary to add a small number when some values are 0 (not the case in the simulated data, but will be the case in real data)
   
@@ -119,7 +119,7 @@ addPSA <- function (pt.data, temp) {
   psa.data$age<-vector(length=n_psa)
   temp <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365
   for(i in 1:n){
-    #psa.data$age[psa.data$id==i] <- temp #GIVES ME ERRORS
+    psa.data$age[psa.data$id==i] <- temp #GIVES ME ERRORS
       }
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
   
@@ -150,7 +150,7 @@ biopsy <- function (pt.data) {
   
   bx.data$time.since.dx<-vector(length=n_bx)
   for(i in 1:n){
-    #bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365
+    bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365
     }
     #gives me issues
   summary(bx.data$time.since.dx)

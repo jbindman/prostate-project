@@ -3,11 +3,11 @@
 setClass(
   
   
-  #ptDataframe.data <- data.frame("id" = numeric())
-  #ptDataframe
+  ptDataframe.data <- data.frame("id" = numeric())
   # continue describing all headers 
+  # when called, it will create a dataframe with predetermined headers and return this empty dataframe
   # create another class for each sub data frame (psa.data, bx.data)
-  # instanciate each in the workflow and then have a class to methods
+  # instanciate each in the workflow and then execute methods on these classes
   
   
  
