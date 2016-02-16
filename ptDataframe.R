@@ -7,22 +7,20 @@ workflow <- function() {
   # 3. Add relevant variables to PSA dataframe
   # 4. Start biopsy dataframe
   # 5. Save data
-  
-  demo.data<-read.csv("julia-demo-data.csv")
-  names(demo.data)
-  loadData(pt.data)
-
-  
-  pt.data<-as.data.frame(demo.data$id)
+ 
+  loadData()
+  pt.data<-as.data.frame(demo.data$id) # adds Id column 
   names(pt.data)<-"id"
   ptDataload(pt.data)
-  addPSA(pt.data)
-  biopsy(pt.data)
+  #addPSA(pt.data, temp)
+  #biopsy(pt.data)
   
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
 }
 
-loadData <- function(pt.data) {
+loadData <- function() {
+  demo.data<-read.csv("julia-demo-data.csv")
+  names(demo.data)
   (n<-dim(demo.data)[1]) #1000 patients in this data
   #psa data. one record per PSA test per patient
   psa.data<-read.csv("julia-psa-data.csv")
@@ -107,8 +105,7 @@ ptDataload <- function(pt.data) {
   pt.data$subj<-c(1:n)
   
 }
-
-addPSA <- function (pt.data) {
+addPSA <- function (pt.data, temp) {
   #log-PSA
   psa.data$log.psa<-log(psa.data$psa + 0.01) #necessary to add a small number when some values are 0 (not the case in the simulated data, but will be the case in real data)
   
@@ -120,9 +117,10 @@ addPSA <- function (pt.data) {
   
   #age at each test
   psa.data$age<-vector(length=n_psa)
+  temp <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365
   for(i in 1:n){
-    temp <- pt.data$dob.num[i]
-    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - temp)/365}
+    #psa.data$age[psa.data$id==i] <- temp #GIVES ME ERRORS
+      }
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
   
   #pt-level prostate volume
@@ -137,7 +135,6 @@ addPSA <- function (pt.data) {
     psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
   
 }
-
 biopsy <- function (pt.data) {
   #define maximum number of follow-up years per patient
   #we will deal with censoring, treatment dates, etc. later
@@ -153,7 +150,9 @@ biopsy <- function (pt.data) {
   
   bx.data$time.since.dx<-vector(length=n_bx)
   for(i in 1:n){
-    bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365}
+    #bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365
+    }
+    #gives me issues
   summary(bx.data$time.since.dx)
   
   
