@@ -11,7 +11,7 @@ ptDataframe <- function() {
   loadData()
   pt.data<-as.data.frame(demo.data$id) # adds Id column 
   names(pt.data)<-"id"
-  ptDataload(pt.data)
+  pt.data<-ptDataload(pt.data)
   #addPSA(pt.data, temp)
   #biopsy(pt.data)
   
