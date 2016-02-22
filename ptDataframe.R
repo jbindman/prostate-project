@@ -8,17 +8,6 @@ ptDataframe <- function() {
   # 4. Start biopsy dataframe
   # 5. Save data
  
-  loadData()
-  pt.data<-as.data.frame(demo.data$id) # adds Id column 
-  names(pt.data)<-"id"
-  pt.data<-ptDataload(pt.data)
-  #addPSA(pt.data, temp)
-  #biopsy(pt.data)
-  
-  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-}
-
-loadData <- function() {
   demo.data<-read.csv("julia-demo-data.csv")
   names(demo.data)
   (n<-dim(demo.data)[1]) #1000 patients in this data
@@ -51,58 +40,79 @@ loadData <- function() {
   #tx.date- date of treatment (abbreviated tx) 
   
   (n_tx<-dim(tx.data)[1]) #203 patients received treatment
+  
+  #######################
+  
+  #FILLING DATAFRAME NOW
+  pt.data<-as.data.frame(demo.data$id) # adds Id column 
+  names(pt.data)<-"id"
+  pt.data<-ptDataload(pt.data)
+  pt.data
+  #addPSA(pt.data, temp)
+  #biopsy(pt.data)
+  
+  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
 }
-ptDataload <- function(pt.data) {
+
+ptDataload <- function(pt = pt.data, tx = tx.data, demo = demo.data, 
+                       bx = bx.data) {
   #define true GS
   pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
   
   for(i in 1:n){
-    if(pt.data$id[i]%in%tx.data$id){
-      pt.data$true.gs[i]<-tx.data$GS[tx.data$id==pt.data$id[i]]
+    if(pt$id[i]%in%tx$id){
+      pt$true.gs[i]<-tx$GS[tx$id==pt$id[i]] #tx.data$GS[tx.data$id==pt.data$id[i]]
     }} #this is one place you could improve efficiency with an apply function of maybe something from dplyr
+  ####
+  #DPLYR
   
-  table(pt.data$true.gs) #90 GS 6 and 113 GS 7+
-  sum(is.na(pt.data$true.gs)) #797 pt without surgery 
+  #pt$true.gs<-filter(tx, GS)
+  
+  ###
+  
+  table(pt$true.gs) #90 GS 6 and 113 GS 7+
+  sum(is.na(pt$true.gs)) #797 pt without surgery 
   
   
   #define DOB numerically
   #warning: date functions in R can be tricky! we will have to do some work later to make sure our function handles all date types
   as.Date(demo.data$dob[1:10])
-  pt.data$dob.num<-as.numeric(as.Date(demo.data$dob))
+  # ADD CUSTOMIZABLE
+  pt.data$dob.num<-as.numeric(as.Date(demo$dob)) #demo.data$dob
   pt.data$dob.num[1:10]
-  as.Date(pt.data$dob.num[1:10], origin="1970-01-01") #I always check that I've defined the dates right
+  #as.Date(pt.data$dob.num[1:10], origin="1970-01-01") #I always check that I've defined the dates right
   #another note- here I just copied dates from demo.data to pt.data because I know the ids are in the same order. this may not always be the case
   
   
   #get diagnostic date
   #requires making bx dates numeric
-  as.Date(bx.data$bx.date[1:10])
-  bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date))
-  bx.data$bx.date.num[1:10]
-  as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
+  as.Date(bx$bx.date[1:10])
+  bx$bx.date.num<-as.numeric(as.Date(bx$bx.date)) #bx.data$bx.date
+  bx$bx.date.num[1:10]
+  as.Date(bx$bx.date.num[1:10], origin="1970-01-01")
   
-  pt.data$dx.date.num<-rep(0,n)
+  pt$dx.date.num<-rep(0,n)
   for(i in 1:n){
-    pt.data$dx.date.num[i]<-bx.data$bx.date.num[bx.data$id==pt.data$id[i] & bx.data$dx==1]}
+    pt$dx.date.num[i]<-bx$bx.date.num[bx$id==pt$id[i] & bx$dx==1]}
   
   #age at diagnosis
-  pt.data$age.dx<-(pt.data$dx.date.num-pt.data$dob.num)/365
-  summary(pt.data$age.dx)
+  pt$age.dx<-(pt$dx.date.num-pt$dob.num)/365
+  summary(pt$age.dx)
   
   
   #get average biopsy volume
   #We want to take volume information from the biopsy data. Since increase in prostate volume due to cancer is negligible relative to the measurement error in assessing prostate volume, we will just take the average across all available biopsies
   #We are going to use prostate volume data in the PSA model. (Great volume leads to greater PSA)
-  pt.data$vol.avg<-vector(length=n)
+  pt$vol.avg<-vector(length=n)
   for(i in 1:n){
-    pt.data$vol.avg[i]<-mean(bx.data$vol[bx.data$id==pt.data$id[i]])} #another place dplyr may be helpful
+    pt$vol.avg[i]<-mean(bx$vol[bx$id==pt$id[i]])} #another place dplyr may be helpful
   summary(pt.data$vol.avg)
   
   
   #order data based on observed true GS
-  pt.data<-pt.data[order(pt.data$true.gs),]
-  pt.data$true.gs[1:300]
-  pt.data$subj<-c(1:n)
+  pt<-pt.data[order(pt$true.gs),]
+  pt$true.gs[1:300]
+  pt$subj<-c(1:n)
   return(pt.data)
 }
 addPSA <- function (pt.data) {
