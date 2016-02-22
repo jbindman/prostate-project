@@ -46,22 +46,22 @@ ptDataframe <- function() {
   #FILLING DATAFRAME NOW
   pt.data<-as.data.frame(demo.data$id) # adds Id column 
   names(pt.data)<-"id"
-  pt.data<-ptDataload(pt.data)
+  pt.data<-ptDataload()
   pt.data
-  #addPSA(pt.data, temp)
-  #biopsy(pt.data)
+  #addPSA(pt.data)
+  #biopsy()
   
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
 }
 
-ptDataload <- function(pt = pt.data, tx = tx.data, demo = demo.data, 
-                       bx = bx.data) {
+ptDataload <- function(pt.data = pt.data, tx.data = tx.data, demo.data = demo.data, 
+                       bx.data = bx.data) { #default file names
   #define true GS
   pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
   
   for(i in 1:n){
-    if(pt$id[i]%in%tx$id){
-      pt$true.gs[i]<-tx$GS[tx$id==pt$id[i]] #tx.data$GS[tx.data$id==pt.data$id[i]]
+    if(pt.data$id[i]%in%tx.data$id){
+      pt.data$true.gs[i]<-tx.data$GS[tx.data$id==pt.data$id[i]] #tx.data$GS[tx.data$id==pt.data$id[i]]
     }} #this is one place you could improve efficiency with an apply function of maybe something from dplyr
   ####
   #DPLYR
@@ -70,15 +70,15 @@ ptDataload <- function(pt = pt.data, tx = tx.data, demo = demo.data,
   
   ###
   
-  table(pt$true.gs) #90 GS 6 and 113 GS 7+
-  sum(is.na(pt$true.gs)) #797 pt without surgery 
+  table(pt.data$true.gs) #90 GS 6 and 113 GS 7+
+  sum(is.na(pt.data$true.gs)) #797 pt without surgery 
   
   
   #define DOB numerically
   #warning: date functions in R can be tricky! we will have to do some work later to make sure our function handles all date types
   as.Date(demo.data$dob[1:10])
   # ADD CUSTOMIZABLE
-  pt.data$dob.num<-as.numeric(as.Date(demo$dob)) #demo.data$dob
+  pt.data$dob.num<-as.numeric(as.Date(demo.data$dob)) #demo.data$dob
   pt.data$dob.num[1:10]
   #as.Date(pt.data$dob.num[1:10], origin="1970-01-01") #I always check that I've defined the dates right
   #another note- here I just copied dates from demo.data to pt.data because I know the ids are in the same order. this may not always be the case
@@ -86,33 +86,34 @@ ptDataload <- function(pt = pt.data, tx = tx.data, demo = demo.data,
   
   #get diagnostic date
   #requires making bx dates numeric
-  as.Date(bx$bx.date[1:10])
-  bx$bx.date.num<-as.numeric(as.Date(bx$bx.date)) #bx.data$bx.date
-  bx$bx.date.num[1:10]
-  as.Date(bx$bx.date.num[1:10], origin="1970-01-01")
+  as.Date(bx.data$bx.date[1:10])
+  bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date)) #bx.data$bx.date
+  bx.data$bx.date.num[1:10]
+  as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
   
-  pt$dx.date.num<-rep(0,n)
+  pt.data$dx.date.num<-rep(0,n)
   for(i in 1:n){
-    pt$dx.date.num[i]<-bx$bx.date.num[bx$id==pt$id[i] & bx$dx==1]}
+    pt.data$dx.date.num[i]<-bx.data$bx.date.num[bx.data$id==pt.data$id[i] & bx.data$dx==1]}
   
   #age at diagnosis
-  pt$age.dx<-(pt$dx.date.num-pt$dob.num)/365
-  summary(pt$age.dx)
+  pt.data$age.dx<-(pt.data$dx.date.num-pt.data$dob.num)/365
+  summary(pt.data$age.dx)
   
   
   #get average biopsy volume
   #We want to take volume information from the biopsy data. Since increase in prostate volume due to cancer is negligible relative to the measurement error in assessing prostate volume, we will just take the average across all available biopsies
   #We are going to use prostate volume data in the PSA model. (Great volume leads to greater PSA)
-  pt$vol.avg<-vector(length=n)
+  pt.data$vol.avg<-vector(length=n)
   for(i in 1:n){
-    pt$vol.avg[i]<-mean(bx$vol[bx$id==pt$id[i]])} #another place dplyr may be helpful
+    pt.data$vol.avg[i]<-mean(bx.data$vol[bx.data$id==pt.data$id[i]])
+    } #another place dplyr may be helpful
   summary(pt.data$vol.avg)
   
   
   #order data based on observed true GS
-  pt<-pt.data[order(pt$true.gs),]
-  pt$true.gs[1:300]
-  pt$subj<-c(1:n)
+  pt.data<-pt.data[order(pt$true.gs),]
+  pt.data$true.gs[1:300]
+  pt.data$subj<-c(1:n)
   return(pt.data)
 }
 addPSA <- function (pt.data = pt.data, psa.data = psa.data) {
@@ -143,6 +144,7 @@ addPSA <- function (pt.data = pt.data, psa.data = psa.data) {
   for(i in 1:n){
     psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
   
+  return(psa.data)
 }
 biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   #define maximum number of follow-up years per patient
@@ -182,7 +184,7 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   bx.full$bx.time<-bx.full$bx.date.num<-bx.full$bx.age<-bx.full$bx.here<-bx.full$rc<-vector(length=N)
   
   
-  for(j in 1:N){
+  for(j in 1:N){ #???
     if(bx.full$time.int[j]==0){ #diagnostic biopsies
       bx.full$bx.time[j]<-0
       bx.full$bx.date.num[j]<-pt.data$dx.date.num[pt.data$subj==bx.full$subj[j]]
