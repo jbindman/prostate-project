@@ -115,7 +115,7 @@ ptDataload <- function(pt = pt.data, tx = tx.data, demo = demo.data,
   pt$subj<-c(1:n)
   return(pt.data)
 }
-addPSA <- function (pt.data) {
+addPSA <- function (pt.data = pt.data, psa.data = psa.data) {
   #log-PSA
   psa.data$log.psa<-log(psa.data$psa + 0.01) #necessary to add a small number when some values are 0 (not the case in the simulated data, but will be the case in real data)
   
@@ -127,9 +127,8 @@ addPSA <- function (pt.data) {
   
   #age at each test
   psa.data$age<-vector(length=n_psa)
-  temp <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365
   for(i in 1:n){
-    psa.data$age[psa.data$id==i] <- temp #GIVES ME ERRORS
+    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365 #GIVES ME ERRORS
       }
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
   
@@ -145,7 +144,7 @@ addPSA <- function (pt.data) {
     psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
   
 }
-biopsy <- function (pt.data) {
+biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   #define maximum number of follow-up years per patient
   #we will deal with censoring, treatment dates, etc. later
   pt.data$total.fup<-vector(length=n)
