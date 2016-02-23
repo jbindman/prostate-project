@@ -1,62 +1,8 @@
-ptDataframe <- function() {
-  rm(list=ls())
 
-  ##WORKFLOW
-  # 1. Load data, look at variables. 
-  # 2. Start patient dataframe
-  # 3. Add relevant variables to PSA dataframe
-  # 4. Start biopsy dataframe
-  # 5. Save data
- 
-  demo.data<-read.csv("julia-demo-data.csv")
-  names(demo.data)
-  (n<-dim(demo.data)[1]) #1000 patients in this data
-  #psa data. one record per PSA test per patient
-  psa.data<-read.csv("julia-psa-data.csv")
-  names(psa.data)
-  #id- unique identifier
-  #psa- total PSA measured
-  #psa.data- date of each PSA test
+ptDataload <- function(tx.data, demo.data, bx.data, pt.data) { #default file names
   
-  (n_psa<-dim(psa.data)[1]) #18792 PSA tests
-  
-  #bx.data. one record per biopsy per patient
-  bx.data<-read.csv("julia-bx-data.csv")
-  names(bx.data)
-  #id- unique identifier
-  #bx.date- date of biopsy (abbreviated bx)
-  #RC- binary indicator or whether grade reclassification (abbreviated RC), i.e. bx gleason 7+, occurred
-  #vol- volume of prostate 
-  #dx- binary indicator of diagnostic biopsy for each patient (diagnosis abbreviated dx)
-  
-  (n_bx<-dim(bx.data)[1]) #4134 biopsy observations
-  
-  #tx.data. one record per treatment received per patient
-  #this data is just for surgery
-  tx.data<-read.csv("julia-tx-data.csv")
-  names(tx.data)
-  #id- unique identifier
-  #GS- indicator of whether post-surgery Gleason score (abbreviated GS) was 7 or higher; aka "true GS"
-  #tx.date- date of treatment (abbreviated tx) 
-  
-  (n_tx<-dim(tx.data)[1]) #203 patients received treatment
-  
-  #######################
-  
-  #FILLING DATAFRAME NOW
-  pt.data<-as.data.frame(demo.data$id) # adds Id column 
-  names(pt.data)<-"id"
-  pt.data<-ptDataload()
-  pt.data
-  #addPSA(pt.data)
-  #biopsy()
-  
-  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-}
-
-ptDataload <- function(pt.data = pt.data, tx.data = tx.data, demo.data = demo.data, 
-                       bx.data = bx.data) { #default file names
   #define true GS
+  pt.data$true.gs
   pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
   
   for(i in 1:n){
@@ -70,8 +16,8 @@ ptDataload <- function(pt.data = pt.data, tx.data = tx.data, demo.data = demo.da
   
   ###
   
-  table(pt.data$true.gs) #90 GS 6 and 113 GS 7+
-  sum(is.na(pt.data$true.gs)) #797 pt without surgery 
+  #table(pt.data$true.gs) #90 GS 6 and 113 GS 7+
+  #sum(is.na(pt.data$true.gs)) #797 pt without surgery 
   
   
   #define DOB numerically
@@ -106,7 +52,7 @@ ptDataload <- function(pt.data = pt.data, tx.data = tx.data, demo.data = demo.da
   pt.data$vol.avg<-vector(length=n)
   for(i in 1:n){
     pt.data$vol.avg[i]<-mean(bx.data$vol[bx.data$id==pt.data$id[i]])
-    } #another place dplyr may be helpful
+  } #another place dplyr may be helpful
   summary(pt.data$vol.avg)
   
   
@@ -130,7 +76,7 @@ addPSA <- function (pt.data = pt.data, psa.data = psa.data) {
   psa.data$age<-vector(length=n_psa)
   for(i in 1:n){
     psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365 #GIVES ME ERRORS
-      }
+  }
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
   
   #pt-level prostate volume
@@ -162,8 +108,8 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   bx.data$time.since.dx<-vector(length=n_bx)
   for(i in 1:n){
     bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365
-    }
-    #gives me issues
+  }
+  #gives me issues
   summary(bx.data$time.since.dx)
   
   
@@ -226,4 +172,62 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   
   #I have various output here in order to "sanity check" the data. Of course, we wouldn't want to have to run these every time we are shaping the data, but I wanted to give you an idea of how you could check that your code did the right thing. Also, we may want to build a couple of data checks into the function so that the user gets an error message if they try to put in problematic data.
   
-}
+}  
+
+
+
+  
+  ##WORKFLOW
+  # 1. Load data, look at variables. 
+  # 2. Start patient dataframe
+  # 3. Add relevant variables to PSA dataframe
+  # 4. Start biopsy dataframe
+  # 5. Save data
+ 
+  demo.data<-read.csv("julia-demo-data.csv")
+  names(demo.data)
+  (n<-dim(demo.data)[1]) #1000 patients in this data
+  #psa data. one record per PSA test per patient
+  psa.data<-read.csv("julia-psa-data.csv")
+  names(psa.data)
+  #id- unique identifier
+  #psa- total PSA measured
+  #psa.data- date of each PSA test
+  
+  (n_psa<-dim(psa.data)[1]) #18792 PSA tests
+  
+  #bx.data. one record per biopsy per patient
+  bx.data<-read.csv("julia-bx-data.csv")
+  names(bx.data)
+  #id- unique identifier
+  #bx.date- date of biopsy (abbreviated bx)
+  #RC- binary indicator or whether grade reclassification (abbreviated RC), i.e. bx gleason 7+, occurred
+  #vol- volume of prostate 
+  #dx- binary indicator of diagnostic biopsy for each patient (diagnosis abbreviated dx)
+  
+  (n_bx<-dim(bx.data)[1]) #4134 biopsy observations
+  
+  #tx.data. one record per treatment received per patient
+  #this data is just for surgery
+  tx.data<-read.csv("julia-tx-data.csv")
+  names(tx.data)
+  #id- unique identifier
+  #GS- indicator of whether post-surgery Gleason score (abbreviated GS) was 7 or higher; aka "true GS"
+  #tx.date- date of treatment (abbreviated tx) 
+  
+  (n_tx<-dim(tx.data)[1]) #203 patients received treatment
+  
+  #######################
+  
+  #FILLING DATAFRAME NOW
+  pt.data<-as.data.frame(demo.data$id) # adds Id column 
+  names(pt.data)<-"id"
+  pt.data
+  full<-ptDataload(tx.data, demo.data, bx.data, pt.data)
+  full
+  #addPSA(pt.data)
+  #biopsy()
+  
+  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
+
+  
