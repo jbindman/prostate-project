@@ -1,6 +1,8 @@
 
-ptDataload <- function(tx.data, demo.data, bx.data, pt.data) { #default file names
-  
+ptDataload <- function(tx.data, demo.data, bx.data) { #default file names
+  pt.data<-as.data.frame(demo.data$id) # adds Id column 
+  names(pt.data)<-"id"
+  pt.data
   #define true GS
   pt.data$true.gs
   pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
@@ -12,7 +14,7 @@ ptDataload <- function(tx.data, demo.data, bx.data, pt.data) { #default file nam
   ####
   #DPLYR
   
-  #pt$true.gs<-filter(tx, GS)
+
   
   ###
   
@@ -57,7 +59,7 @@ ptDataload <- function(tx.data, demo.data, bx.data, pt.data) { #default file nam
   
   
   #order data based on observed true GS
-  pt.data<-pt.data[order(pt$true.gs),]
+  pt.data<-pt.data[order(pt.data$true.gs),]
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
   return(pt.data)
@@ -220,14 +222,11 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   #######################
   
   #FILLING DATAFRAME NOW
-  pt.data<-as.data.frame(demo.data$id) # adds Id column 
-  names(pt.data)<-"id"
+  pt.data<-ptDataload(tx.data, demo.data, bx.data)
   pt.data
-  full<-ptDataload(tx.data, demo.data, bx.data, pt.data)
-  full
   #addPSA(pt.data)
   #biopsy()
   
-  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
+  #save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
 
   
