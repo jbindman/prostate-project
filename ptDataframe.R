@@ -1,4 +1,57 @@
+rm(list=ls()) #clears
 
+
+##WORKFLOW
+# 1. Load data, look at variables. 
+# 2. Start patient dataframe
+# 3. Add relevant variables to PSA dataframe
+# 4. Start biopsy dataframe
+# 5. Save data
+
+demo.data<-read.csv("julia-demo-data.csv")
+names(demo.data)
+(n<-dim(demo.data)[1]) #1000 patients in this data
+#psa data. one record per PSA test per patient
+psa.data<-read.csv("julia-psa-data.csv")
+names(psa.data)
+#id- unique identifier
+#psa- total PSA measured
+#psa.data- date of each PSA test
+
+(n_psa<-dim(psa.data)[1]) #18792 PSA tests
+
+#bx.data. one record per biopsy per patient
+bx.data<-read.csv("julia-bx-data.csv")
+names(bx.data)
+#id- unique identifier
+#bx.date- date of biopsy (abbreviated bx)
+#RC- binary indicator or whether grade reclassification (abbreviated RC), i.e. bx gleason 7+, occurred
+#vol- volume of prostate 
+#dx- binary indicator of diagnostic biopsy for each patient (diagnosis abbreviated dx)
+
+(n_bx<-dim(bx.data)[1]) #4134 biopsy observations
+
+#tx.data. one record per treatment received per patient
+#this data is just for surgery
+tx.data<-read.csv("julia-tx-data.csv")
+names(tx.data)
+#id- unique identifier
+#GS- indicator of whether post-surgery Gleason score (abbreviated GS) was 7 or higher; aka "true GS"
+#tx.date- date of treatment (abbreviated tx) 
+
+(n_tx<-dim(tx.data)[1]) #203 patients received treatment
+
+#######################
+
+#FILLING DATAFRAME NOW
+pt.data<-ptDataload(tx.data, demo.data, bx.data) #passes through specified files
+pt.data
+#addPSA(pt.data)
+#biopsy()
+
+#save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
+
+#functions
 ptDataload <- function(tx.data, demo.data, bx.data) { #default file names
   pt.data<-as.data.frame(demo.data$id) # adds Id column 
   names(pt.data)<-"id"
@@ -177,56 +230,3 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
 }  
 
 
-
-  
-  ##WORKFLOW
-  # 1. Load data, look at variables. 
-  # 2. Start patient dataframe
-  # 3. Add relevant variables to PSA dataframe
-  # 4. Start biopsy dataframe
-  # 5. Save data
- 
-  demo.data<-read.csv("julia-demo-data.csv")
-  names(demo.data)
-  (n<-dim(demo.data)[1]) #1000 patients in this data
-  #psa data. one record per PSA test per patient
-  psa.data<-read.csv("julia-psa-data.csv")
-  names(psa.data)
-  #id- unique identifier
-  #psa- total PSA measured
-  #psa.data- date of each PSA test
-  
-  (n_psa<-dim(psa.data)[1]) #18792 PSA tests
-  
-  #bx.data. one record per biopsy per patient
-  bx.data<-read.csv("julia-bx-data.csv")
-  names(bx.data)
-  #id- unique identifier
-  #bx.date- date of biopsy (abbreviated bx)
-  #RC- binary indicator or whether grade reclassification (abbreviated RC), i.e. bx gleason 7+, occurred
-  #vol- volume of prostate 
-  #dx- binary indicator of diagnostic biopsy for each patient (diagnosis abbreviated dx)
-  
-  (n_bx<-dim(bx.data)[1]) #4134 biopsy observations
-  
-  #tx.data. one record per treatment received per patient
-  #this data is just for surgery
-  tx.data<-read.csv("julia-tx-data.csv")
-  names(tx.data)
-  #id- unique identifier
-  #GS- indicator of whether post-surgery Gleason score (abbreviated GS) was 7 or higher; aka "true GS"
-  #tx.date- date of treatment (abbreviated tx) 
-  
-  (n_tx<-dim(tx.data)[1]) #203 patients received treatment
-  
-  #######################
-  
-  #FILLING DATAFRAME NOW
-  pt.data<-ptDataload(tx.data, demo.data, bx.data)
-  pt.data
-  #addPSA(pt.data)
-  #biopsy()
-  
-  #save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-
-  
