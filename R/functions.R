@@ -179,5 +179,7 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   #I have various output here in order to "sanity check" the data. Of course, we wouldn't want to have to run these every time we are shaping the data, but I wanted to give you an idea of how you could check that your code did the right thing. Also, we may want to build a couple of data checks into the function so that the user gets an error message if they try to put in problematic data.
   return(bx.data)
 }
+#not functional right now because it needs somethig from ptDataload
 
 
+#right now, i have three functions so each can return a dataframe, but it really could be one function that saves all three at the end
