@@ -1,12 +1,13 @@
 
 #functions
-ptDataload <- function(tx.data = tx.data, demo.data = demo.data, bx.data = bx.data) { #default file names
+loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
+  #define n within this function
   pt.data<-as.data.frame(demo.data$id) # adds Id column
   names(pt.data)<-"id"
   pt.data
   #define true GS
   pt.data$true.gs
-  pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
+  pt.data$true.gs<-rep(NA,n) #n for demo data needs to be passed through
 
   for(i in 1:n){
     if(pt.data$id[i]%in%tx.data$id){
@@ -63,9 +64,8 @@ ptDataload <- function(tx.data = tx.data, demo.data = demo.data, bx.data = bx.da
   pt.data<-pt.data[order(pt.data$true.gs),]
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
-  return(pt.data)
-}
-addPSA <- function (pt.data = pt.data, psa.data = psa.data) {
+  #FINISHED PT DATA
+
   #log-PSA
   psa.data$log.psa<-log(psa.data$psa + 0.01) #necessary to add a small number when some values are 0 (not the case in the simulated data, but will be the case in real data)
 
@@ -94,11 +94,9 @@ addPSA <- function (pt.data = pt.data, psa.data = psa.data) {
   psa.data$subj<-vector(length=n_psa)
   for(i in 1:n){
     psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
+  ##FINISHED PSA DATA
 
-  return(psa.data)
-}
 
-biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   #define maximum number of follow-up years per patient
   #we will deal with censoring, treatment dates, etc. later
   pt.data$total.fup<-vector(length=n)
@@ -168,6 +166,9 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   table(bx.full$rc) #these should also be equal
   sum(bx.data$RC)
 
+
+  #FINISHED BX DATA
+
   #summary(bx.full$bx.time[bx.full$time.int==1])
   #summary(bx.full$bx.time)
   #summary(bx.full$bx.date.num[bx.full$time.int==1])
@@ -177,9 +178,10 @@ biopsy <- function (pt.data = pt.data, bx.data = bx.data) {
   #Will get rid of these when its working
 
   #I have various output here in order to "sanity check" the data. Of course, we wouldn't want to have to run these every time we are shaping the data, but I wanted to give you an idea of how you could check that your code did the right thing. Also, we may want to build a couple of data checks into the function so that the user gets an error message if they try to put in problematic data.
-  return(bx.data)
+
+  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
+
 }
-#not functional right now because it needs somethig from ptDataload
 
 
-#right now, i have three functions so each can return a dataframe, but it really could be one function that saves all three at the end
+
