@@ -7,6 +7,7 @@ loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_d
   pt.data
   #define true GS
   pt.data$true.gs
+  (n<-dim(demo_data)[1]) #1000 patients in this data
   pt.data$true.gs<-rep(NA,n) #n for demo data needs to be passed through
 
   for(i in 1:n){
@@ -76,6 +77,7 @@ loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_d
   as.Date(psa.data$psa.date.num[1:10], origin="1970-01-01")
 
   #age at each test
+  (n_psa<-dim(psa_data)[1]) #18792 PSA tests
   psa.data$age<-vector(length=n_psa)
   psa.data$age
 
@@ -105,6 +107,7 @@ loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_d
   summary(pt.data$total.fup)
 
   #adding time since dx and subj variable to bx.data will also help
+  (n_bx<-dim(bx_data)[1]) #4134 biopsy observations
   bx.data$subj<-vector(length=n_bx)
   for(i in 1:n){
     bx.data$subj[bx.data$id==pt.data$id[i]]<-pt.data$subj[i]}
@@ -180,7 +183,8 @@ loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_d
   #I have various output here in order to "sanity check" the data. Of course, we wouldn't want to have to run these every time we are shaping the data, but I wanted to give you an idea of how you could check that your code did the right thing. Also, we may want to build a couple of data checks into the function so that the user gets an error message if they try to put in problematic data.
 
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-
+  all = list(pt.data, psa.data, bx.full)
+  return(all)
 }
 
 
