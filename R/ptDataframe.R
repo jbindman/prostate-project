@@ -1,12 +1,7 @@
 rm(list=ls()) #clears
 #TEST
 
-##WORKFLOW
-# 1. Load data, look at variables.
-# 2. Start patient dataframe
-# 3. Add relevant variables to PSA dataframe
-# 4. Start biopsy dataframe
-# 5. Save data
+
 
 
 

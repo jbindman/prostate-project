@@ -1,2 +1,164 @@
-load("/Users/jbindman/Desktop/JHU/Prostate/prostate-project/data-shaping-work-space.RData")
-load("/Users/jbindman/Desktop/JHU/Prostate/prostate-project/data-shaping-work-space.RData")
+getwd
+getwd()
+dir
+x <- 1
+print(x)
+x
+msg <- "hello"
+msg
+x <- 1:20
+x
+x <- c("a", "b", "c", "c", "d", "a")
+x[1]
+x[2]
+x[1:4]
+x[x>2]
+x[x>"a"]
+u <- x > "a"
+u
+x[u]
+u
+x <- list(foo = 1:4, bar = .6)
+x
+x[1]
+x[bar]
+x["bar"]
+x$bar
+x[$bar]
+x
+x[c(1,3)]
+x[c(1,2)]
+x[c(0,2)]
+x <- list(a = list(10, 12, 14), b = c(3.14, 2.81))
+x
+x <- matrix(1:6, 2,3)
+x
+x[1, ]
+x[1, , drop = FALSE]
+x <- list(aarvark = 1:5)
+x$a
+x$aar
+x$aarvark
+x[["aarvark"]]
+x[["aarvar"]]
+x[["a", exact = FALSE]]
+x <- c(1, 2, NA, 4, NA, 5)
+x
+bad <- is.na(x)
+bad
+x[bad]
+x[!bad]
+x <- c(1, 2, NA, 4, NA, 5)
+y <- c("a", "b", NA, "d", NA, "f")
+good <- complete.cases(x,y)
+good
+x <- c(4, TRUE)
+class(x)
+x <- c(1,3,5)
+y <- c(3,2,10)
+rbind(x,y)
+x <- c(17, 14, 4, 5, 13, 12, 10)
+x[x>4]
+x[x>4] = 4
+x
+pwd
+wd
+data <- (hw1_data.csv, "r")
+data <- ("hw1_data.csv", r)
+data <- ("hw1_data.csv", "r")
+data = read.csv("hw1_data.csv")
+data
+data.colNames
+data.colClasses
+data.colClasses()
+x <- readLines(data, 1:2)
+con <- gzfile("data")
+x = <- readLines(con, 1:2)
+x <- readLines(con, 1:2)
+x <- readLines(con, 2)
+data[1]
+data[2,]
+data[1,]
+data[1:2,]
+data[151:153,]
+data[152:153,]
+data[47,]
+good <- is.na(data)
+good
+!good
+data
+data[ ,2]
+data[ , 2]
+data["Ozone"]
+x <- is.na(data["Ozone"])
+x
+data(x)
+bad <- x
+bad
+!bad
+bad
+bad <- is.na(x)
+x[bad]
+x[!bad]
+x
+data[x]
+data[!x]
+data[x]
+mean[data[x]]
+mean[data["Ozone"]]
+data["Ozone"]
+mean(list["Ozone"])
+mean(["Ozone"])
+mean["Ozone"]
+mean[ , "Ozone"]
+colMeans(data, na.rm = TRUE, dims = 1)
+new = data$Ozone > 31 $Temp > 90
+new = data("Ozone" > 31)
+x <- list(2, "a", "b", TRUE)
+x[[1]]
+x[1]
+x[2]
+x[1]
+x[[1]]
+x[1:2]
+x <- 1:4
+y <- 2:3
+x+y
+y
+x
+x+y
+x <- c(3,5,1,10,12,6)
+x[x<6] = 0
+x
+x[x<6] <- 0
+x
+x <- c(3,5,1,10,12,6)
+x[x<6] <- 0
+x
+data <- read.table("hw1_data.csv")
+data = read.table("hw1_data.csv")
+data = read.csv("hw1_data.csv")
+data
+data[1:2]
+data[,1:2]
+data[1:2, ]
+data[152:153, ]
+data[47, ]
+bad <- is.na(data[ ,"Ozone"])
+bad
+data[bad]
+data["FALSE"]
+data["FALSE", ]
+data[bad, ]
+colMeans(data[,"Ozone"], na.rm = TRUE, dims = 1)
+colMeans(data, na.rm = TRUE, dims = 1)
+new <- data[ ,"Ozone"]
+new
+install.packages("swirl")
+R.version.string
+swirl()
+getwd()
+setwd("prostate-project")
+setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
+source(functions.R)
+install.packages(ProstatePackage)

@@ -1,5 +1,16 @@
-
-#functions
+#' load dataframes from four patient data files
+#'
+#' @param tx.data one record per treatment received per patient
+#' @param demo.data demographic data, one record per patient
+#' @param psa.data psa data, one record per PSA test per patient
+#' @param bx.data one record per biopsy per patient
+#' @return list of three dataframes, pt.data, psa.data, bx.full
+#' @export
+#' 1. Load data, look at variables.
+#' 2. Start patient dataframe
+#' 3. Add relevant variables to PSA dataframe
+#' 4. Start biopsy dataframe
+#' 5. Save data
 loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
   #define n within this function
   pt.data<-as.data.frame(demo.data$id) # adds Id column
@@ -168,19 +179,8 @@ loadfiles <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_d
 
   table(bx.full$rc) #these should also be equal
   sum(bx.data$RC)
-
-
   #FINISHED BX DATA
 
-  #summary(bx.full$bx.time[bx.full$time.int==1])
-  #summary(bx.full$bx.time)
-  #summary(bx.full$bx.date.num[bx.full$time.int==1])
-  #summary(bx.full$bx.date.num)
-  #summary(bx.full$bx.age[bx.full$time.int==1])
-  #summary(bx.full$bx.age)
-  #Will get rid of these when its working
-
-  #I have various output here in order to "sanity check" the data. Of course, we wouldn't want to have to run these every time we are shaping the data, but I wanted to give you an idea of how you could check that your code did the right thing. Also, we may want to build a couple of data checks into the function so that the user gets an error message if they try to put in problematic data.
 
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
   all = list(pt.data, psa.data, bx.full)

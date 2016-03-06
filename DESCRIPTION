@@ -8,3 +8,4 @@ Maintainer: Julia Bindman <jbindman@jhu.edu>
 Description: A working package to synthesize the work of Yates Coley
 License: JHU
 LazyData: TRUE
+RoxygenNote: 5.0.1
