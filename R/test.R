@@ -2,7 +2,7 @@
 #'
 #' @param x blah
 #' @return x blah
-#' #export
+#' @export
 #'
 test <- function(x) {
   return(x)
