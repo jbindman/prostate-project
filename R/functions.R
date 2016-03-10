@@ -183,7 +183,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
 
 
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-  all = list(pt.data, psa.data, bx.full)
+  all<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
   return(all)
 }
 

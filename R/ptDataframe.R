@@ -13,7 +13,7 @@ psa_data<-read.csv("julia-psa-data.csv")
 bx_data<-read.csv("julia-bx-data.csv")
 tx_data<-read.csv("julia-tx-data.csv")
 
-list <- fillPatientTables(tx_data, demo_data, psa_data, bx_data) #overrides, passes through specified files
+all <- fillPatientTables(tx_data, demo_data, psa_data, bx_data) #overrides, passes through specified files
 
 
 
