@@ -24,16 +24,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   for(i in 1:n){
     if(pt.data$id[i]%in%tx.data$id){
       pt.data$true.gs[i]<-tx.data$GS[tx.data$id==pt.data$id[i]] #tx.data$GS[tx.data$id==pt.data$id[i]]
-    }} #this is one place you could improve efficiency with an apply function of maybe something from dplyr
-  ####
-  #DPLYR
-
-
-
-  ###
-
-  #table(pt.data$true.gs) #90 GS 6 and 113 GS 7+
-  #sum(is.na(pt.data$true.gs)) #797 pt without surgery
+    }}
 
 
   #define DOB numerically
@@ -68,7 +59,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   pt.data$vol.avg<-vector(length=n)
   for(i in 1:n){
     pt.data$vol.avg[i]<-mean(bx.data$vol[bx.data$id==pt.data$id[i]])
-  } #another place dplyr may be helpful
+  }
   summary(pt.data$vol.avg)
 
 
@@ -127,7 +118,6 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   for(i in 1:n){
     bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365
   }
-  #gives me issues
   summary(bx.data$time.since.dx)
 
 
@@ -148,7 +138,8 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   bx.full$bx.time<-bx.full$bx.date.num<-bx.full$bx.age<-bx.full$bx.here<-bx.full$rc<-vector(length=N)
 
 
-  for(j in 1:N){ #???
+  for(j in 1:N){
+    # everyone here had a biopsy and is easily assigned
     if(bx.full$time.int[j]==0){ #diagnostic biopsies
       bx.full$bx.time[j]<-0
       bx.full$bx.date.num[j]<-pt.data$dx.date.num[pt.data$subj==bx.full$subj[j]]
@@ -156,6 +147,10 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
       bx.full$bx.here[j]<-1
       bx.full$rc[j]<-0
     }
+    # a bit messier here --> clean up. for patient i patient year j, look at biopsy data and see if there were biospies in year j "use"
+    # if theres at least one biopsy, this indicator variable "use" will be created than 0. quick and dirty
+    # use dplyr here to
+
     else{ #post-dx biopsies
       bx.data$use<-rep(0,n_bx) #clearing existing values in this variable
       bx.data$use[ bx.data$subj==bx.full$subj[j] & bx.data$time.since.dx>(bx.full$time.int[j]-1) & bx.data$time.since.dx<=bx.full$time.int[j] ] <- 1 #identifying biopsies for this patient in the time interval of interest
@@ -167,7 +162,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
         bx.full$bx.here[j] <- 1
         bx.full$rc[j] <- max(bx.data$RC[bx.data$use==1])
       }
-
+      #if no biopsies, assign everything NA
       else{ #if the patient didn't get any biopsies in this interval
         bx.full$bx.time[j] <- bx.full$bx.date.num[j] <- bx.full$bx.age[j] <- bx.full$rc[j] <- NA
         bx.full$bx.here[j]<-0

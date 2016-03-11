@@ -9,3 +9,7 @@ A single package synthesizing the work of Yates Coley
     highlight and run the four lines to load in the default files 
     call fillPatientTables()
     three data frames will be returned in list and saved to workspace
+
+
+
+    customization: fillPatientTables(data... tx_data_names=c("ID", "DATE", data.format"XX/XX/XXXX")) and describe in the readme 
