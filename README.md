@@ -12,5 +12,5 @@ A single package synthesizing the work of Yates Coley
     three data frames will be returned in list and saved to workspace
 
 
-
-  
+    install.packages("devtools")
+    devtools::install_github("jbindman/prostate-project") --> why doesn't this work?
