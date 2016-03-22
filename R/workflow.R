@@ -10,6 +10,8 @@ source("R/fillPatientTables.R")
 
 demo_data<-read.csv("julia-demo-data.csv")
 colnames(demo_data) <- c("X", "id", "dob") #customize (right now default)
+## what is the purpose of customizing? it will allow overwrite of default columns, but they need to be reassigned to our columns
+
 
 psa_data<-read.csv("julia-psa-data.csv")
 colnames(psa_data) <- c("X", "id", "psa", "psa.date") #customizable
