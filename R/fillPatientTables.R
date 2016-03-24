@@ -13,7 +13,7 @@
 #' 5. Save data
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
   #define n within this function
-  pt.data<-as.data.frame(demo_data$id) #should $id be changed to colname(demo_data#)
+  pt.data<-as.data.frame(demo.data$id) #should $id be changed to colname(demo_data#)
   names(pt.data)<-"id" # this stays
   # NOT names(pt.data)<-colnames(demo_data) --> dont want this, so what does it matter their names?
 
