@@ -86,7 +86,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   psa.data$age
 
   for(i in 1:n){
-    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365 #GIVES ME ERRORS
+    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365
   }
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
 
@@ -170,7 +170,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
         bx.full$bx.here[j]<-0
       }
     }
-  } #this for loop obviously takes an unreasonably long time to run --> what does it do?
+  } #this for loop obviously takes an unreasonably long time to run
 
   table(bx.full$bx.here) #the number of biopsies should equal n_bx (since we don't have any overlaps in intervals)
 
