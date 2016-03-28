@@ -11,6 +11,7 @@
 #' 3. Add relevant variables to PSA dataframe
 #' 4. Start biopsy dataframe
 #' 5. Save data
+
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
   #define n within this function
   pt.data<-as.data.frame(demo.data$id) #should $id be changed to colname(demo_data#)
