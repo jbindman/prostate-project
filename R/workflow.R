@@ -1,4 +1,4 @@
-#rm(list=ls()) #clears
+rm(list=ls()) #clears
 #TEST
 
 #setwd("Desktop/JHU/Prostate/prostate-project") #change to your working directory
