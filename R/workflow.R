@@ -21,7 +21,7 @@ tx_data<-read.csv("julia-tx-data.csv")
 #colnames(tx_data) <- c("X", "id", "GS", "tx.date") #customizable
 
 all <- fillPatientTables(tx_data, demo_data, psa_data, bx_data) #builds three data frames
-
+RJAGSreturn <- RJAGSprep(all[1], all[2], all[3]) #called another way?
 
 
 
