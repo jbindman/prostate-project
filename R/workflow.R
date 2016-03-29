@@ -1,10 +1,10 @@
 #rm(list=ls()) #clears
 
 
-install.packages("lme4") #dependencies figure out
-install.packages("splines") #not available R 3.2.3., supress warning
-install.packages("bayesm")
-install.packages("Matrix") #necessary?
+install.packages("lme4", repos="http://cran.rstudio.com/") #dependencies figure out
+install.packages("splines", repos="http://cran.rstudio.com/") #not available R 3.2.3., supress warning
+install.packages("bayesm", repos="http://cran.rstudio.com/")
+install.packages("Matrix", repos="http://cran.rstudio.com/") #necessary?
 
 #setwd("Desktop/JHU/Prostate/prostate-project") #change to your working directory
 source("R/fillPatientTables.R")
