@@ -22,9 +22,9 @@
 #'
 #'
 RJAGSprep <- function(all = all) { #default file names
-  pt.data <- all[1]
-  psa.data <- all[2]
-  bx.full <- all[3]
+  pt.data <- all[[1]]
+  psa.data <- all[[2]]
+  bx.full <- all[[3]]
   ### 0. Load packageges and  necessary data.
 
   #These packages should be loaded automatically when someone loads our package
@@ -50,9 +50,9 @@ RJAGSprep <- function(all = all) { #default file names
 
 
   #I also found something that should have been included in the pt.data shaping earlier.
-  pt.data$rc<-rep(0,n)
-  for(i in 1:n){
-    if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
+  #pt.data$rc<-rep(0,n)
+  #for(i in 1:n){
+  #  if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
   #Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
 
   table(pt.data$rc) #205 patients with grade reclassification observed
@@ -103,7 +103,7 @@ RJAGSprep <- function(all = all) { #default file names
   (d_V_RC<-dim(V_RC_data)[2]) #should be 6
 
 
-  cat("test")
+  #cat("test")
   ### FINISHED DATA PREP, NOW ARGUMENT PREP
   #' 0. Load libraries
   #' 1. Define data to be sent to jags function
@@ -115,7 +115,7 @@ RJAGSprep <- function(all = all) { #default file names
 
   ### 0. Load libraries
   #These packages should be loaded automatically when someone loads our package
-  install.packages("bayesm") #beginning of larger workflow?
+
   library("bayesm")
 
 
@@ -182,12 +182,10 @@ RJAGSprep <- function(all = all) { #default file names
   #I ran the code below to make sure that this code version works!
   #ex.jags<-jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
 
-  ex.out<-ex.jags$BUGSoutput
+  #ex.out<-ex.jags$BUGSoutput
 
-  str(ex.out$sims.list)
+  #str(ex.out$sims.list)
 
-
-
-  return(ex.out)
+  return(jags_data)
 }
 

@@ -28,7 +28,7 @@ library("splines")
 
 
 #(You shouldn't need to load the data in your workflow because the dataframes should already be defined by your previous function.)
-load('data-shaping-work-space.RData')
+#load('data-shaping-work-space.RData')
 
 #ls()
 #bx.full, psa.data, pt.data
@@ -57,7 +57,13 @@ eta_data<-pt.data$true.gs[!is.na(pt.data$true.gs)]
 
 
 #I also found something that should have been included in the pt.data shaping earlier.
-## moved
+pt.data$rc<-rep(0,n)
+for(i in 1:n){
+	if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
+#Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
+
+table(pt.data$rc) #205 patients with grade reclassification observed
+
 
 
 

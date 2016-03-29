@@ -71,7 +71,6 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
 
-  #tried to add in rc stuff but didnt like it!
 
   #FINISHED PT DATA
 
@@ -181,6 +180,13 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   table(bx.full$rc) #these should also be equal
   sum(bx.data$RC)
   #FINISHED BX DATA
+
+
+  #tried to add in rc stuff but didnt like it!
+  pt.data$rc<-rep(0,n)
+  for(i in 1:n){
+    if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
+  #Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
 
 
   save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")

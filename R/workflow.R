@@ -3,7 +3,7 @@
 
 install.packages("lme4") #dependencies figure out
 install.packages("splines") #not available R 3.2.3., supress warning
-
+install.packages("bayesm") #beginning of larger workflow?
 
 #setwd("Desktop/JHU/Prostate/prostate-project") #change to your working directory
 source("R/fillPatientTables.R")
@@ -25,7 +25,7 @@ tx_data<-read.csv("julia-tx-data.csv")
 #colnames(tx_data) <- c("X", "id", "GS", "tx.date") #customizable
 
 all <- fillPatientTables(tx_data, demo_data, psa_data, bx_data) #builds three data frames
-RJAGSreturn <- RJAGSprep(all) #called another way?
+RJAGSreturn <- RJAGSprep(all)
 
 
 
