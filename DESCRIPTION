@@ -9,3 +9,7 @@ Description: A working package to synthesize the work of Yates Coley
 License: JHU
 LazyData: TRUE
 RoxygenNote: 5.0.1
+Imports: bayesm,
+         lme4,
+         Matrix,
+         splines,
