@@ -3,7 +3,8 @@
 
 install.packages("lme4") #dependencies figure out
 install.packages("splines") #not available R 3.2.3., supress warning
-install.packages("bayesm") #beginning of larger workflow?
+install.packages("bayesm")
+install.packages("Matrix") #necessary?
 
 #setwd("Desktop/JHU/Prostate/prostate-project") #change to your working directory
 source("R/fillPatientTables.R")
