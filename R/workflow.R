@@ -1,9 +1,13 @@
 #rm(list=ls()) #clears
-#TEST
+
+
+install.packages("lme4") #dependencies figure out
+install.packages("splines") #not available R 3.2.3., supress warning
+
 
 #setwd("Desktop/JHU/Prostate/prostate-project") #change to your working directory
 source("R/fillPatientTables.R")
-
+source("R/RJAGSprep.R")
 
 
 #######################
@@ -21,7 +25,7 @@ tx_data<-read.csv("julia-tx-data.csv")
 #colnames(tx_data) <- c("X", "id", "GS", "tx.date") #customizable
 
 all <- fillPatientTables(tx_data, demo_data, psa_data, bx_data) #builds three data frames
-RJAGSreturn <- RJAGSprep(all[1], all[2], all[3]) #called another way?
+RJAGSreturn <- RJAGSprep(all) #called another way?
 
 
 

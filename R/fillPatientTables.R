@@ -71,12 +71,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
 
-  pt.data$rc<-rep(0,n)
-  for(i in 1:n){
-    if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
-  #Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
-
-  table(pt.data$rc) #205 patients with grade reclassification observed
+  #tried to add in rc stuff but didnt like it!
 
   #FINISHED PT DATA
 

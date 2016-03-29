@@ -21,28 +21,16 @@
 #' 5. Write model definition?
 #'
 #'
-RJAGSprep <- function(pt.data = pt_data, psa.data = psa_data, bx.data = bx_data) { #default file names
-
+RJAGSprep <- function(all = all) { #default file names
+  pt.data <- all[1]
+  psa.data <- all[2]
+  bx.full <- all[3]
   ### 0. Load packageges and  necessary data.
 
   #These packages should be loaded automatically when someone loads our package
-  install.packages("lme4") #dependencies figure out
+
   library("lme4")
-  install.packages("splines") #not available R 3.2.3., supress warning
   library("splines")
-
-
-  #(You shouldn't need to load the data in your workflow because the dataframes should already be defined by your previous function.)
-  load('data-shaping-work-space.RData')
-
-  #ls()
-  #bx.full, psa.data, pt.data
-  #Here, I am starting with bx.full, psa.data, and pt. data created by the data-shaping-code I sent your before. You may need to adjust dataframe and variable names if you defined things differently in your earlier code
-
-
-
-
-
 
 
   ### 1. Format pt-level data for JAGS run
@@ -62,7 +50,13 @@ RJAGSprep <- function(pt.data = pt_data, psa.data = psa_data, bx.data = bx_data)
 
 
   #I also found something that should have been included in the pt.data shaping earlier.
-  ## moved
+  pt.data$rc<-rep(0,n)
+  for(i in 1:n){
+    if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
+  #Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
+
+  table(pt.data$rc) #205 patients with grade reclassification observed
+
 
 
 
@@ -108,6 +102,8 @@ RJAGSprep <- function(pt.data = pt_data, psa.data = psa_data, bx.data = bx_data)
   V_RC_data<-as.matrix(cbind(rep(1,n_rc), ns(rc.data$bx.time, 2), ns(rc.data$bx.date.num, 2), scale(rc.data$bx.age) ))
   (d_V_RC<-dim(V_RC_data)[2]) #should be 6
 
+
+  cat("test")
   ### FINISHED DATA PREP, NOW ARGUMENT PREP
   #' 0. Load libraries
   #' 1. Define data to be sent to jags function
@@ -162,6 +158,36 @@ RJAGSprep <- function(pt.data = pt_data, psa.data = psa_data, bx.data = bx_data)
   parameters.to.save <- c("p_eta", "eta_hat", "mu_int", "mu_slope", "sigma_int", "sigma_slope", "sigma_res", "rho_int_slope", "cov_int_slope", "b_vec", "beta",  "gamma_RC",  "p_rc")
 
 
-  #return what??
+  ### 4. Define other jags settings?
+  # It is probably easier to let users define these settings themselves.
+
+  # change length; burn-in; number thinned; number of chains
+  #n.iter <- 50000; n.burnin <- 25000; n.thin <- 20; n.chains <- 1
+
+
+
+
+  ### 5. Write model definition?
+  #When running JAGS, it is also necessary to provide a .txt file that defines the model. The most straight forward thing to do at this point is to assume that users want to run the *exact* model I've already defined. In that case, we just need to provide this text file in the R package. Or, if it is not possible to include a .txt file, we can include an R script that writes the .txt file. I will send both to you.
+
+
+  ### What this code should enable/ Next steps for users
+  #This function should return the following objects (that will then serves as arguments for the JAGS function): jags_data, inits, parameters.to.save, a model file ("UNADJ-jags-model.txt").
+
+  #Users would then load the library R2jags and execute the following command:
+  #jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains, n.iter, n.burnin, n.thin)
+
+
+
+  #I ran the code below to make sure that this code version works!
+  #ex.jags<-jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
+
+  ex.out<-ex.jags$BUGSoutput
+
+  str(ex.out$sims.list)
+
+
+
+  return(ex.out)
 }
 
