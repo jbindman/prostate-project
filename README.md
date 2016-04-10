@@ -11,6 +11,6 @@ A single package synthesizing the work of Yates Coley
     
 3. Prepare data and arguments for RJAGS by calling RJAGS on the formatted list all.
 
-#man issues from install
+
 #supress warnings
 #package with dependencies

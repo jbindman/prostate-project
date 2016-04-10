@@ -21,10 +21,10 @@
 #' 5. Write model definition?
 #'
 #'
-RJAGSprep <- function(all = all) { #default file names
-  pt.data <- all[[1]]
-  psa.data <- all[[2]]
-  bx.full <- all[[3]]
+RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-jags-model.txt") {
+  pt.data <- patientDataframes[[1]]
+  psa.data <- patientDataframes[[2]]
+  bx.full <- patientDataframes[[3]]
   ### 0. Load packageges and  necessary data.
 
   #These packages should be loaded automatically when someone loads our package
@@ -36,8 +36,6 @@ RJAGSprep <- function(all = all) { #default file names
   ### 1. Format pt-level data for JAGS run
 
   (n<-dim(pt.data)[1]) #there are 1000 patients.
-  #I think you have already defined this in your data shaping code, so you wouldn't need to define it again
-  #(The same may be true of other variables I define below. If that is the case, no need to define them again. I won't keep putting this reminder in the code every place this may happen.)
 
   #define vector with observed cancer state for patients with surgery
   eta_data<-pt.data$true.gs[!is.na(pt.data$true.gs)]
@@ -102,56 +100,33 @@ RJAGSprep <- function(all = all) { #default file names
   V_RC_data<-as.matrix(cbind(rep(1,n_rc), ns(rc.data$bx.time, 2), ns(rc.data$bx.date.num, 2), scale(rc.data$bx.age) ))
   (d_V_RC<-dim(V_RC_data)[2]) #should be 6
 
-
-  #cat("test")
-  ### FINISHED DATA PREP, NOW ARGUMENT PREP
-  #' 0. Load libraries
-  #' 1. Define data to be sent to jags function
-  #' 2. Initialize model parameters
-  #' 3. Define parameters to be tracked
-  #' 4. Define other jags settings?
-  #' 5. Write model definition?
-
+  #argument prep
 
   ### 0. Load libraries
-  #These packages should be loaded automatically when someone loads our package
-
   library("bayesm")
-
-
-
 
 
   ### 1. Define data to be sent to jags function
 
   #The number of latent classes/ values of true cancer state
   K<-2
-  #We've written this initial code only to handle a binary latent class. This might be something to extend later. (I have a code for ordered latent classes, but I don't know how much more complicated that will be to package)
-
-
+  #extend beyond binary latent class.
   jags_data<-list(K=K, n=n, eta_data=eta_data, n_eta_known=n_eta_known, n_obs_psa=n_obs_psa, Y=Y, subj_psa=subj_psa, Z=Z_data, X=X_data, d_Z=d_Z, d_X=d_X, I_d_Z=diag(d_Z), RC=RC, n_rc=n_rc, subj_rc=subj_rc, V_RC=V_RC_data, d_V_RC=d_V_RC)
 
-  names(pt.data)
+  names(pt.data) #from all[1]
 
   ### 2. Initialize model parameters
   inits <- function(){
-
     p_eta<-rbeta(1,1,1)
-
     eta_hat<-pt.data$rc[is.na(pt.data$true.gs)]
-
     xi<-c(min(rlnorm(1),100), min(rlnorm(1),100))
     mu_raw<-as.matrix(cbind(rnorm(d_Z),rnorm(d_Z)))
     Tau_B_raw<-rwishart((d_Z+1),diag(d_Z)*var_vec)$W
     sigma_res<-min(rlnorm(1),1)
-
     beta<-rnorm(d_X)
-
     gamma_RC<-rnorm((d_V_RC+1), mean=0, sd=0.1)  #last coefficient is effect of eta=1
-
     list(p_eta=p_eta, eta_hat=eta_hat, xi=xi, mu_raw=mu_raw, Tau_B_raw=Tau_B_raw, sigma_res=sigma_res, beta=beta,  gamma_RC=gamma_RC)
   }
-
 
 
   ### 3. Define parameters to be tracked
@@ -159,33 +134,19 @@ RJAGSprep <- function(all = all) { #default file names
 
 
   ### 4. Define other jags settings?
-  # It is probably easier to let users define these settings themselves.
-
   # change length; burn-in; number thinned; number of chains
-  #n.iter <- 50000; n.burnin <- 25000; n.thin <- 20; n.chains <- 1
+  n.iter <- 50000; n.burnin <- 25000; n.thin <- 20; n.chains <- 1
 
 
-
-
-  ### 5. Write model definition?
-  #When running JAGS, it is also necessary to provide a .txt file that defines the model. The most straight forward thing to do at this point is to assume that users want to run the *exact* model I've already defined. In that case, we just need to provide this text file in the R package. Or, if it is not possible to include a .txt file, we can include an R script that writes the .txt file. I will send both to you.
-
-
-  ### What this code should enable/ Next steps for users
-  #This function should return the following objects (that will then serves as arguments for the JAGS function): jags_data, inits, parameters.to.save, a model file ("UNADJ-jags-model.txt").
-
-  #Users would then load the library R2jags and execute the following command:
-  #jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains, n.iter, n.burnin, n.thin)
-
-
-
-  #I ran the code below to make sure that this code version works!
+  ### 5. Write model definition
+  #called here or main workflow? if here...
+  #library(rjags)
   #ex.jags<-jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
-
   #ex.out<-ex.jags$BUGSoutput
-
   #str(ex.out$sims.list)
 
-  return(jags_data)
+  RJAGSprepfull <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file = model.file) #text file comes from R folder
+  return(RJAGSprepfull)
+
 }
 

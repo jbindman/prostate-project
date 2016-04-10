@@ -2,7 +2,7 @@
 % Please edit documentation in R/fillPatientTables.R
 \name{fillPatientTables}
 \alias{fillPatientTables}
-\title{load dataframes from four patient data files}
+\title{Load dataframes from four patient data files}
 \usage{
 fillPatientTables(tx.data = tx_data, demo.data = demo_data,
   psa.data = psa_data, bx.data = bx_data)
@@ -20,6 +20,6 @@ fillPatientTables(tx.data = tx_data, demo.data = demo_data,
 list of three dataframes, pt.data, psa.data, bx.full
 }
 \description{
-load dataframes from four patient data files
+Load dataframes from four patient data files
 }
 

@@ -1,4 +1,4 @@
-#' load dataframes from four patient data files
+#' Load dataframes from four patient data files
 #'
 #' @param tx.data one record per treatment received per patient
 #' @param demo.data demographic data, one record per patient
@@ -13,37 +13,28 @@
 #' 5. Save data
 
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
-  #define n within this function
-  pt.data<-as.data.frame(demo.data$id) #should $id be changed to colname(demo_data#)
-  names(pt.data)<-"id" # this stays
-  # NOT names(pt.data)<-colnames(demo_data) --> dont want this, so what does it matter their names?
-
-  pt.data
-  #define true GS
+  pt.data<-as.data.frame(demo.data$id)
+  names(pt.data)<-"id"
   pt.data$true.gs
   (n<-dim(demo_data)[1]) #1000 patients in this data
-  pt.data$true.gs<-rep(NA,n) #n for demo data needs to be passed through
+  pt.data$true.gs<-rep(NA,n)
 
   for(i in 1:n){
     if(pt.data$id[i]%in%tx.data$id){
-      pt.data$true.gs[i]<-tx.data$GS[tx.data$id==pt.data$id[i]] #tx.data$GS[tx.data$id==pt.data$id[i]]
+      pt.data$true.gs[i]<-tx.data$GS[tx.data$id==pt.data$id[i]]
     }}
 
-
   #define DOB numerically
-  #warning: date functions in R can be tricky! we will have to do some work later to make sure our function handles all date types
   as.Date(demo.data$dob[1:10])
   # ADD CUSTOMIZABLE
   pt.data$dob.num<-as.numeric(as.Date(demo.data$dob)) #demo.data$dob
   pt.data$dob.num[1:10]
-  #as.Date(pt.data$dob.num[1:10], origin="1970-01-01") #I always check that I've defined the dates right
-  #another note- here I just copied dates from demo.data to pt.data because I know the ids are in the same order. this may not always be the case
+  #copied dates from demo.data to pt.data because I know the ids are in the same order. this may not always be the case
 
 
-  #get diagnostic date
-  #requires making bx dates numeric
+  #get diagnostic date, requires making bx dates numeric
   as.Date(bx.data$bx.date[1:10])
-  bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date)) #bx.data$bx.date
+  bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date))
   bx.data$bx.date.num[1:10]
   as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
 
@@ -56,9 +47,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   summary(pt.data$age.dx)
 
 
-  #get average biopsy volume
-  #We want to take volume information from the biopsy data. Since increase in prostate volume due to cancer is negligible relative to the measurement error in assessing prostate volume, we will just take the average across all available biopsies
-  #We are going to use prostate volume data in the PSA model. (Great volume leads to greater PSA)
+  #average biopsy volume
   pt.data$vol.avg<-vector(length=n)
   for(i in 1:n){
     pt.data$vol.avg[i]<-mean(bx.data$vol[bx.data$id==pt.data$id[i]])
@@ -71,11 +60,8 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
 
-
-  #FINISHED PT DATA
-
   #log-PSA
-  psa.data$log.psa<-log(psa.data$psa + 0.01) #necessary to add a small number when some values are 0 (not the case in the simulated data, but will be the case in real data)
+  psa.data$log.psa<-log(psa.data$psa + 0.01)
 
   #date of test
   as.Date(psa.data$psa.date[1:10])
@@ -91,7 +77,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   for(i in 1:n){
     psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365
   }
-  summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
+  summary(psa.data$age)
 
   #pt-level prostate volume
   psa.data$vol.avg<-vector(length=n_psa)
@@ -103,8 +89,6 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   psa.data$subj<-vector(length=n_psa)
   for(i in 1:n){
     psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
-  ##FINISHED PSA DATA
-
 
   #define maximum number of follow-up years per patient
   #we will deal with censoring, treatment dates, etc. later
@@ -124,7 +108,6 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
     bx.data$time.since.dx[bx.data$id==pt.data$id[i]]<-(bx.data$bx.date.num[bx.data$id==pt.data$id[i]] - pt.data$dx.date.num[i])/365
   }
   summary(bx.data$time.since.dx)
-
 
 
   #start by defining one time interval for each year a pt is under surveillance
@@ -152,9 +135,9 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
       bx.full$bx.here[j]<-1
       bx.full$rc[j]<-0
     }
-    # a bit messier here --> clean up. for patient i patient year j, look at biopsy data and see if there were biospies in year j "use"
+    # dplyr return
+    # for patient i patient year j, look at biopsy data and see if there were biospies in year j "use"
     # if theres at least one biopsy, this indicator variable "use" will be created than 0. quick and dirty
-    # use dplyr here to
 
     else{ #post-dx biopsies
       bx.data$use<-rep(0,n_bx) #clearing existing values in this variable
@@ -173,25 +156,20 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
         bx.full$bx.here[j]<-0
       }
     }
-  } #this for loop obviously takes an unreasonably long time to run
+  }
 
   table(bx.full$bx.here) #the number of biopsies should equal n_bx (since we don't have any overlaps in intervals)
 
   table(bx.full$rc) #these should also be equal
   sum(bx.data$RC)
-  #FINISHED BX DATA
 
 
-  #tried to add in rc stuff but didnt like it!
   pt.data$rc<-rep(0,n)
   for(i in 1:n){
     if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
-  #Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
 
-
-  save(pt.data, psa.data, bx.full,file="data-shaping-work-space.RData")
-  all<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
-  return(all)
+  patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
+  return(patientDataframes)
 }
 
 
