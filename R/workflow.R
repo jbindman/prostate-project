@@ -1,8 +1,8 @@
 #rm(list=ls()) #clears
 
 # 0. Install Packages with Dependencies
-install.packages("devtools")
-devtools::install_github("jbindman/prostate-project") #install package
+#install.packages("devtools")
+#devtools::install_github("jbindman/prostate-project") #install package
 install.packages("lme4", repos="http://cran.rstudio.com/")
 install.packages("splines", repos="http://cran.rstudio.com/") #not available R 3.2.3., supress warning
 install.packages("bayesm", repos="http://cran.rstudio.com/")
