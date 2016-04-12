@@ -27,11 +27,11 @@ model.file <- "UNADJ-jags-model.txt"
 
 # 2. Prep for RJAGS
 patientDataframes <- fillPatientTables(tx_data, demo_data, psa_data, bx_data)
+
+
+# 3. Call and Reextrat data from RJAGS Function (call from this main workflow? Within function? Save to workspace?)
+
 RJAGSprepfull <- RJAGSprep(patientDataframes, model.file) #returns list of arguments for running RJAGS
-
-
-# 3. Reextrat data from RJAGS Function (call from this main workflow? Within function? Save to workspace?)
-
 jags_data <- RJAGSprepfull [[1]]
 inits <- RJAGSprepfull [[2]]
 parameters.to.save <- RJAGSprepfull [[3]]
