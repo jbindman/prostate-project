@@ -43,20 +43,7 @@ RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-j
 
   #number of patients with true state (eta) observed
   (n_eta_known<-length(eta_data))  #203
-
-  #Pt.data should already be ordered so that those with eta=0, 1 come before patients without eta observed (true.gs=NA) and subject ids 1:n_eta_known are the ids for patients with eta observed
-
-
-  #I also found something that should have been included in the pt.data shaping earlier.
-  #pt.data$rc<-rep(0,n)
-  #for(i in 1:n){
-  #  if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
-  #Pt.data needs to be ordered by subject to run this line as is. Otherwise, try if(max(bx.full$rc[bx.full$id==pt.data$id[i]], na.rm=T)==1){pt.data$rc[i]<-1}
-
   table(pt.data$rc) #205 patients with grade reclassification observed
-
-
-
 
   ### 2. Format PSA data for JAGS run
   (n_obs_psa<-dim(psa.data)[1]) #18792 #the total number of PSA observations
@@ -71,19 +58,17 @@ RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-j
 
 
   #matrix of covariates with only fixed effects
-  #here, prostate volume (standardized on patient-level with mean and std of volume since it is constant within patients). no intercept needed
+  #prostate volume (standardized on patient-level with mean and std of volume since it is constant within patients). no intercept needed
   psa.data$vol.std<-scale(psa.data$vol.avg, center=mean(pt.data$vol.avg), scale=sd(pt.data$vol.avg)) #you may want to move this line to original data shaping
   X_data<-as.matrix(cbind(psa.data$vol.std))
   (d_X<-dim(X_data)[2]) #should be 1
 
 
-  #here, I fit a linear mixed effects regression (lmer) to get a starting value for the covariance parameter. I will use this as input for the JAGS model
+  #fit a linear mixed effects regression (lmer) to get a starting value for the covariance parameter. I will use this as input for the JAGS model
   #lmer fit to get starting value for covariance parameter in JAGS
   mod_lmer<-lmer(log.psa~ vol.std + (1+ age.std |id), data=psa.data)
   (var_vec <- apply(coef(mod_lmer)$id, 2, var)[1:d_Z])
   (var_vec <- c(var_vec[2], var_vec[1])) #I want the covariance parameters ordered so that the one corresponding to the intercept is first and the one corresponding to age is second. I don't know why the model output is in a different order
-
-
 
 
 

@@ -1,13 +1,16 @@
 #rm(list=ls()) #clears
 
 #these four packages need to be installed with dependencies
+install.packages("devtools")
+devtools::install_github("jbindman/prostate-project")
+
 install.packages("lme4", repos="http://cran.rstudio.com/")
 install.packages("splines", repos="http://cran.rstudio.com/") #not available R 3.2.3., supress warning
 install.packages("bayesm", repos="http://cran.rstudio.com/")
 install.packages("Matrix", repos="http://cran.rstudio.com/") #necessary? #double colon syntax?
 install.packages("rjags")
 
-#setwd("Desktop/JHU/Prostate/prostate-project") #change to your working directory
+#setwd("~/Desktop/JHU/Prostate/prostate-project") #change to your working directory
 source("R/fillPatientTables.R")
 source("R/RJAGSprep.R")
 
@@ -20,14 +23,16 @@ bx_data<-read.csv("julia-bx-data.csv")
 tx_data<-read.csv("julia-tx-data.csv")
 
 patientDataframes <- fillPatientTables(tx_data, demo_data, psa_data, bx_data)
-RJAGSprepfull <- RJAGSprep(patientDataframes, model.file="UNADJ-jags-model.txt") #returns list of arguments for running RJAGS
+
+model.file <- "UNADJ-jags-model.txt"
+RJAGSprepfull <- RJAGSprep(patientDataframes, model.file) #returns list of arguments for running RJAGS
 
 
 #if we want to call from this main workflow:
 jags_data <- RJAGSprepfull [[1]]
 inits <- RJAGSprepfull [[2]]
 parameters.to.save <- RJAGSprepfull [[3]]
-model.file <- RJAGSprepfull [[4]]
+model.file <- RJAGSprepfull [[4]] #already defined?
 n.iter <- 50000; n.burnin <- 25000; n.thin <- 20; n.chains <- 1 #customize
 
 library(rjags)
