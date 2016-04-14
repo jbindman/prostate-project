@@ -191,3 +191,10 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
 #-all PSA observations must have a date
 #-all biopsies must have reclassification information. this should be reported as 0 or 1.
 #-all treatment records must have a date
+
+# if (psa.data < 0) {
+# stop ("psa.data must be non negative")
+# }
+#
+#
+
