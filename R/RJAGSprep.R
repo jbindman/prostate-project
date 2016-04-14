@@ -1,4 +1,4 @@
-#' Prep files for RJAGS
+#' Prep files for RJAGS run blah blah
 #'
 #' @param pt.data filled dataframe
 #' @param psa.data filled dataframe
@@ -17,8 +17,8 @@
 #' 1. Define data to be sent to jags function
 #' 2. Initialize model parameters
 #' 3. Define parameters to be tracked
-#' 4. Define other jags settings?
-#' 5. Write model definition?
+#' 4. Define other jags settings
+#' 5. Write model definition
 #'
 #'
 RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-jags-model.txt") {
@@ -85,7 +85,7 @@ RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-j
   V_RC_data<-as.matrix(cbind(rep(1,n_rc), ns(rc.data$bx.time, 2), ns(rc.data$bx.date.num, 2), scale(rc.data$bx.age) ))
   (d_V_RC<-dim(V_RC_data)[2]) #should be 6
 
-  #argument prep
+
 
   ### 0. Load libraries
   library("bayesm")
@@ -120,18 +120,18 @@ RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-j
 
   ### 4. Define other jags settings?
   # change length; burn-in; number thinned; number of chains
+  # make this returned with prep
   n.iter <- 50000; n.burnin <- 25000; n.thin <- 20; n.chains <- 1
 
 
   ### 5. Write model definition
-  #called here or main workflow? if here...
   #library(rjags)
   #ex.jags<-jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
   #ex.out<-ex.jags$BUGSoutput
   #str(ex.out$sims.list)
 
-  RJAGSprepfull <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file = model.file) #text file comes from R folder
-  return(RJAGSprepfull)
+  jagsPrep <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file = model.file) #text file comes from R folder
+  return(jagsPrep)
 
 }
 

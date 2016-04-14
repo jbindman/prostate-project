@@ -173,3 +173,21 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
 }
 
 
+
+
+
+
+
+
+#-must have positive dimension for demo.data, psa.data, bx.data, and tx.data
+#-each patient in demo.data must have at least one record in psa.data, bx.data
+#-all surgery patients must have post-surgery gleason score (we may lift this restriction). these must be reported at 0 or 1.
+#-each patient needs date of birth
+#-all biopsy records must have a date
+#-all patients must have diagnostic biopsy indicated in bx.data
+#-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)
+#-all patients must have at least one volume measurement in the biopsy data
+#-all PSA observations must be 0 or higher; none can be missing
+#-all PSA observations must have a date
+#-all biopsies must have reclassification information. this should be reported as 0 or 1.
+#-all treatment records must have a date
