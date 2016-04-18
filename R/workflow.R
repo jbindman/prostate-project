@@ -12,6 +12,8 @@ install.packages("Matrix", repos="http://cran.rstudio.com/")
 
 source("R/fillPatientTables.R")
 source("R/RJAGSprep.R")
+source("R/writeJAGSmodel.R")
+
 #dont source the files, want automatically downloaded through package use HOW DO I DO THIS
 
 #######################
