@@ -1,19 +1,10 @@
 #rm(list=ls()) #clears
-#setwd("~/Desktop/JHU/Prostate/prostate-project")
-
-# Install required packages
-
-install.packages("lme4", repos="http://cran.rstudio.com/")
-install.packages("splines", repos="http://cran.rstudio.com/") #not available R 3.2.3., supress warning
-install.packages("bayesm", repos="http://cran.rstudio.com/")
-install.packages("Matrix", repos="http://cran.rstudio.com/")
-#packages accessed as needed through library calls
+#setwd("~/Desktop/JHU/Prostate/prostate-project"s
 
 
 
-
-source("R/fillPatientTables.R")
-source("R/RJAGSprep.R")
+#source("R/fillPatientTables.R")
+#source("R/RJAGSprep.R")
 #dont source the files, want automatically downloaded through package use HOW DO I DO THIS
 
 #######################
