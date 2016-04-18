@@ -1,4 +1,4 @@
-#' Prep files for RJAGS run blah blah
+#' Prep files for RJAGS run
 #'
 #' @param pt.data filled dataframe
 #' @param psa.data filled dataframe
@@ -21,7 +21,7 @@
 #' 5. Write model definition
 #'
 #'
-RJAGSprep <- function(patientDataframes = patientDataframes, model.file="UNADJ-jags-model.txt") {
+RJAGSprep <- function(patientDataframes = patientDataframes, model.file) {
   pt.data <- patientDataframes[[1]]
   psa.data <- patientDataframes[[2]]
   bx.full <- patientDataframes[[3]]

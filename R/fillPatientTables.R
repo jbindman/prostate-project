@@ -13,6 +13,10 @@
 #' 5. Save data
 
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
+
+  # check all data, here on in workflow
+
+
   pt.data<-as.data.frame(demo.data$id)
   names(pt.data)<-"id"
   pt.data$true.gs
