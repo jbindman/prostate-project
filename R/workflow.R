@@ -1,10 +1,13 @@
 #rm(list=ls()) #clears
-#setwd("~/Desktop/JHU/Prostate/prostate-project"s
+#setwd("~/Desktop/JHU/Prostate/prostate-project")
 
 
 
-#source("R/fillPatientTables.R")
-#source("R/RJAGSprep.R")
+
+
+
+source("R/fillPatientTables.R")
+source("R/RJAGSprep.R")
 #dont source the files, want automatically downloaded through package use HOW DO I DO THIS
 
 #######################
