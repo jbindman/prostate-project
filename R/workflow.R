@@ -1,13 +1,7 @@
 #rm(list=ls()) #clears
 #setwd("~/Desktop/JHU/Prostate/prostate-project")
 
-# Install required packages
 
-install.packages("lme4", repos="http://cran.rstudio.com/")
-install.packages("splines", repos="http://cran.rstudio.com/") #not available R 3.2.3., supress warning
-install.packages("bayesm", repos="http://cran.rstudio.com/")
-install.packages("Matrix", repos="http://cran.rstudio.com/")
-#packages accessed as needed through library calls
 
 
 source("R/fillPatientTables.R")
