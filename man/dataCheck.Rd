@@ -2,7 +2,7 @@
 % Please edit documentation in R/dataCheck.R
 \name{dataCheck}
 \alias{dataCheck}
-\title{Check if data has values within range}
+\title{Check if data has values within specified range}
 \usage{
 dataCheck(tx.data, demo.data, psa.data, bx.data)
 }
@@ -19,6 +19,6 @@ dataCheck(tx.data, demo.data, psa.data, bx.data)
 true if error was caught, false if not
 }
 \description{
-Check if data has values within range
+Check if data has values within specified range
 }
 

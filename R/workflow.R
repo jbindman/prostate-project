@@ -2,7 +2,6 @@
 #setwd("~/Desktop/JHU/Prostate/prostate-project")
 
 # Install required packages
-
 install.packages("lme4", repos="http://cran.rstudio.com/")
 install.packages("splines", repos="http://cran.rstudio.com/") #not available R 3.2.3., supress warning
 install.packages("bayesm", repos="http://cran.rstudio.com/")
@@ -10,9 +9,9 @@ install.packages("Matrix", repos="http://cran.rstudio.com/")
 #packages accessed as needed through library calls
 
 
-source("R/fillPatientTables.R")
-source("R/RJAGSprep.R")
-source("R/writeJAGSmodel.R")
+#source("R/fillPatientTables.R")
+#source("R/RJAGSprep.R")
+#source("R/writeJAGSmodel.R")
 #dont source the files, want automatically downloaded through package use HOW DO I DO THIS
 
 #######################
@@ -31,10 +30,10 @@ model.file <- "UNADJ-jags-model.txt" #customize here. no matter specified name, 
 
 # Organize data frames from clinical patient sources
 # dataCheck (tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
-patientDataframes <- fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
+patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
 
-# Call argument prep on data frames for RJAGS function
-jagsPrep <- RJAGSprep(patientDataframes, model.file) #returns list of arguments for running RJAGS
+# Return RJAGS argument prep on formatted patient dataframes
+jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, model.file)
 
 
 

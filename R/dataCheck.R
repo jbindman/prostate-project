@@ -17,7 +17,10 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
 
   #-each patient needs date of birth
   #-all biopsy records must have a date
-  #-all patients must have diagnostic biopsy indicated in bx.data
+  bad <- filter(bx_data, is.na(bx_data$bx.date))
+
+  #-all patients must have diagnostic biopsy indicated in bx.data  dummy <- anti_join(bx_data$dx)
+
   #-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)
   #-all patients must have at least one volume measurement in the biopsy data
   #-all PSA observations must be 0 or higher; none can be missing
