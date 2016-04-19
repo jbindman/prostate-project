@@ -127,7 +127,7 @@ RJAGSprep <- function(patientDataframes = patientDataframes, model.file) {
 
 
   ### 5. Write model definition
-  writeJAGSmodel(model.file)
+
   #library(rjags)
   #ex.jags<-jags(data=jags_data, inits=inits, parameters.to.save=parameters.to.save, model.file="UNADJ-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
   #ex.out<-ex.jags$BUGSoutput
