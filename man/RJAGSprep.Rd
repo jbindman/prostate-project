@@ -2,9 +2,9 @@
 % Please edit documentation in R/RJAGSprep.R
 \name{RJAGSprep}
 \alias{RJAGSprep}
-\title{Prep files for RJAGS}
+\title{Prep files for RJAGS run}
 \usage{
-RJAGSprep(all = all)
+RJAGSprep(patientDataframes = patientDataframes, model.file)
 }
 \arguments{
 \item{pt.data}{filled dataframe}
@@ -17,6 +17,6 @@ RJAGSprep(all = all)
 list for RJAGS prep
 }
 \description{
-Prep files for RJAGS
+Prep files for RJAGS run
 }
 

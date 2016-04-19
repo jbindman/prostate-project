@@ -1,4 +1,4 @@
-#' Check if data has values within range
+#' Check if data has values within specified range
 #'
 #' @param tx.data one record per treatment received per patient
 #' @param demo.data demographic data, one record per patient
