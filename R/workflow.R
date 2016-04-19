@@ -27,6 +27,8 @@ bx_data<-read.csv("julia-bx-data.csv")
 tx_data<-read.csv("julia-tx-data.csv")
 # .txt file that defines the model
 model.file <- "UNADJ-jags-model.txt" #customize here. no matter specified name, it will create txt file w same name
+writeJAGSmodel(model.file)
+
 
 # Organize data frames from clinical patient sources
 # dataCheck (tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
