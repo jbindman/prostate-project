@@ -53,11 +53,14 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
   }
   #### checking dob in bx.data after its been changed
   #### how to check bx.data RC
-  for (i in bx.data$vol) {
-    if (i < 0) {
-      stop ("Patients must have positive value for vol in bx_data")
-    }
-  }
+
+  #-all patients must have at least one volume measurement in the biopsy data
+  #for (i in bx.data$vol) {
+  #  if (i < 0) {
+  #    stop ("Patients must have positive value for vol in bx_data")
+  #  }
+  #}
+
   for (i in bx.data$dx) {
     if (i < 0) {
       stop ("Patients must have 0 or positive value for dx in bx_data")
@@ -78,11 +81,7 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
       stop ("Patients must have positive value for GS value in tx_data")
     }
   }
-  #### change dates later
-
-
-
-
+  #### change dates later for the rest of tx.data
 
 
   #-each patient (id) in demo.data must have at least one record in psa.data, bx.data
@@ -104,36 +103,22 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
 
 
   #-all surgery patients must have post-surgery gleason score (we may lift this restriction). these must be reported at 0 or 1.
-  #-each patient needs date of birth
-  #-all biopsy records must have a date
-  bad <- filter(bx_data, is.na(bx_data$bx.date))
+  invalidGS <-filter(tx.data, GS != 1 & GS != 0)
+  if (nrow(invalidGS) != 0) {
+    stop ("Patients must have post-surgery gleason score of 0 or 1")
+  }
 
-  #-all patients must have diagnostic biopsy indicated in bx.data
-  # iterate through bx make sure each has a diagnostic biopsy = 1
-
-  #-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)
-  #-all patients must have at least one volume measurement in the biopsy data
-  #-all PSA observations must be 0 or higher; none can be missing
-  #-all PSA observations must have a date
+  #-each patient needs date of birth --> check date, later
+  #-all biopsy records must have a date --> check date, later
+  #-all patients must have diagnostic biopsy indicated in bx.data --> check date, later
+  #-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)  --> check date, later
+  #-all PSA observations must have a date --> check date, later
   #-all biopsies must have reclassification information. this should be reported as 0 or 1.
 
 
-  #-all treatment records must have a date
-  if (!is.na(filter(tx_data, is.na(tx.date)))) { #not real but dyplyr example
-    stop ("tx_data values must all have a date")
-  }
-
-  for (i in tx_data$tx.date) { #iteration example
-    if (is.na(i)) {
-      stop ("tx_data values must all have a date")
-    }
-  }
+  #-all treatment records must have a date -->  check date, later
 
 
-  # if (psa_data < 0) {
-  # stop ("psa_data must be non negative")
-  # }
-  #
-  #
+
 
 }
