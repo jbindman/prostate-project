@@ -9,11 +9,11 @@
 
 dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
   #some data checks in this function, some after the dataframes have been combined
-  # to do later: DOB checks
+  # to do later: date checks
 
 
 
-  #-must have positive dimension for demo.data, psa.data, bx.data, and tx.data
+  #-must have positive dimension for demo.data, psa.data, bx.data, and tx.data DONE
   for (i in demo.data$X) {
     if (i < 0) {
       stop ("Patients must have positive dimensions for X in demo_data")
@@ -85,16 +85,16 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
 
 
 
-  #-each patient in demo.data must have at least one record in psa.data, bx.data
+  #-each patient (id) in demo.data must have at least one record in psa.data, bx.data
   for (i in demo.data$id) {
-    i <- 5000
+    #i <- 5000 check
     contains <- i %in% psa.data$id
     if (contains == FALSE) {
       stop ("Patient ID #", i ," missing psa data")
     }
   }
   for (i in demo.data$id) {
-    i <- 5000
+    #i <- 5000 check
     contains <- i %in% bx.data$id
     if (contains == FALSE) {
       stop ("Patient ID #", i ," missing biopsy data")
