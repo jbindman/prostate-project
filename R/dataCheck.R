@@ -8,18 +8,20 @@
 #' @export
 
 dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
+  #some data checks in this function, some after the dataframes have been combined
+
+
   #-must have positive dimension for demo.data, psa.data, bx.data, and tx.data
 
   #-each patient in demo.data must have at least one record in psa.data, bx.data
 
   #-all surgery patients must have post-surgery gleason score (we may lift this restriction). these must be reported at 0 or 1.
-
-
   #-each patient needs date of birth
   #-all biopsy records must have a date
   bad <- filter(bx_data, is.na(bx_data$bx.date))
 
-  #-all patients must have diagnostic biopsy indicated in bx.data  dummy <- anti_join(bx_data$dx)
+  #-all patients must have diagnostic biopsy indicated in bx.data
+  # iterate through bx make sure each has a diagnostic biopsy = 1
 
   #-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)
   #-all patients must have at least one volume measurement in the biopsy data
