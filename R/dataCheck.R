@@ -9,11 +9,99 @@
 
 dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
   #some data checks in this function, some after the dataframes have been combined
+  # to do later: DOB checks
+
 
 
   #-must have positive dimension for demo.data, psa.data, bx.data, and tx.data
+  for (i in demo.data$X) {
+    if (i < 0) {
+      stop ("Patients must have positive dimensions for X in demo_data")
+    }
+  }
+  for (i in demo.data$id) {
+    if (i < 0) {
+      stop ("Patients must have positive dimensions for ID in demo_data")
+    }
+  }
+  #### checking dob in demo.data after its been changed
+  for (i in psa.data$X) {
+    if (i < 0) {
+      stop ("Patients must have positive dimensions for X in psa_data")
+    }
+  }
+  for (i in psa.data$id) {
+    if (i < 0) {
+      stop ("Patients must have positive dimensions for ID in psa_data")
+    }
+  }
+  for (i in psa.data$psa) {
+    if (i < 0) {
+      stop ("Patients must have positive value for psa value in psa_data")
+    }
+  }
+  #### checking dob in psa.data after its been changed
+  for (i in bx.data$X) {
+    if (i < 0) {
+      stop ("Patients must have positive value for X value in bx_data")
+    }
+  }
+  for (i in bx.data$id) {
+    if (i < 0) {
+      stop ("Patients must have positive value for id value in bx_data")
+    }
+  }
+  #### checking dob in bx.data after its been changed
+  #### how to check bx.data RC
+  for (i in bx.data$vol) {
+    if (i < 0) {
+      stop ("Patients must have positive value for vol in bx_data")
+    }
+  }
+  for (i in bx.data$dx) {
+    if (i < 0) {
+      stop ("Patients must have 0 or positive value for dx in bx_data")
+    }
+  }
+  for (i in tx.data$X) {
+    if (i < 0) {
+      stop ("Patients must have positive value for X value in tx_data")
+    }
+  }
+  for (i in tx.data$id) {
+    if (i < 0) {
+      stop ("Patients must have positive value for id value in tx_data")
+    }
+  }
+  for (i in tx.data$GS) {
+    if (i < 0) {
+      stop ("Patients must have positive value for GS value in tx_data")
+    }
+  }
+  #### change dates later
+
+
+
+
+
 
   #-each patient in demo.data must have at least one record in psa.data, bx.data
+  for (i in demo.data$id) {
+    i <- 5000
+    contains <- i %in% psa.data$id
+    if (contains == FALSE) {
+      stop ("Patient ID #", i ," missing psa data")
+    }
+  }
+  for (i in demo.data$id) {
+    i <- 5000
+    contains <- i %in% bx.data$id
+    if (contains == FALSE) {
+      stop ("Patient ID #", i ," missing biopsy data")
+    }
+  }
+
+
 
   #-all surgery patients must have post-surgery gleason score (we may lift this restriction). these must be reported at 0 or 1.
   #-each patient needs date of birth
