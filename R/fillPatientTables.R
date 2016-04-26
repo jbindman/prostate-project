@@ -14,7 +14,13 @@
 
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
 
-  # check all data, here on in workflow
+  dataCheck(tx.data, demo.data, psa.data, bx.data)
+  #-each patient needs date of birth --> check date, later
+  #-all biopsy records must have a date --> check date, later
+  #-all patients must have diagnostic biopsy indicated in bx.data --> check date, later
+  #-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)  --> check date, later
+  #-all PSA observations must have a date --> check date, later
+  #-all treatment records must have a date -->  check date, later
 
   pt.data<-as.data.frame(demo.data$id)
   names(pt.data)<-"id"
