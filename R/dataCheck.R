@@ -7,6 +7,8 @@
 #' @export
 
 dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
+  # get rid of X dummy variable
+
   #checks demo.data
   for (i in demo.data$X) {
     if (i < 0) {

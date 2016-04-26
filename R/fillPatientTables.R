@@ -15,6 +15,9 @@
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
 
   dataCheck(tx.data, demo.data, psa.data, bx.data)
+  #check to make sure non empty dates, then convert, then do checks to see if empty and in reasonable range
+  #possible to have future values
+
   #-each patient needs date of birth --> check date, later
   #-all biopsy records must have a date --> check date, later
   #-all patients must have diagnostic biopsy indicated in bx.data --> check date, later
