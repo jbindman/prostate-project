@@ -7,14 +7,9 @@
 #' @export
 
 dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
-  # get rid of X dummy variable
+
 
   #checks demo.data
-  for (i in demo.data$X) {
-    if (i < 0) {
-      stop ("Patients must have positive dimensions for X in demo_data")
-    }
-  }
   for (i in demo.data$id) {
     if (i < 0) {
       stop ("Patients must have positive dimensions for ID in demo_data")
@@ -22,11 +17,6 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
   }
 
   #checks psa.data
-  for (i in psa.data$X) {
-    if (i < 0) {
-      stop ("Patients must have positive dimensions for X in psa_data")
-    }
-  }
   for (i in psa.data$id) {
     if (i < 0) {
       stop ("Patients must have positive dimensions for ID in psa_data")
@@ -39,11 +29,6 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
   }
 
   #checks bx.data
-  for (i in bx.data$X) {
-    if (i < 0) {
-      stop ("Patients must have positive value for X value in bx_data")
-    }
-  }
   for (i in bx.data$id) {
     if (i < 0) {
       stop ("Patients must have positive value for id value in bx_data")
@@ -66,12 +51,8 @@ dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
     }
   }
 
+
   #checks tx.data
-  for (i in tx.data$X) {
-    if (i < 0) {
-      stop ("Patients must have positive value for X value in tx_data")
-    }
-  }
   for (i in tx.data$id) {
     if (i < 0) {
       stop ("Patients must have positive value for id value in tx_data")

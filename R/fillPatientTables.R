@@ -15,33 +15,44 @@
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
 
   dataCheck(tx.data, demo.data, psa.data, bx.data)
-  #check to make sure non empty dates, then convert, then do checks to see if empty and in reasonable range
-  #possible to have future values
 
-  #-each patient needs date of birth --> check date, later
-  #-all biopsy records must have a date --> check date, later
-  #-all patients must have diagnostic biopsy indicated in bx.data --> check date, later
+
+  # checks:
+  #-each patient needs date of birth
+  #-all biopsy records must have a date
+  #-all PSA observations must have a date
+  #-all treatment records must have a date
   #-all patients must have age at diagnosis above 0. (I actually think it should probably be above 35.)  --> check date, later
-  #-all PSA observations must have a date --> check date, later
-  #-all treatment records must have a date -->  check date, later
+
 
   pt.data<-as.data.frame(demo.data$id)
   names(pt.data)<-"id"
   pt.data$true.gs
   (n<-dim(demo_data)[1]) #1000 patients in this data
   pt.data$true.gs<-rep(NA,n)
+  #check dob
+  for (i in demo.data$dob) {
+    if  (as.Date(i) < "1900-01-01") { #what dates?  #possible to have future values for dates
+      stop ("Patients must have DOB dates in correct range")
+    }
+  }
+
+
+  #check treatment dates
+  for (i in tx.data$tx.date) {
+    if  (as.Date(i) < "1970-01-01") { #what dates?
+      stop ("Patients must have treatment dates in correct range")
+    }
+  }
 
   for(i in 1:n){
     if(pt.data$id[i]%in%tx.data$id){
       pt.data$true.gs[i]<-tx.data$GS[tx.data$id==pt.data$id[i]]
     }}
 
-  #define DOB numerically
-  as.Date(demo.data$dob[1:10])
-  # ADD CUSTOMIZABLE
+
   pt.data$dob.num<-as.numeric(as.Date(demo.data$dob)) #demo.data$dob
   pt.data$dob.num[1:10]
-  #copied dates from demo.data to pt.data because I know the ids are in the same order. this may not always be the case
 
 
   #get diagnostic date, requires making bx dates numeric
@@ -49,6 +60,13 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date))
   bx.data$bx.date.num[1:10]
   as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
+  #bx check
+  for (i in bx.data$bx.date) {
+    if  (as.Date(i) < "1970-01-01") {
+      stop ("Patients must have BX dates in correct range ")
+    }
+  }
+
 
   pt.data$dx.date.num<-rep(0,n)
   for(i in 1:n){
@@ -56,7 +74,13 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
 
   #age at diagnosis
   pt.data$age.dx<-(pt.data$dx.date.num-pt.data$dob.num)/365
-  summary(pt.data$age.dx)
+  for (i in pt.data$age.dx) {
+    if  (i < 35) { #what age?
+      stop ("Patients must be older than 35 when they received treatment")
+    }
+  }
+  #summary(pt.data$age.dx)
+
 
 
   #average biopsy volume
@@ -64,7 +88,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   for(i in 1:n){
     pt.data$vol.avg[i]<-mean(bx.data$vol[bx.data$id==pt.data$id[i]])
   }
-  summary(pt.data$vol.avg)
+  #summary(pt.data$vol.avg)
 
 
   #order data based on observed true GS
@@ -80,6 +104,13 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   psa.data$psa.date.num<-as.numeric(as.Date(psa.data$psa.date))
   psa.data$psa.date.num[1:10]
   as.Date(psa.data$psa.date.num[1:10], origin="1970-01-01")
+
+  #check psa date
+  for (i in psa.data$psa.date) {
+    if  (as.Date(i) < "1970-01-01") {
+      stop ("Patients must have PSA dates in correct range ")
+    }
+  }
 
   #age at each test
   (n_psa<-dim(psa_data)[1]) #18792 PSA tests
@@ -147,7 +178,6 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
       bx.full$bx.here[j]<-1
       bx.full$rc[j]<-0
     }
-    # dplyr return
     # for patient i patient year j, look at biopsy data and see if there were biospies in year j "use"
     # if theres at least one biopsy, this indicator variable "use" will be created than 0. quick and dirty
 
@@ -169,6 +199,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
       }
     }
   }
+
 
   table(bx.full$bx.here) #the number of biopsies should equal n_bx (since we don't have any overlaps in intervals)
 
