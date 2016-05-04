@@ -8,7 +8,7 @@
 
 dataCheck <- function (tx.data, demo.data, psa.data, bx.data) {
 
-
+  library(dplyr)
   #checks demo.data
   for (i in demo.data$id) {
     if (i < 0) {

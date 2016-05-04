@@ -15,9 +15,6 @@ dataCheck(tx.data, demo.data, psa.data, bx.data)
 
 \item{bx.data}{one record per biopsy per patient}
 }
-\value{
-true if error was caught, false if not
-}
 \description{
 Check if data has values within specified range
 }
