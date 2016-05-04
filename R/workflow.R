@@ -21,12 +21,11 @@ bx_data<-read.csv("julia-bx-data.csv")
 # tx.data. one record per treatment received per patient
 tx_data<-read.csv("julia-tx-data.csv")
 # .txt file that defines the model
-model.file <- "UNADJ-jags-model.txt" #customize here. no matter specified name, it will create txt file w same name
-writeJAGSmodel(model.file)
+model.file <- "UNADJ-jags-model.txt" #customize here
+#ProstatePackage:::writeJAGSmodel(model.file)
 
 
 # Organize data frames from clinical patient sources
-# dataCheck (tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
 patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
 
 # Return RJAGS argument prep on formatted patient dataframes
@@ -34,7 +33,7 @@ jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, model.file)
 
 
 
-# Execute RJAGS (Test)
+# Execute RJAGS (Test) #what should i do to test if i have correct return?
 
 #library(rjags)
 #inits=jagsPrep$inits # test
