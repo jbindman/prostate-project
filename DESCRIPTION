@@ -13,3 +13,5 @@ Imports: bayesm,
          lme4,
          Matrix,
          splines,
+         dplyr,
+
