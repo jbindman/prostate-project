@@ -4,7 +4,7 @@
 #' @return the model
 #' @export
 
-writeJAGSmodelfile<-function(file.name){
+writeJAGSmodelfile<-function(file.name = "UNADJ-jags-model.txt"){
 
   cat("model {
 
@@ -86,5 +86,5 @@ writeJAGSmodelfile<-function(file.name){
 
 
 }", fill=TRUE, file=file.name)
-  return(file)
+  return(file.name)
   }

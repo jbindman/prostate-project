@@ -20,17 +20,17 @@ psa_data<-read.csv("julia-psa-data.csv")
 bx_data<-read.csv("julia-bx-data.csv")
 # tx.data. one record per treatment received per patient
 tx_data<-read.csv("julia-tx-data.csv")
-# .txt file that defines the model
-model.file <- "UNADJ-jags-model.txt" #customize here
 
-model <- ProstatePackage:::writeJAGSmodelfile(model.file)
+
+
+model.file <- writeJAGSmodelfile("UNADJ-jags-model.txt") #default name can be overwritten here
 
 
 # Organize data frames from clinical patient sources
 patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
 
 # Return RJAGS argument prep on formatted patient dataframes
-jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, model)
+jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, model.file)
 
 #small run standard
 
