@@ -2,24 +2,24 @@
 % Please edit documentation in R/fillPatientTables.R
 \name{fillPatientTables}
 \alias{fillPatientTables}
-\title{Load dataframes from four patient data files}
+\title{fillPatientTables.R}
 \usage{
 fillPatientTables(tx.data = tx_data, demo.data = demo_data,
   psa.data = psa_data, bx.data = bx_data)
 }
 \arguments{
-\item{tx.data}{one record per treatment received per patient}
+\item{tx.data}{One record per treatment received per patient containing treatment date and GS}
 
-\item{demo.data}{demographic data, one record per patient}
+\item{demo.data}{Demographic data, one record per patient ID containing DOB}
 
-\item{psa.data}{psa data, one record per PSA test per patient}
+\item{psa.data}{PSA data, one record per PSA test per patient containing date of PSA test}
 
-\item{bx.data}{one record per biopsy per patient}
+\item{bx.data}{One record per biopsy per patient containing reclassicfication, volume, and dx}
 }
 \value{
-list of three dataframes, pt.data, psa.data, bx.full
+List of three dataframes, pt.data, psa.data, bx.full
 }
 \description{
-Load dataframes from four patient data files
+Load dataframes from four patient data files to create a list of formatted patient dataframes.
 }
 

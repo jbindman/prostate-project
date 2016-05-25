@@ -32,12 +32,11 @@ patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo
 # Return RJAGS argument prep on formatted patient dataframes
 jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, "UNADJ-jags-model.txt")
 
-#small run standard
 
-# Execute RJAGS (Test) #what should i do to test if i have correct return?
+# Execute RJAGS (Test)
 
 #library(rjags)
-inits=jagsPrep$initparameters.to.save # test
+file=jagsPrep$model.file
 #ex.jags<-jags(jags_data = jagsPrep$jags_data, inits=jagsPrep$inits, parameters.to.save=jagsPrep$parameters.to.save, model.file = jagsPrep$model.file, n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
 #ex.out<-ex.jags$BUGSoutput
 #str(ex.out$sims.list)

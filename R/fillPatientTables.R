@@ -1,10 +1,12 @@
-#' Load dataframes from four patient data files
+#' fillPatientTables.R
 #'
-#' @param tx.data one record per treatment received per patient
-#' @param demo.data demographic data, one record per patient
-#' @param psa.data psa data, one record per PSA test per patient
-#' @param bx.data one record per biopsy per patient
-#' @return list of three dataframes, pt.data, psa.data, bx.full
+#' Load dataframes from four patient data files to create a list of formatted patient dataframes.
+#'
+#' @param tx.data One record per treatment received per patient containing treatment date and GS
+#' @param demo.data Demographic data, one record per patient ID containing DOB
+#' @param psa.data PSA data, one record per PSA test per patient containing date of PSA test
+#' @param bx.data One record per biopsy per patient containing reclassicfication, volume, and dx
+#' @return List of three dataframes, pt.data, psa.data, bx.full
 #' @export
 #'
 #' 1. Load data, look at variables.

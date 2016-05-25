@@ -2,21 +2,21 @@
 % Please edit documentation in R/RJAGSprep.R
 \name{RJAGSprep}
 \alias{RJAGSprep}
-\title{Prep files for RJAGS run}
+\title{RJAGSprep.R.}
 \usage{
 RJAGSprep(patientDataframes = patientDataframes, model.file = model.file)
 }
 \arguments{
-\item{pt.data}{filled dataframe}
+\item{pt.data}{Filled dataframe of one record per patient containing DOB, age at dx, vol, and rc}
 
-\item{psa.data}{filled dataframe}
+\item{psa.data}{Filled dataframe of one record per patient PSA reading containing patient subj ID, date of PSA, log PSA, and vol}
 
-\item{bx.data}{filled dataframe}
+\item{bx.data}{Filled dataframe of one record per patient biopsy, containing patient subj ID, time, rc, and age}
 }
 \value{
-list for RJAGS prep
+List of parameters for RJAGS prep
 }
 \description{
-Prep files for RJAGS run
+Prep files for RJAGS by creating list of parameters for RJAGS run.
 }
 

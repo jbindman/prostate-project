@@ -2,20 +2,20 @@
 % Please edit documentation in R/dataCheck.R
 \name{dataCheck}
 \alias{dataCheck}
-\title{Check if data has values within specified range}
+\title{dataCheck.R}
 \usage{
 dataCheck(tx.data, demo.data, psa.data, bx.data)
 }
 \arguments{
-\item{tx.data}{one record per treatment received per patient}
+\item{tx.data}{One record per treatment received per patient containing treatment date and GS}
 
-\item{demo.data}{demographic data, one record per patient}
+\item{demo.data}{Demographic data, one record per patient ID containing DOB}
 
-\item{psa.data}{psa data, one record per PSA test per patient}
+\item{psa.data}{PSA data, one record per PSA test per patient containing date of PSA test}
 
-\item{bx.data}{one record per biopsy per patient}
+\item{bx.data}{One record per biopsy per patient containing reclassicfication, volume, and dx}
 }
 \description{
-Check if data has values within specified range
+Check if loaded patient data has values within acceptable range.
 }
 
