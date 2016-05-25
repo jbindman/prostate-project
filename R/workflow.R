@@ -23,7 +23,7 @@ tx_data<-read.csv("julia-tx-data.csv")
 
 
 
-model <- writeJAGSmodel("UNADJ-jags-model.txt") #default name can be overwritten here
+model <- ProstatePackage:::writeJAGSmodel("UNADJ-jags-model.txt") #default name can be overwritten here
 
 
 # Organize data frames from clinical patient sources
