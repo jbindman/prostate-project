@@ -6,6 +6,7 @@
 #' @param bx.data one record per biopsy per patient
 #' @return list of three dataframes, pt.data, psa.data, bx.full
 #' @export
+#'
 #' 1. Load data, look at variables.
 #' 2. Start patient dataframe
 #' 3. Add relevant variables to PSA dataframe

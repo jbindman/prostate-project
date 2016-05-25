@@ -4,7 +4,7 @@
 \alias{RJAGSprep}
 \title{Prep files for RJAGS run}
 \usage{
-RJAGSprep(patientDataframes = patientDataframes, model.file)
+RJAGSprep(patientDataframes = patientDataframes, model.file = model.file)
 }
 \arguments{
 \item{pt.data}{filled dataframe}
