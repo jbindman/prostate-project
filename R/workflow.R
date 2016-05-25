@@ -23,7 +23,8 @@ tx_data<-read.csv("julia-tx-data.csv")
 
 
 # still giving me problems
-writeModel() #default name can be overwritten here
+
+ProstatePackage:::writeModel() #default name can be overwritten here
 
 
 # Organize data frames from clinical patient sources
