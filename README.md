@@ -18,7 +18,7 @@ bx_data<-read.csv("julia-bx-data.csv")
 tx_data<-read.csv("julia-tx-data.csv")
 # .txt file that defines the model
 model.file <- "UNADJ-jags-model.txt" #customize here
-#ProstatePackage:::writeJAGSmodel(model.file)
+ProstatePackage:::writeJAGSmodel(model.file)
 
 # Organize data frames from clinical patient sources
 patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
@@ -27,6 +27,6 @@ patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo
 3. Prepare data and arguments for RJAGS by calling RJAGS on the formatted list patientDataframes and the specific file name for the required accompanying RJAGS txt file.
 
 # Return RJAGS argument prep on formatted patient dataframes
-jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, model.file)
+jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes)
 
 4. Execute RJAGS 
