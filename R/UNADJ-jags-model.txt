@@ -1,4 +1,4 @@
-cat("model {
+model {
 
 ###PRIORS FOR LATENT CLASS MODEL
 
@@ -77,4 +77,4 @@ for(j in 1:n_rc){
 	RC[j] ~ dbern(p_rc[j]) }
 
 	
- }", fill=TRUE, file="UNADJ-jags-model.txt")
+ }
