@@ -2,7 +2,7 @@
 % Please edit documentation in R/RJAGSprep.R
 \name{RJAGSprep}
 \alias{RJAGSprep}
-\title{RJAGSprep.R.}
+\title{RJAGSprep.R}
 \usage{
 RJAGSprep(patientDataframes = patientDataframes, model.file = model.file)
 }
