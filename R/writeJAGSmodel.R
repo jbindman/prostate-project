@@ -1,4 +1,10 @@
-model {
+#The user needs to run this function so that this .txt file is written into their current working directory (or the directory of their choice)
+#I would give the .txt file a default name that the user can change (you can see how I think that would work below)
+
+
+writeJAGSmodel<-function(file.name="UNADJ-jags-model.txt"){
+
+	cat("model {
 
 ###PRIORS FOR LATENT CLASS MODEL
 
@@ -77,4 +83,7 @@ for(j in 1:n_rc){
 	RC[j] ~ dbern(p_rc[j]) }
 
 
- }
+ }", fill=TRUE, file=file.name)
+  return(file.name)
+
+}

@@ -23,21 +23,21 @@ tx_data<-read.csv("julia-tx-data.csv")
 
 
 
-#model <- ProstatePackage:::writeJAGSmodelfile("UNADJ-jags-model.txt") #default name can be overwritten here
+model <- writeJAGSmodel("UNADJ-jags-model.txt") #default name can be overwritten here
 
 
 # Organize data frames from clinical patient sources
 patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
 
 # Return RJAGS argument prep on formatted patient dataframes
-jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, "UNADJ-jags-model.txt")
+jagsPrep <- ProstatePackage:::RJAGSprep(patientDataframes, model)
 
 #small run standard
 
 # Execute RJAGS (Test) #what should i do to test if i have correct return?
 
 #library(rjags)
-inits=jagsPrep$inits # test
+inits=jagsPrep$initparameters.to.save # test
 #ex.jags<-jags(jags_data = jagsPrep$jags_data, inits=jagsPrep$inits, parameters.to.save=jagsPrep$parameters.to.save, model.file = jagsPrep$model.file, n.chains=1, n.iter=50, n.burnin=10, n.thin=5)
 #ex.out<-ex.jags$BUGSoutput
 #str(ex.out$sims.list)
