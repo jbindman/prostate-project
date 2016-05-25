@@ -24,7 +24,7 @@
 #'
 #'
 
-RJAGSprep <- function(patientDataframes = patientDataframes, model.file = model.file) {
+RJAGSprep <- function(patientDataframes = patientDataframes) {
   pt.data <- patientDataframes[[1]]
   psa.data <- patientDataframes[[2]]
   bx.full <- patientDataframes[[3]]
@@ -135,7 +135,7 @@ RJAGSprep <- function(patientDataframes = patientDataframes, model.file = model.
   #ex.out<-ex.jags$BUGSoutput
   #str(ex.out$sims.list)
 
-  jagsPrep <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file = model.file) #text file comes from R folder
+  jagsPrep <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file ="UNADJ-jags-model.txt") #text file comes from R folder
   return(jagsPrep)
 
 }

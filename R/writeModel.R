@@ -1,6 +1,6 @@
-#' writeModel
+#' writeModel.R
 #'
-#' Check if loaded patient data has values within acceptable range.
+#' Create a txt file for the RJAGS run with default name UNADJ-jags-model.txt
 #'
 #' @param The name of the model file to create
 #' @export
