@@ -22,7 +22,7 @@ bx_data<-read.csv("julia-bx-data.csv")
 tx_data<-read.csv("julia-tx-data.csv")
 
 
-
+# still giving me problems
 #model <- ProstatePackage:::writeJAGSmodel("UNADJ-jags-model.txt") #default name can be overwritten here
 
 
