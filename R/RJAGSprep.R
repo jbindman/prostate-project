@@ -22,7 +22,7 @@
 #'
 #'
 
-RJAGSprep <- function(patientDataframes = patientDataframes, model.file) {
+RJAGSprep <- function(patientDataframes = patientDataframes, model.file = model.file) {
   pt.data <- patientDataframes[[1]]
   psa.data <- patientDataframes[[2]]
   bx.full <- patientDataframes[[3]]

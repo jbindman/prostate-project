@@ -211,6 +211,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   for(i in 1:n){
     if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
 
+
   patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
   return(patientDataframes)
 }

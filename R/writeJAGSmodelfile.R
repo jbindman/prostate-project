@@ -1,7 +1,7 @@
 #' Write JAGS model from text file
 #'
 #' @param the name of the file that describes the model
-#' @return the model
+#' @return the name of the saved model txt file
 #' @export
 
 writeJAGSmodelfile<-function(file.name = "UNADJ-jags-model.txt"){
