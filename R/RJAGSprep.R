@@ -7,7 +7,6 @@
 #' @param psa.data Filled dataframe of one record per patient PSA reading containing patient subj ID, date of PSA, log PSA, and vol
 #' @param bx.data Filled dataframe of one record per patient biopsy, containing patient subj ID, time, rc, and age
 #' @return List of parameters for RJAGS prep
-#' @export
 #'
 #'
 #' WORKFLOW
@@ -22,7 +21,7 @@
 #' 8. Define other jags settings
 #' 9. Write model definition
 #'
-#'
+#' @export
 
 RJAGSprep <- function(patientDataframes = patientDataframes, modelFile = model.file) {
   pt.data <- patientDataframes[[1]]

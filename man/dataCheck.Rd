@@ -4,10 +4,10 @@
 \alias{dataCheck}
 \title{dataCheck.R}
 \usage{
-dataCheck(tx.data, demo.data, psa.data, bx.data)
+dataCheck(surg.data, demo.data, psa.data, bx.data = bx_data)
 }
 \arguments{
-\item{tx.data}{One record per treatment received per patient containing treatment date and GS}
+\item{surg.data}{One record per treatment received per patient containing treatment date and GS}
 
 \item{demo.data}{Demographic data, one record per patient ID containing DOB}
 
