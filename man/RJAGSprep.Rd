@@ -4,7 +4,7 @@
 \alias{RJAGSprep}
 \title{RJAGSprep.R}
 \usage{
-RJAGSprep(patientDataframes = patientDataframes, model.file = model.file)
+RJAGSprep(patientDataframes = patientDataframes, modelFile = model.file)
 }
 \arguments{
 \item{pt.data}{Filled dataframe of one record per patient containing DOB, age at dx, vol, and rc}

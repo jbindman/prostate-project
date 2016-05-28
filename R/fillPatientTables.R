@@ -18,6 +18,8 @@
 fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) { #default file names
 
   dataCheck(tx.data, demo.data, psa.data, bx.data)
+  dataCheck2(tx.data, demo.data, psa.data, bx.data)
+  #writeRJAGSmodel()
 
 
   # checks:

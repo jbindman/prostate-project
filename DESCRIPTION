@@ -14,4 +14,5 @@ Imports: bayesm,
          Matrix,
          splines,
          dplyr,
+         RCurl,
 
