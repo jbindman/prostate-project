@@ -4,7 +4,8 @@
 \alias{dataCheck}
 \title{dataCheck.R}
 \usage{
-dataCheck(surg.data, demo.data, psa.data, bx.data = bx_data)
+dataCheck(surg.data = surg_data, demo.data = demo_data,
+  psa.data = psa_data, bx.data = bx_data)
 }
 \arguments{
 \item{surg.data}{One record per treatment received per patient containing treatment date and GS}

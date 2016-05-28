@@ -8,7 +8,7 @@
 #' @param bx.data One record per biopsy per patient containing reclassicfication, volume, and dx
 #' @export
 
-dataCheck <- function (surg.data, demo.data, psa.data, bx.data) {
+dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) {
   #ADD NEW CHECKS
   library(dplyr)
   #checks demo.data
