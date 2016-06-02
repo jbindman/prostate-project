@@ -8,6 +8,7 @@
 #' @param bx.data One record per biopsy per patient containing reclassicfication, volume, and dx
 #' @export
 
+#any additions for IOP?
 dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) {
   #ADD NEW CHECKS
   library(dplyr)
