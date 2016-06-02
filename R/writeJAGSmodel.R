@@ -1,4 +1,12 @@
-model {
+#' Write JAGS model from text file
+#'
+#' @param file.name the name of the file that describes the model
+#' @return the model
+#' @export
+
+writeJAGSmodel<-function(file.name="UNADJ-jags-model.txt"){
+
+  cat("model {
 
       ###PRIORS FOR LATENT CLASS MODEL
 
@@ -77,7 +85,6 @@ model {
       RC[j] ~ dbern(p_rc[j]) }
 
 
-}
+}", fill=TRUE, file=file.name)
 
-
-
+  }

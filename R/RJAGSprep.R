@@ -3,9 +3,7 @@
 #' Prep files for RJAGS by creating list of parameters for RJAGS run.
 #'
 #'
-#' @param pt.data Filled dataframe of one record per patient containing DOB, age at dx, vol, and rc
-#' @param psa.data Filled dataframe of one record per patient PSA reading containing patient subj ID, date of PSA, log PSA, and vol
-#' @param bx.data Filled dataframe of one record per patient biopsy, containing patient subj ID, time, rc, and age
+#' @param patientDataframes Filled dataframe of formatted clinical data
 #' @return List of parameters for RJAGS prep
 #'
 #'
@@ -23,7 +21,7 @@
 #'
 #' @export
 
-RJAGSprep <- function(patientDataframes = patientDataframes, modelFile = model.file) {
+RJAGSprep <- function(patientDataframes = pt) {
   pt.data <- patientDataframes[[1]]
   psa.data <- patientDataframes[[2]]
   bx.full <- patientDataframes[[3]]
@@ -53,7 +51,7 @@ RJAGSprep <- function(patientDataframes = patientDataframes, modelFile = model.f
   Y<-psa.data$log_psa #name log-PSA observatios "Y
   subj_psa<-psa.data$subj #vector with subject ids that correspond to PSA obsrevations
 
-  #matrix of covariates with "random effects" (This term is familiar to stats people, but may not be familiar to you. Make sure to keep the Z_ and X_ labels here, because stats people will understand that better.)
+  #matrix of covariates with "random effects"
   #here, intercept and age (standardized)
   psa.data$age.std<-scale(psa.data$age) #you may want to move this line to original data shaping function
   Z_data<-as.matrix( cbind(rep(1,n_obs_psa), psa.data$age.std) )
@@ -134,10 +132,9 @@ RJAGSprep <- function(patientDataframes = patientDataframes, modelFile = model.f
   #ex.out<-ex.jags$BUGSoutput
   #str(ex.out$sims.list)
 
-  #write file
-  #model.file <- read.table("UNADJ-jags-model.txt", header = FALSE, fill = TRUE)
-  fileToUse <- modelFile
-  jagsPrep <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, fileToUse = fileToUse) #text file comes from R folder
+  writeJAGSmodel() #specify here if you want it named something else
+  model.file <- read.table("UNADJ-jags-model.txt", header = FALSE, fill = TRUE)
+  jagsPrep <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file = model.file) #text file comes from R folder
   return(jagsPrep)
 
 }

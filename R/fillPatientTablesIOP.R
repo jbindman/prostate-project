@@ -19,7 +19,6 @@ fillPatientTablesIOP <- function(demo.data = demo_data, psa.data = psa_data, bx.
   dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
 
 
-  names(demo.data)
   #id- unique identifier for each patient (abbreviated pt)
   #dob- date of birth, in  "%Y-%M-%D" form
   #status.rc- did this patient reclassify on biopsy
@@ -28,13 +27,13 @@ fillPatientTablesIOP <- function(demo.data = demo_data, psa.data = psa_data, bx.
   #censor.dt.tx- if status.tx=1, date of treatment; if status.tx=0, date of censoring
   (n<-dim(demo.data)[1]) #1000 patients in this data
 
-  names(psa.data)
+
   #id- unique identifier
   #psa- total PSA measured
   #psa.data- date of each PSA test
   (n_psa<-dim(psa.data)[1]) #15083 PSA tests
 
-  names(bx.data)
+
   #id- unique identifier
   #bx.date- date of biopsy (abbreviated bx)
   #RC- binary indicator or whether grade reclassification (abbreviated RC), i.e. bx gleason 7+, occurred
@@ -43,7 +42,7 @@ fillPatientTablesIOP <- function(demo.data = demo_data, psa.data = psa_data, bx.
   (n_bx<-dim(bx.data)[1]) #3842 biopsy observations
 
 
-  names(surg.data)
+
   #id- unique identifier
   #GS- indicator of whether post-surgery Gleason score (abbreviated GS) was 7 or higher; aka "true GS"
   #surg.date- date of surgery (abbreviated surg)
@@ -288,6 +287,12 @@ fillPatientTablesIOP <- function(demo.data = demo_data, psa.data = psa_data, bx.
   summary(bx.full$bx.age)
 
 
+  bx.full$surgery<-rep(0,N)
+  for(i in 1:n){
+    if(pt.data$surgery[i]==1){bx.full$surgery[bx.full$subj==pt.data$subj[i] & bx.full$time.int==ceiling(pt.data$time.until.tx[i])]<-1}}
+
+  table(pt.data$surgery)
+  table(bx.full$surgery)
 
   ###Everything below here is NEW and needed for modeling biopsy and surgery outcomes
 

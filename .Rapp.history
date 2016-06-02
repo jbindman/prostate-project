@@ -157,8 +157,55 @@ new
 install.packages("swirl")
 R.version.string
 swirl()
-getwd()
-setwd("prostate-project")
-setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
-source(functions.R)
-install.packages(ProstatePackage)
+install.packages("devtools")
+devtools::install_github("jbindman/prostate-project")
+pip install git+git://github.com/jbindman/prostate-package.git
+install.packages("devtools")
+library(devtools)
+install_github("jbindman/prostate-package")
+install_github("jbindman/prostate-project")
+library(devtools)
+install_github("jbindman/prostate-project")
+install.packages("devtools")
+install.packages("splines")
+install.packages("devtools")
+devtools::install_github("jbindman/prostate-project") #install package
+library(ProstatePackage)
+ProstatePackage:::fillPatientTables()
+demo_data<-read.csv("julia-demo-data.csv")#
+# psa data. one record per PSA test per patient#
+psa_data<-read.csv("julia-psa-data.csv")#
+# bx.data. one record per biopsy per patient#
+bx_data<-read.csv("julia-bx-data.csv")#
+# tx.data. one record per treatment received per patient#
+tx_data<-read.csv("julia-tx-data.csv")#
+# .txt file that defines the model#
+model.file <- "UNADJ-jags-model.txt"
+install.packages("devtools")
+devtools::install_github("jbindman/prostate-project")
+devtools::install_github("jbindman/prostate-project", force = TRUE)
+demo_data<-read.csv("julia-demo-data-IOP.csv")#
+#psa data. one record per PSA test per patient#
+psa_data<-read.csv("julia-psa-data-IOP.csv")#
+#bx.data. one record per biopsy per patient#
+bx_data<-read.csv("julia-bx-data-IOP.csv")#
+#surg.data. one record per treatment received per patient#
+#this data is just for surgery#
+surg_data<-read.csv("julia-surg-data-IOP.csv")
+ls()
+dataCheck(surg_data, demo_data, psa_data, bx_data)
+install.packages("devtools")#
+devtools::install_github("jbindman/prostate-project")
+devtools::install_github("jbindman/prostate-project"
+)
+patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
+patientDataframes <- fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
+library(ProstatePackage)
+patientDataframes <- fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
+patientDataframes <- ProstatePackage:::fillPatientTables(tx.data = tx_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data)
+dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
+dataCheck(surg_data, demo_data, psa_data, bx_data) #do the checks need to be different?
+ls
+ls()
+fillPatientTablesIOP()
+full <- fillPatientTablesIOP()
