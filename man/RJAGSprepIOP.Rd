@@ -4,10 +4,10 @@
 \alias{RJAGSprepIOP}
 \title{RJAGSprepIOP.R}
 \usage{
-RJAGSprepIOP(patientDataframes = pt)
+RJAGSprepIOP(pt = ptDataframes)
 }
 \arguments{
-\item{patientDataframes}{Filled dataframe of formatted clinical data}
+\item{ptDataframes}{Filled dataframe of formatted clinical data}
 }
 \value{
 List of parameters for RJAGS prep

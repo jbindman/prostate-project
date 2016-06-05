@@ -3,6 +3,7 @@
 export(RJAGSprep)
 export(RJAGSprepIOP)
 export(dataCheck)
+export(fillPatientTables)
 export(fillPatientTablesIOP)
 export(printIndividualData)
 export(writeJAGSmodel)

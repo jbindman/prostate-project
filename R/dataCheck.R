@@ -8,7 +8,6 @@
 #' @param bx.data One record per biopsy per patient containing reclassicfication, volume, and dx
 #' @export
 
-#any additions for IOP?
 dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) {
   #ADD NEW CHECKS
   library(dplyr)
@@ -18,6 +17,11 @@ dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = 
       stop ("Patients must have positive dimensions for ID in demo_data")
     }
   }
+  #### NEW FOR IOP
+  #check for demo.data: status.rc, status.tx, censor.dt.rc, censor.dt.tx
+  # any other checks needed for other dataframes?
+
+
 
   #checks psa.data
   for (i in psa.data$id) {
@@ -62,10 +66,10 @@ dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = 
     }
   }
   # add back
-  #invalidGS <-filter(surg.data, GS != 1 & GS != 0)
-  #if (nrow(invalidGS) != 0) {
-  #  stop ("Patients must have post-surgery gleason score of 0 or 1")
-  #}
+  invalidGS <-filter(surg.data, GS != 1 & GS != 0)
+  if (nrow(invalidGS) != 0) {
+    stop ("Patients must have post-surgery gleason score of 0 or 1")
+  }
 
 
   #-each patient (id) in demo.data must have at least one record in psa.data
@@ -82,6 +86,8 @@ dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = 
       stop ("Patient ID #", i ," missing biopsy data")
     }
   }
+
+
 
   # will only get to return if all checks passed
   return(TRUE)
