@@ -324,12 +324,15 @@ fillPatientTablesIOP <- function(demo.data = demo_data, psa.data = psa_data, bx.
       bx.full$bx.here[bx.full$subj==pt.data$subj[i] & bx.full$time.int>rc.time]<-NA}}
   sum(is.na(bx.full$bx.here)) #537
 
-  #I have various output here in order to "sanity check" the data. Of course, we wouldn't want to have to run these every time we are shaping the data, but I wanted to give you an idea of how you could check that your code did the right thing. Also, we may want to build a couple of data checks into the function so that the user gets an error message if they try to put in problematic data.
 
 
   #I'm saving the workspace here so you can see what the data frames looked like when I finished, but you will want to define these objects in some simple, easy to understand, efficient way
   #save(pt.data, psa.data, bx.full,file="IOP-data-shaping-work-space.RData")
 
+  #for(i in bx.full$subj) {
+  #  idReturn <- filter(bx.data, subj == i)$id[1] #first match will give correct corresponding id
+  #  bx.full$id[i] <- idReturn
+  #}
 
   patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
   return(patientDataframes)

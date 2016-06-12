@@ -216,6 +216,17 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
     if(max(bx.full$rc[bx.full$subj==i], na.rm=T)==1){pt.data$rc[i]<-1}}
 
 
+  #after bx.full and bx.data are complete, add id column to bx.data\
+
+  # bx.full doesnt have ID column yet BUT it needs it. Get it from bx.data
+
+  #for(i in bx.full$subj) {
+
+  #  small <- filter(bx.data, subj == i)$id[1] #first match will give correct corresponding id
+    #if (bx.full$subj[i]
+    #bx.full$id[i] <- idReturn
+  #}
+
   patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
   return(patientDataframes)
 }

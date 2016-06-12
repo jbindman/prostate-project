@@ -32,7 +32,11 @@ names(surg_data)
 # We want the patient data to include one record per patient and true GS
 # We may also put variables in this data frame to ease definition of variables in the PSA and BX data frame (date of dx, age dx, average prostate volume)
 # Finally, we will order patients based on their observed GS. This is done to make estimation in JAGS easier. We assign a new sequential unique patient identifier for this ordering ("subj")
-ptDataframes <- fillPatientTablesIOP()
+
+ptDataframes <- fillPatientTables()
+
+printIndividualData(3, ptDataframes)
+
 
 3. Prepare data and arguments for RJAGS by calling RJAGS on a required text file required for RJAGS use, as well as the formatted list patient.Dataframes.
 
