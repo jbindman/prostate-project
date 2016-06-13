@@ -166,7 +166,7 @@ fillPatientTablesIOP <- function(demo.data = demo_data, psa.data = psa_data, bx.
   #age at each test
   psa.data$age<-vector(length=n_psa)
   for(i in 1:n){
-    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[i])/365}
+    psa.data$age[psa.data$id==i] <- (psa.data$psa.date.num[psa.data$id==i] - pt.data$dob.num[pt.data$id==i])/365}
   summary(psa.data$age) #some of these are unrealistic; this is because the data is fake
   #standardize age so that mean age=0, sd=1
   psa.data$age.std<-scale(psa.data$age)

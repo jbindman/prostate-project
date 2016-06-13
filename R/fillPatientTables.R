@@ -55,7 +55,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
     }}
 
 
-  pt.data$dob.num<-as.numeric(as.Date(demo.data$dob)) #demo.data$dob
+  pt.data$dob.num<-as.numeric(as.Date(demo.data$dob))
   pt.data$dob.num[1:10]
 
 
@@ -64,6 +64,7 @@ fillPatientTables <- function(tx.data = tx_data, demo.data = demo_data, psa.data
   bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date))
   bx.data$bx.date.num[1:10]
   as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
+
   #bx check
   for (i in bx.data$bx.date) {
     if  (as.Date(i) < "1970-01-01") {

@@ -5,7 +5,7 @@
 #'
 #' @param idInput Integer of patient record to be displayed
 #' @export
-printIndividualData<- function(idInput = 3, patientDataframes = ptDataframes) {
+printIndividualData<- function(idInput = 10, patientDataframes = ptDataframes) {
   pt.data <- patientDataframes[[1]] #global variable patientDataframes put into temporary dataframes with names matching RJAGS prep
   psa.data <- patientDataframes[[2]]
   bx.data <- patientDataframes[[3]]
@@ -29,8 +29,8 @@ printIndividualData<- function(idInput = 3, patientDataframes = ptDataframes) {
   print("PSA Data: ")
   formattedPsa <- filter(psa.data, id == idInput)
   formattedPsa <- arrange(formattedPsa, psa.date.num) #already in order but double check
-  formattedPsa <- formattedPsa[c("id", "psa", "psa.date.num")]
-  #names(formattedPsa) <- c("PSA Value", "Date of PSA", "psa.date.num", "Age")
+  formattedPsa <- formattedPsa[c("id", "psa", "psa.date.num", "age")]#add age
+  names(formattedPsa) <- c("Patient", "PSA", "Visit", "Age")
   print(formattedPsa)
 
   print("Biopsy Data: ")
@@ -38,9 +38,36 @@ printIndividualData<- function(idInput = 3, patientDataframes = ptDataframes) {
   formattedBx <- filter(bx.data, id == idInput)
   formattedBx <- filter(formattedBx, bx.here == 1)
   formattedBx <- arrange(formattedBx, bx.date.num)
-  formattedBx <- formattedBx[c("id", "bx.age", "bx.date.num")]
+  formattedBx <- formattedBx[c("id", "bx.here", "bx.date.num", "bx.age")]
+  names(formattedBx) <- c("Patient", "Biopsy", "Visit", "Age")
   print(formattedBx)
 
-  #merged.data <- merge(formattedPsa, formattedBx, by.x="psa.date.num", by.y="bx.date.num", all = TRUE)
-  #now format to make one id column, all relevant data, and replace NA with -
+
+  merged.data <- merge(formattedPsa, formattedBx, by=c("Patient","Visit", "Age"), all = TRUE)
+  #merged.data[is.na(merged.data)] <- 0
+
+  #all NA replaced with '-'
+  for (i in 1:nrow(merged.data)) {
+    if(is.na(merged.data$Biopsy[i])) {
+      merged.data$Biopsy[i] <- "-"
+    }
+    if(is.na(merged.data$PSA[i])) {
+      merged.data$PSA[i] <- "-"
+    }
+  }
+  #for (i in 1:nrow(merged.data)) {
+  #  if(merged.data$Biopsy == 1) {
+  #    merged.data$Biopsy <-"Yes"
+  #  }
+  #}
+  merged.data$Visit <- as.Date(merged.data$Visit[1:nrow(merged.data)], origin="1970-01-01")
+  merged.data$Patient <- NULL #dont need to show anymore
+
+
+
+
+  print(merged.data)
+
+  #ages are messed up, thinks biopsy at later time has younger patient age
+
 }
