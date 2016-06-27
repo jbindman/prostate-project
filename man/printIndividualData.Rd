@@ -4,7 +4,7 @@
 \alias{printIndividualData}
 \title{printIndividualData.R}
 \usage{
-printIndividualData(idInput)
+printIndividualData(idInput = 10, patientDataframes = ptDataframes)
 }
 \arguments{
 \item{idInput}{Integer of patient record to be displayed}

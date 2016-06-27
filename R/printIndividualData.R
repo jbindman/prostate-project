@@ -19,12 +19,12 @@ printIndividualData<- function(idInput = 10, patientDataframes = ptDataframes) {
   library(dplyr)
 
   #print("Demographics Data: ")
-  formattedDemo <- filter(pt.data, id == idInput)
-  formattedDemo$subj <- NULL
-  formattedDemo$total.fup <- NULL
+  #formattedDemo <- filter(pt.data, id == idInput)
+  #formattedDemo$subj <- NULL
+  #formattedDemo$total.fup <- NULL
   #change DOB
-  names(formattedDemo) <- c("Patient", "Gleason Score", "DOB", "Diagnosis Date", "Age at Diagnosis", "Avg Volume", "RC")
-  print(formattedDemo)
+  #names(formattedDemo) <- c("Patient", "Gleason Score", "DOB", "Diagnosis Date", "Age at Diagnosis", "Avg Volume", "RC")
+  #print(formattedDemo)
 
   #print("PSA Data: ")
   formattedPsa <- filter(psa_data, id == idInput)

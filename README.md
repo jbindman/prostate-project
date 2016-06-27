@@ -28,14 +28,23 @@ names(bx_data)
 surg_data<-read.csv("julia-surg-data-IOP.csv")
 names(surg_data)
 
+
+demo_data<-read.csv("julia-demo-data.csv")
+psa_data<-read.csv("julia-psa-data.csv")
+bx_data<-read.csv("julia-bx-data.csv")
+surg_data<-read.csv("julia-tx-data.csv")
+
 3. Organize data frames from clinical patient sources
 # We want the patient data to include one record per patient and true GS
 # We may also put variables in this data frame to ease definition of variables in the PSA and BX data frame (date of dx, age dx, average prostate volume)
 # Finally, we will order patients based on their observed GS. This is done to make estimation in JAGS easier. We assign a new sequential unique patient identifier for this ordering ("subj")
 
-ptDataframes <- fillPatientTables()
+ptDataframes <- fillPatientTablesIOP()
 
 printIndividualData(3, ptDataframes)
+for (i in 1:200) {
+  printIndividualData(i)
+}
 
 
 3. Prepare data and arguments for RJAGS by calling RJAGS on a required text file required for RJAGS use, as well as the formatted list patient.Dataframes.

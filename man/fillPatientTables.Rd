@@ -2,28 +2,24 @@
 % Please edit documentation in R/fillPatientTables.R
 \name{fillPatientTables}
 \alias{fillPatientTables}
-\title{fillPatientTables.R}
+\title{fillPatientTables}
 \usage{
-fillPatientTables(tx.data = tx_data, demo.data = demo_data,
-  psa.data = psa_data, bx.data = bx_data)
+fillPatientTables(demo.data = demo_data, psa.data = psa_data,
+  bx.data = bx_data, surg.data = surg_data, IOP = TRUE)
 }
 \arguments{
-\item{tx.data}{One record per treatment received per patient containing treatment date and GS}
-
 \item{demo.data}{Demographic data, one record per patient ID containing DOB}
 
 \item{psa.data}{PSA data, one record per PSA test per patient containing date of PSA test}
 
 \item{bx.data}{One record per biopsy per patient containing reclassicfication, volume, and dx}
+
+\item{surg.data}{One record per treatment received per patient containing treatment date and GS}
+
+\item{IOP}{True if IOP, false if latent class model}
 }
 \value{
 List of three dataframes, pt.data, psa.data, bx.full
-
-1. Load data, look at variables.
-2. Start patient dataframe
-3. Add relevant variables to PSA dataframe
-4. Start biopsy dataframe
-5. Save data
 }
 \description{
 Load dataframes from four patient data files to create a list of formatted patient dataframes.
