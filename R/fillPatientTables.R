@@ -193,37 +193,36 @@ fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.dat
     psa.data$vol.avg[psa.data$id==pt.data$id[i]]<-pt.data$vol.avg[i]}
   summary(psa.data$vol.avg)
 
+  #prostate volume (standardized on patient-level with mean and std of volume since it is constant within patients). no intercept needed
+  psa.data$vol.std<-scale(psa.data$vol.avg, center=mean(pt.data$vol.avg), scale=sd(pt.data$vol.avg)) #you may want to move this line to original data shaping
+
   #subj identifier
   psa.data$subj<-vector(length=n_psa)
   for(i in 1:n){
     psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
 
   #print(psa.data$age.std)
-
-  if (IOP == TRUE) {
-
-    #standardize prostate volume, so that mean= 0 and std dev=1
-    pt.data$vol.std <- scale(pt.data$vol.avg)
+###### before this was IOP only but i think both
+  #standardize prostate volume, so that mean= 0 and std dev=1
+  pt.data$vol.std <- scale(pt.data$vol.avg)
 
 
-    #standardize age so that mean age=0, sd=1
-    psa.data$age.std <- scale(psa.data$age)
+  #standardize age so that mean age=0, sd=1
+  psa.data$age.std <- scale(psa.data$age)
 
-    #pt-level prostate volume
-    psa.data$vol.std <- vector(length = n_psa)
-    for (i in 1:n) {
-      psa.data$vol.std[psa.data$id == pt.data$id[i]] <- pt.data$vol.std[i]
-    }
-    #summary(psa.data$vol.std)
-    psa.data$subj<-vector(length=n_psa)
-    for(i in 1:n){
-      psa.data$subj[psa.data$id==pt.data$id[i]]<-pt.data$subj[i]}
+  #pt-level prostate volume
+  psa.data$vol.std <- vector(length = n_psa)
+  for (i in 1:n) {
+    psa.data$vol.std[psa.data$id == pt.data$id[i]] <- pt.data$vol.std[i]
   }
+########
+
 
   ##add biopsy and surgery outcomes
 
   ##not IOP
   if (IOP != TRUE) {
+
     pt.data$total.fup<-vector(length=n)
     for(i in 1:n){
       pt.data$total.fup[i] <- (max(max(psa.data$psa.date.num[psa.data$id==pt.data$id[i]]), max(bx.data$bx.date.num[bx.data$id==pt.data$id[i]])) - pt.data$dx.date.num[i])/365}
