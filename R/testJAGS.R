@@ -4,6 +4,7 @@
 #'
 #'
 #' @param ptDataframes Filled dataframe of formatted clinical data
+#' @param IOP True if IOP
 #' @return List of parameters for RJAGS prep
 #'
 #'
@@ -21,7 +22,7 @@
 #'
 #' @export
 
-RJAGSprep <- function(pt = ptDataframes) {
+test <- function(pt = ptDataframes, IOP = TRUE) {
 
   library("lme4")
   library("splines")
@@ -73,15 +74,15 @@ RJAGSprep <- function(pt = ptDataframes) {
   (var_vec <- apply(coef(mod_lmer)$id, 2, var)[1:d_Z])
   #previously, I re-orderd this vector with the knowledge that the intercept term was second and the age term was first. I don't know why that is though, so I don't know if all R platforms will do it this way, so I figured it would be safest to define it based on component names.
 
-  ### non IOP
-  (var_vec <- c(var_vec[2], var_vec[1])) #I want the covariance parameters ordered so that the one corresponding to the intercept is first and the one corresponding to age is second. I don't know why the model output is in a different order
-  ###
+  if (IOP == FALSE) {
+    (var_vec <- c(var_vec[2], var_vec[1])) #I want the covariance parameters ordered so that the one corresponding to the intercept is first and the one corresponding to age is second. I don't know why the model output is in a different order
+  }
 
-  #### IOP
-  (index.intercept<-c(1:2)[names(var_vec)=="(Intercept)"])
-  (index.age<-c(1:2)[names(var_vec)=="age.std"])
-  (var_vec <- c(var_vec[index.intercept], var_vec[index.age]))
-  ####
+  if (IOP == TRUE) {
+    (index.intercept<-c(1:2)[names(var_vec)=="(Intercept)"])
+    (index.age<-c(1:2)[names(var_vec)=="age.std"])
+    (var_vec <- c(var_vec[index.intercept], var_vec[index.age]))
+  }
 
 
 
@@ -95,13 +96,14 @@ RJAGSprep <- function(pt = ptDataframes) {
   subj_bx<-bx.data$subj
   table(BX) #3842 bx performed
 
-  #### IOP
-  #covariate matrix U for logistic regression predicting biopsy
-  #includes natural spline representations of time, date, age, and number of previous biopsies
-  U_BX_data<-as.matrix(cbind(rep(1,n_bx), ns(bx.data$time.int,4), ns(bx.data$int.date.num,4), ns(bx.data$int.age,2), ns(bx.data$num.prev.bx.start,2) ) )
-  apply(U_BX_data,2,summary)
-  (d_U_BX<-dim(U_BX_data)[2]) #
-  ####
+  if (IOP == TRUE) {
+    #covariate matrix U for logistic regression predicting biopsy
+    #includes natural spline representations of time, date, age, and number of previous biopsies
+    U_BX_data<-as.matrix(cbind(rep(1,n_bx), ns(bx.data$time.int,4), ns(bx.data$int.date.num,4), ns(bx.data$int.age,2), ns(bx.data$num.prev.bx.start,2) ) )
+    apply(U_BX_data,2,summary)
+    (d_U_BX<-dim(U_BX_data)[2]) #
+  }
+
 
 
 
@@ -122,18 +124,19 @@ RJAGSprep <- function(pt = ptDataframes) {
   #Here, we define the outcome and predictors for surgeries recieved during each person-year under observations
   #this uses all records in bx.full, because patients always at risk of choosing surgery
 
-  #### IOP
-  SURG<-as.numeric(bx.full$surgery)
-  (n_surg<-dim(bx.full)[1]) #7832
-  subj_surg<-bx.full$subj
-  table(SURG) #183 patients with surgery
+  if (IOP == TRUE) {
+    SURG<-as.numeric(bx.full$surgery)
+    (n_surg<-dim(bx.full)[1]) #7832
+    subj_surg<-bx.full$subj
+    table(SURG) #183 patients with surgery
 
-  #covariate matrix W for pooled logistic regression predicting surgery
-  #here, age (ns with df=2), time since diagnosis (ns with df=4), calendar time (ns with df=3), number of previous biopsies, previous grade reclassification; interaction with eta and previous RC
-  W_SURG_data<-as.matrix(cbind(rep(1,n_surg), ns(bx.full$time.int, 4), ns(bx.full$int.date.num, 3), ns(bx.full$int.age, 2), scale(bx.full$num.prev.bx.end), bx.full$prev.rc)) #
-  apply(W_SURG_data,2,summary)
-  (d_W_SURG<-dim(W_SURG_data)[2]) #12
-  ####
+    #covariate matrix W for pooled logistic regression predicting surgery
+    #here, age (ns with df=2), time since diagnosis (ns with df=4), calendar time (ns with df=3), number of previous biopsies, previous grade reclassification; interaction with eta and previous RC
+    W_SURG_data<-as.matrix(cbind(rep(1,n_surg), ns(bx.full$time.int, 4), ns(bx.full$int.date.num, 3), ns(bx.full$int.age, 2), scale(bx.full$num.prev.bx.end), bx.full$prev.rc)) #
+    apply(W_SURG_data,2,summary)
+    (d_W_SURG<-dim(W_SURG_data)[2]) #12
+
+  }
 
 
   ### 0. Load libraries
@@ -151,36 +154,60 @@ RJAGSprep <- function(pt = ptDataframes) {
   #We've written this initial code only to handle a binary latent class. This might be something to extend later. (I have a code for ordered latent classes, but I don't know how much more complicated that will be to package)
 
 
-  jags_data<-list(K=K, n=n, eta_data=eta_data, n_eta_known=n_eta_known, n_obs_psa=n_obs_psa, Y=Y, subj_psa=subj_psa, Z=Z_data, X=X_data, d_Z=d_Z, d_X=d_X, I_d_Z=diag(d_Z), n_bx=n_bx, BX=BX, subj_bx=subj_bx, U_BX=U_BX_data, d_U_BX=d_U_BX, RC=RC, n_rc=n_rc, subj_rc=subj_rc, V_RC=V_RC_data, d_V_RC=d_V_RC, n_surg=n_surg, SURG=SURG, subj_surg=subj_surg, W_SURG=W_SURG_data, d_W_SURG=d_W_SURG)
+
+  if (IOP == TRUE) {
+    jags_data<-list(K=K, n=n, eta_data=eta_data, n_eta_known=n_eta_known, n_obs_psa=n_obs_psa, Y=Y, subj_psa=subj_psa, Z=Z_data, X=X_data, d_Z=d_Z, d_X=d_X, I_d_Z=diag(d_Z), n_bx=n_bx, BX=BX, subj_bx=subj_bx, U_BX=U_BX_data, d_U_BX=d_U_BX, RC=RC, n_rc=n_rc, subj_rc=subj_rc, V_RC=V_RC_data, d_V_RC=d_V_RC, n_surg=n_surg, SURG=SURG, subj_surg=subj_surg, W_SURG=W_SURG_data, d_W_SURG=d_W_SURG)
 
 
-  ### 2. Initialize model parameters
-  inits <- function(){
+    ### 2. Initialize model parameters
+    inits <- function(){
 
-    p_eta<-rbeta(1,1,1)
+      p_eta<-rbeta(1,1,1)
 
-    eta_hat<-pt.data$status.rc[is.na(pt.data$true.gs)]
+      eta_hat<-pt.data$status.rc[is.na(pt.data$true.gs)]
 
-    xi<-c(min(rlnorm(1),100), min(rlnorm(1),100))
-    mu_raw<-as.matrix(cbind(rnorm(d_Z),rnorm(d_Z)))
-    Tau_B_raw<-rwishart((d_Z+1),diag(d_Z)*var_vec)$W
-    sigma_res<-min(rlnorm(1),1)
+      xi<-c(min(rlnorm(1),100), min(rlnorm(1),100))
+      mu_raw<-as.matrix(cbind(rnorm(d_Z),rnorm(d_Z)))
+      Tau_B_raw<-rwishart((d_Z+1),diag(d_Z)*var_vec)$W
+      sigma_res<-min(rlnorm(1),1)
 
-    beta<-rnorm(d_X)
+      beta<-rnorm(d_X)
 
-    nu_BX<-rnorm((d_U_BX+1), mean=0, sd=0.1)  #last coefficient is effect of eta=1
-    gamma_RC<-rnorm((d_V_RC+1), mean=0, sd=0.1)  #last coefficient is effect of eta=1
-    omega_SURG<-rnorm((d_W_SURG+2), mean=0, sd=0.1)  #here, include interaction with last prediction and eta=1
+      nu_BX<-rnorm((d_U_BX+1), mean=0, sd=0.1)  #last coefficient is effect of eta=1
+      gamma_RC<-rnorm((d_V_RC+1), mean=0, sd=0.1)  #last coefficient is effect of eta=1
+      omega_SURG<-rnorm((d_W_SURG+2), mean=0, sd=0.1)  #here, include interaction with last prediction and eta=1
 
-    list(p_eta=p_eta, eta_hat=eta_hat, xi=xi, mu_raw=mu_raw, Tau_B_raw=Tau_B_raw, sigma_res=sigma_res, beta=beta, nu_BX=nu_BX, gamma_RC=gamma_RC, omega_SURG=omega_SURG)
+      list(p_eta=p_eta, eta_hat=eta_hat, xi=xi, mu_raw=mu_raw, Tau_B_raw=Tau_B_raw, sigma_res=sigma_res, beta=beta, nu_BX=nu_BX, gamma_RC=gamma_RC, omega_SURG=omega_SURG)
+    }
+
+
+
+    ### 3. Define parameters to be tracked
+    parameters.to.save <- c("p_eta", "eta_hat", "mu_int", "mu_slope", "sigma_int", "sigma_slope", "sigma_res", "cov_int_slope", "b_vec", "beta",  "nu_BX", "gamma_RC", "omega_SURG", "p_bx", "p_rc", "p_surg")
+
   }
+  if (IOP == FALSE) {
+    jags_data<-list(K=K, n=n, eta_data=eta_data, n_eta_known=n_eta_known, n_obs_psa=n_obs_psa, Y=Y, subj_psa=subj_psa, Z=Z_data, X=X_data, d_Z=d_Z, d_X=d_X, I_d_Z=diag(d_Z), RC=RC, n_rc=n_rc, subj_rc=subj_rc, V_RC=V_RC_data, d_V_RC=d_V_RC)
+
+    names(pt.data) #from all[1]
+
+    ### 2. Initialize model parameters
+    inits <- function(){
+      p_eta<-rbeta(1,1,1)
+      eta_hat<-pt.data$rc[is.na(pt.data$true.gs)]
+      xi<-c(min(rlnorm(1),100), min(rlnorm(1),100))
+      mu_raw<-as.matrix(cbind(rnorm(d_Z),rnorm(d_Z)))
+      Tau_B_raw<-rwishart((d_Z+1),diag(d_Z)*var_vec)$W
+      sigma_res<-min(rlnorm(1),1)
+      beta<-rnorm(d_X)
+      gamma_RC<-rnorm((d_V_RC+1), mean=0, sd=0.1)  #last coefficient is effect of eta=1
+      list(p_eta=p_eta, eta_hat=eta_hat, xi=xi, mu_raw=mu_raw, Tau_B_raw=Tau_B_raw, sigma_res=sigma_res, beta=beta,  gamma_RC=gamma_RC)
+    }
 
 
-
-  ### 3. Define parameters to be tracked
-  parameters.to.save <- c("p_eta", "eta_hat", "mu_int", "mu_slope", "sigma_int", "sigma_slope", "sigma_res", "cov_int_slope", "b_vec", "beta",  "nu_BX", "gamma_RC", "omega_SURG", "p_bx", "p_rc", "p_surg")
-
-
+    ### 3. Define parameters to be tracked
+    parameters.to.save <- c("p_eta", "eta_hat", "mu_int", "mu_slope", "sigma_int", "sigma_slope", "sigma_res", "rho_int_slope", "cov_int_slope", "b_vec", "beta",  "gamma_RC",  "p_rc")
+  }
 
 
   ### 4. Define other jags settings?
@@ -218,7 +245,8 @@ RJAGSprep <- function(pt = ptDataframes) {
   if (IOP == FALSE) {
     writeJAGSmodel(IOP = FALSE)
   }
-  model.file <- read.table("IOP-jags-model.txt", header = FALSE, fill = TRUE)
+
+  model.file <- read.table("UNADJ-jags-model.txt", header = FALSE, fill = TRUE)
   jagsPrep <- list(jags_data = jags_data, inits = inits, parameters.to.save = parameters.to.save, model.file = model.file) #text file comes from R folder
   return(jagsPrep)
 

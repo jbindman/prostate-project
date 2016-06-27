@@ -16,7 +16,7 @@
 # 4. Start biopsy dataframe
 # 5. Save data
 fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.data = bx_data, surg.data = surg_data, IOP = TRUE) { #default file names
-  print(IOP)
+
   dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
   #add check to make sure IOP/not is right
 

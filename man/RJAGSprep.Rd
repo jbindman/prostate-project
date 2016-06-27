@@ -4,11 +4,13 @@
 \alias{RJAGSprep}
 \title{RJAGSprep.R}
 \usage{
-RJAGSprep(pt = ptDataframes)
+RJAGSprep(pt = ptDataframes, IOP = TRUE)
 
-RJAGSprep(pt = ptDataframes)
+RJAGSprep(pt = ptDataframes, IOP = TRUE)
 }
 \arguments{
+\item{IOP}{True if IOP}
+
 \item{patientDataframes}{Filled dataframe of formatted clinical data}
 
 \item{ptDataframes}{Filled dataframe of formatted clinical data}
