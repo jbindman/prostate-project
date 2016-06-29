@@ -3,7 +3,7 @@
 #' Prep files for RJAGS by creating list of parameters for RJAGS run.
 #'
 #'
-#' @param ptDataframes Filled dataframe of formatted clinical data
+#' @param pt Filled dataframe of formatted clinical data
 #' @param IOP True if IOP
 #' @return List of parameters for RJAGS prep
 #'
@@ -22,10 +22,10 @@
 #'
 #' @export
 
-RJAGSprep <- function(pt = ptDataframes, IOP = TRUE) {
+RJAGSprep <- function(pt, IOP = TRUE) {
 
-  library("lme4")
-  library("splines")
+  #library("lme4")
+  #library("splines")
 
   pt.data <- pt[[1]]
   psa.data <- pt[[2]]
@@ -141,7 +141,7 @@ RJAGSprep <- function(pt = ptDataframes, IOP = TRUE) {
 
   ### 0. Load libraries
   #These packages should be loaded automatically when someone loads our package
-  library("bayesm")
+  #library("bayesm")
 
 
 

@@ -1,5 +1,6 @@
 #' Write JAGS model from text file
 #'
+#' @param IOP True
 #' @param file.name the name of the file that describes the model
 #' @return the model
 #' @export

@@ -3,11 +3,11 @@
 #' Find the distance between two patients
 #'
 #'
-#' @param idInput Integer of patient record to be displayed
+#' @param pt.id Integer of patient record to be displayed
 #' @param K Number of nearby patients to return
 #' @param D Max distance between comparable patients
 #' @export
-closestK <- function(pt1 = 5, K = 50, D = 1) {
+closestK <- function(pt.id = 5, K = 50, D = 1) {
   (n<-dim(demo.data)[1]) #1000 patients in this data
   pt.data$ptDistance <- vector(length=n)
   for (i in pt.data$id) {

@@ -4,8 +4,9 @@
 #'
 #'
 #' @param idInput Integer of patient record to be displayed
+#' @param patientDataframes Full
 #' @export
-printIndividualData<- function(idInput = 10, patientDataframes = ptDataframes) {
+printIndividualData<- function(idInput = 10, patientDataframes) {
   pt.data <- patientDataframes[[1]] #global variable patientDataframes put into temporary dataframes with names matching RJAGS prep
   #psa.data <- patientDataframes[[2]]
   #bx.data <- patientDataframes[[3]]
@@ -16,7 +17,7 @@ printIndividualData<- function(idInput = 10, patientDataframes = ptDataframes) {
   #pt.data[pt.data$id == patient,] #actually works and is equiv #patientDataframes[[1]][patientDataframes[[1]]$id == patient,]
   #psa.data[psa.data$id == patient,]
   #bx.data[bx.data$id == patient,]
-  library(dplyr)
+  #library(dplyr)
 
   #print("Demographics Data: ")
   #formattedDemo <- filter(pt.data, id == idInput)

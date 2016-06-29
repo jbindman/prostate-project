@@ -7,7 +7,9 @@
 distance(pt1 = 5, pt2 = 38)
 }
 \arguments{
-\item{idInput}{Integer of patient record to be displayed}
+\item{pt1}{Patient 1}
+
+\item{pt2}{Patient 2}
 }
 \description{
 Find the distance between two patients

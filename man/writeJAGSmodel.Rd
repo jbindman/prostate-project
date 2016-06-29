@@ -7,6 +7,8 @@
 writeJAGSmodel(IOP = TRUE, file.name = "UNADJ-jags-model.txt")
 }
 \arguments{
+\item{IOP}{True}
+
 \item{file.name}{the name of the file that describes the model}
 }
 \value{

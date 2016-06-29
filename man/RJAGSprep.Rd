@@ -4,12 +4,12 @@
 \alias{RJAGSprep}
 \title{RJAGSprep.R}
 \usage{
-RJAGSprep(pt = ptDataframes, IOP = TRUE)
+RJAGSprep(pt, IOP = TRUE)
 }
 \arguments{
-\item{IOP}{True if IOP}
+\item{pt}{Filled dataframe of formatted clinical data}
 
-\item{ptDataframes}{Filled dataframe of formatted clinical data}
+\item{IOP}{True if IOP}
 }
 \value{
 List of parameters for RJAGS prep

@@ -3,7 +3,8 @@
 #' Find the distance between two patients
 #'
 #'
-#' @param idInput Integer of patient record to be displayed
+#' @param pt1 Patient 1
+#' @param pt2 Patient 2
 #' @export
 distance <- function(pt1 = 5, pt2 = 38) {
   age1 <- filter(pt.data, id == pt1)$age.dx
