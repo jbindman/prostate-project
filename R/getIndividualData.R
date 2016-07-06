@@ -1,4 +1,4 @@
-#' printIndividualData.R
+#' getIndividualData.R
 #'
 #' Print a specified patient's demographic, PSA, biopsy, and treatment results to the console
 #'
@@ -6,7 +6,7 @@
 #' @param idInput Integer of patient record to be displayed
 #' @param patientDataframes Full
 #' @export
-printIndividualData<- function(idInput = 3, patientDataframes, bx_data) {
+getIndividualData<- function(idInput = 3, patientDataframes, bx_data) {
   pt.data <- patientDataframes[[1]] #global variable patientDataframes put into temporary dataframes with names matching RJAGS prep
   psa.data <- patientDataframes[[2]]
   #bx.data <- patientDataframes[[3]]
@@ -104,7 +104,7 @@ printIndividualData<- function(idInput = 3, patientDataframes, bx_data) {
 
 
 
-  print(merged.data)
+  #print(merged.data)
 
   #ages are messed up, thinks biopsy at later time has younger patient age
 

@@ -7,14 +7,15 @@
 #' @param K Number of nearby patients to return
 #' @param D Max distance between comparable patients
 #' @export
-closestK <- function(pt.id = 5, K = 50, D = 1) {
+closestK <- function(ptId = 6, K = 50, D = 1, patientDataframes, bx_data) {
   (n<-dim(demo.data)[1]) #1000 patients in this data
-  pt.data$ptDistance <- vector(length=n)
+  pt.data <- patientDataframes[[1]]
+  pt.data$ptDistance <- vector(length = nrow(pt.data))
   for (i in pt.data$id) {
-    pt.data$ptDistance[i] <- distance(i, pt1)
+    pt.data$ptDistance[i] <- distance(70, i, patientDataframes, bx_data)[1]
   }
   #### for certain # K patients
-  arrange(pt.data, desc(ptDistance)) #arrange in descending order
+  all <- arrange(pt.data, desc(ptDistance)) #arrange in descending order
   pt.data[1:K,]
 
   ### within certain distance D

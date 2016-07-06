@@ -41,9 +41,10 @@ surg_data<-read.csv("julia-tx-data.csv")
 
 ptDataframes <- fillPatientTables(IOP = TRUE)
 
-printIndividualData(3, ptDataframes)
+inputPatient <- printIndividualData(5, ptDataframes)
+
 for (i in 1:200) {
-  printIndividualData(i)
+  printIndividualData(i, ptDataframes)
 }
 
 
@@ -55,3 +56,6 @@ jagsPrep <- RJAGSprep(ptDataframes, TRUE)
 4. Execute RJAGS 
 
 #independently
+
+5. Preform Distance function
+closestK(inputPatient, ptDataframes)

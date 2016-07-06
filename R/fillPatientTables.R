@@ -441,6 +441,12 @@ fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.dat
 
   }
 
+  bx.full$id <- length(bx.full)
+  for(i in bx.full$subj) {
+    idReturn <- filter(pt.data, subj == i)$id[1] #first match will give correct corresponding id
+    bx.full$id[i] <- idReturn
+  }
+
   patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
   return(patientDataframes)
 }
