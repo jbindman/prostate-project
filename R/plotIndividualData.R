@@ -9,9 +9,12 @@
 #' @param plot.psad F
 #' @export
 
-plotIndividualData<-function(pt.id, what.data="both", log.scale=T, plot.psad=F){
+plotIndividualData<-function(pt.id, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
 
-
+  pt.data <- patientDataframes[[1]]
+  psa.data <- patientDataframes[[2]]
+  bx.full <- patientDataframes[[3]]
+  #bx.data <- bx_data
 
   #subset PSA data
   psa.data.i<-psa.data[psa.data$id==pt.id,]

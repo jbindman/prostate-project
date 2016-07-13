@@ -6,28 +6,29 @@
 #' @param pt1 Patient 1
 #' @param pt2 Patient 2
 #' @export
-distance <- function(ptId = 6, comp = 45, patientDataframes, bx_data) {
-  pt.data <- patientDataframes[[1]]
-  ageDxPtId <- filter(pt.data, id == ptId)$age.dx
-  ageDxComp <- filter(pt.data, id == comp)$age.dx
-  ageDiff <- ageDxPtId - ageDxComp #can be neg or pos
-  stdevAge <- sd(pt.data$age.dx, na.rm = FALSE) #standard deviation of ages, look through demo.data
-
-  ptMerged <- getIndividualData(ptId, patientDataframes, bx_data) #should make getIndividualData function
-  loftPtId <- ptMerged$Visit[nrow(ptMerged)][1] # substract with dates: - ptMerged$Visit[1]
-  compMerged <- getIndividualData(comp, patientDataframes, bx_data)
-  #loftComp <- #subtract
-  #loft <- loftPtId - loftComp #will already be in years
-  #standard deviation comes from all merged dataframes, lots of computation. another way to do this, pt.data?
+distance <- function(ptId = 6, comp = 45, patientDataframes, distDataframe) {
 
 
-  calDateNumPtId <- filter(patientDataframes[[1]],id == ptId)$dx.date.num
-  calDateNumComp <- filter(patientDataframes[[1]],id == comp)$dx.date.num
-  calDateDiff <- calDateNumPtId - calDateNumComp #can be neg or positive
-  #needs to be converted from this seemingly arbitrary integer into years --> how
-  stdevCalDate <- sd(patientDataframes[[1]]$dx.date.num, na.rm = FALSE)
+  stdev <- getSd()
+  x1 <- c(distDataframe$ageDx[distDataframe$id == ptId], distDataframe$loft[distDataframe$id == ptId], (as.numeric(distDataframe$calDx[distDataframe$id == ptId])))
+  x2 <- c(distDataframe$ageDx[distDataframe$id == comp], distDataframe$loft[distDataframe$id == comp], (as.numeric(distDataframe$calDx[distDataframe$id == comp])))
 
-  dis <- (calDateDiff/stdevCalDate)^2
+  dis <- getDistance(x1, x2, stdev)
   return(dis)
-  #to save on code, return these comparisons within a loop, but do the standarddeviation separately so it doesnt need to be calculated each time. or does this not matter
 }
+
+getSd <- function() {
+  ageSd <- sd(distDataframe$ageDx, na.rm = FALSE)
+  loftSd <- sd(distDataframe$loft, na.rm = FALSE)
+  calSd <- sd(distDataframe$calDx, na.rm = FALSE)/365
+  sd <- c(ageSd, loftSd, calSd)
+  return (sd)
+}
+
+getDistance <- function(x1, x2, stdev) {
+    dis = (x1-x2)^2/stdev
+    #fix date
+    dis[3] <- ((x1[3] - x2[3]) / 365)^2/stdev[3]
+
+    return (sum(dis))
+  }

@@ -7,21 +7,37 @@
 #' @param K Number of nearby patients to return
 #' @param D Max distance between comparable patients
 #' @export
-closestK <- function(ptId = 6, K = 50, D = 1, patientDataframes, bx_data) {
-  (n<-dim(demo.data)[1]) #1000 patients in this data
+closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
+  #(n<-dim(demo.data)[1]) #1000 patients in this data
   pt.data <- patientDataframes[[1]]
   pt.data$ptDistance <- vector(length = nrow(pt.data))
-  for (i in pt.data$id) {
-    pt.data$ptDistance[i] <- distance(70, i, patientDataframes, bx_data)[1]
+
+  #make a dataframe with one entry per person, containing age, length of follow up, and cal date dx
+  distDataframe<-as.data.frame(pt.data$id)
+  names(distDataframe) <- "id"
+  #names(distDataframe)<-c("id", "ageDx", "loft", "calDx", "dob")
+  distDataframe$dob <- as.Date(pt.data$dob.num,  origin="1970-01-01")
+  distDataframe$ageDx <- pt.data$age.dx
+  distDataframe$calDx <- as.Date(pt.data$dx.date.num, origin="1970-01-01")
+  #slow, see if follow up time can be calculated faster
+  for (i in distDataframe$id) {
+    ptMerged <- getIndividualData(i, patientDataframes)
+    distDataframe$loft[distDataframe$id==i] <- ptMerged$`Patient Age`[nrow(ptMerged)]- distDataframe$ageDx[distDataframe$id==i] #for each patient, go through their merged dataframe and subtract last test date from diagnostic date, then convert to year
+    #error in simulated data? shouldnt be negative loft
+
+  }
+
+  #compare distances for all patients except ptId
+  for (i in 1:nrow(pt.data)) {
+    pt.data$ptDistance[pt.data$id==i] <- distance(ptId, i, patientDataframes, distDataframe)
   }
   #### for certain # K patients
-  all <- arrange(pt.data, desc(ptDistance)) #arrange in descending order
-  pt.data[1:K,]
+  all <- arrange(pt.data, ptDistance) #arrange in descending order
+  return(all[1:K,]$id)
 
-  ### within certain distance D
-  filter(pt.data, ptDistance < D)
-  # return certain rows of pt.data
-  # use this in plotting to limit scope to patient id's included in this subset
-
-#do i need to see RJAGS return
+  ### OR within certain distance D
+  all <- arrange(pt.data, ptDistance)
+  filter(all, ptDistance < D)
+  return(filter(all, ptDistance < 1)$id)
+  #return vector of ids
 }
