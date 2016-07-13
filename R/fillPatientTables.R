@@ -242,7 +242,6 @@ fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.dat
     }
     summary(bx.data$time.since.dx)
 
-    ##yOOOOOOOOO##
 
 
     #start by defining one time interval for each year a pt is under surveillance
@@ -444,7 +443,7 @@ fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.dat
   bx.full$id <- length(bx.full)
   for(i in bx.full$subj) {
     idReturn <- filter(pt.data, subj == i)$id[1] #first match will give correct corresponding id
-    bx.full$id[i] <- idReturn
+    bx.full$id[bx.full$subj == i] <- idReturn
   }
 
   patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)

@@ -8,14 +8,14 @@
 #' @param D Max distance between comparable patients
 #' @export
 closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
-  #(n<-dim(demo.data)[1]) #1000 patients in this data
+
+
   pt.data <- patientDataframes[[1]]
   pt.data$ptDistance <- vector(length = nrow(pt.data))
 
   #make a dataframe with one entry per person, containing age, length of follow up, and cal date dx
   distDataframe<-as.data.frame(pt.data$id)
   names(distDataframe) <- "id"
-  #names(distDataframe)<-c("id", "ageDx", "loft", "calDx", "dob")
   distDataframe$dob <- as.Date(pt.data$dob.num,  origin="1970-01-01")
   distDataframe$ageDx <- pt.data$age.dx
   distDataframe$calDx <- as.Date(pt.data$dx.date.num, origin="1970-01-01")
@@ -23,7 +23,7 @@ closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
   for (i in distDataframe$id) {
     ptMerged <- getIndividualData(i, patientDataframes)
     distDataframe$loft[distDataframe$id==i] <- ptMerged$`Patient Age`[nrow(ptMerged)]- distDataframe$ageDx[distDataframe$id==i] #for each patient, go through their merged dataframe and subtract last test date from diagnostic date, then convert to year
-    #error in simulated data? shouldnt be negative loft
+    #error in simulated data? shouldnt be any negative loft
 
   }
 
@@ -40,4 +40,5 @@ closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
   filter(all, ptDistance < D)
   return(filter(all, ptDistance < 1)$id)
   #return vector of ids
+  #remove first id which will always be ptId as distance = 0
 }

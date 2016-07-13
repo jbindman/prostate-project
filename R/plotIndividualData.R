@@ -9,12 +9,27 @@
 #' @param plot.psad F
 #' @export
 
-plotIndividualData<-function(pt.id, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
+plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
+
+
 
   pt.data <- patientDataframes[[1]]
   psa.data <- patientDataframes[[2]]
   bx.full <- patientDataframes[[3]]
   #bx.data <- bx_data
+
+  closestK <- closestK(pt.id, patientDataframes = patientDataframes)
+  fullPsa <- subset(psa.data, id %in% closestK)
+  fullBx <- subset(bx.full, id %in% closestK) #doesn't pull right because of subj/id issue
+
+  #print background PSA
+  p <- ggplot(fullPsa, aes(x = age, y = psa)) + geom_point(colour = "grey") + geom_line(aes(group = id), colour="grey")
+  p + stat_quantile(quantiles = c(0.05,0.25, 0.5, 0.75, 0.95))
+  #print background biopsy
+  p <- ggplot(fullBx, aes(x = int.age, y = bx.here)) + geom_point(colour = "grey")
+  p + geom_jitter(height = .25) #arbitrary jitter
+
+
 
   #subset PSA data
   psa.data.i<-psa.data[psa.data$id==pt.id,]
