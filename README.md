@@ -39,9 +39,9 @@ surg_data<-read.csv("julia-tx-data.csv")
 # We may also put variables in this data frame to ease definition of variables in the PSA and BX data frame (date of dx, age dx, average prostate volume)
 # Finally, we will order patients based on their observed GS. This is done to make estimation in JAGS easier. We assign a new sequential unique patient identifier for this ordering ("subj")
 
-ptDataframes <- fillPatientTables(IOP = TRUE)
+ptDataframes <- ProstatePackage:::fillPatientTables(IOP = TRUE)
 
-inputPatient <- printIndividualData(5, ptDataframes)
+inputPatient <- ProstatePackage:::printIndividualData(5, ptDataframes)
 
 for (i in 1:200) {
   printIndividualData(i, ptDataframes)

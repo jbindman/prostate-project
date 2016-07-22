@@ -28,9 +28,23 @@ printIndividualData<- function(idInput = 5, patientDataframes, bx_data) {
   formattedDemo <- filter(pt.data, id == idInput)
   formattedDemo$dob <- as.Date(formattedDemo$dob.num, origin="1970-01-01")
   #formattedDemo$dobCheck <-as.numeric(as.Date(formattedDemo$dob))
-  formattedDemo <- formattedDemo[c("id", "age.dx", "vol.avg", "dob")]
-  names(formattedDemo) <- c("Patient", "Age at Dx", "Avg Vol", "DOB")
-  #print(formattedDemo)
+  formattedDemo <- formattedDemo[c("id", "age.dx", "dob", "vol.avg")]
+  names(formattedDemo) <- c("Patient      ", "Age Dx     ", "DOB       ", "Avg Prostate Volume")
+  #print("Patient Id")
+  #print(formattedDemo$Patient)
+  #print("Age at Diagnosis")
+  #print(formattedDemo$'Age at Dx')
+  #print("DOB")
+  #print(formattedDemo$DOB)
+  #print("Average Prostate Volume")
+  #print(formattedDemo$'Avg Vol')
+  demoAge <- as.numeric(formattedDemo$`Age Dx     `)
+  ageSmall <- round(demoAge, digits = 0)
+  formattedDemo$`Age Dx     ` <- ageSmall
+  demoVol <- as.numeric(formattedDemo$`Avg Prostate Volume`)
+  volSmall <- round(demoVol, digits = 0)
+  formattedDemo$`Avg Prostate Volume` <- volSmall
+  print(knitr::kable(formattedDemo, align = 'c'))
 
   formattedPsa <- filter(psa.data, id == idInput)
   formattedPsa$visit <- as.Date(formattedPsa$psa.date.num, origin = "1970-01-01")

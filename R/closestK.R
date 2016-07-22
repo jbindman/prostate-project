@@ -7,7 +7,7 @@
 #' @param K Number of nearby patients to return
 #' @param D Max distance between comparable patients
 #' @export
-closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
+closestK <- function(ptId = 198, K = 10, D = 1, patientDataframes) {
 
 
   pt.data <- patientDataframes[[1]]
@@ -27,18 +27,21 @@ closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
 
   }
 
-  #compare distances for all patients except ptId
+  #calculate stdev for all patients
+  stdev <- getSd(distDataframe)
+  
+  #compare distances for all patients
   for (i in 1:nrow(pt.data)) {
-    pt.data$ptDistance[pt.data$id==i] <- distance(ptId, i, patientDataframes, distDataframe)
+    pt.data$ptDistance[pt.data$id==i] <- distance(ptId, i, distDataframe, stdev)
   }
   #### for certain # K patients
-  all <- arrange(pt.data, ptDistance) #arrange in descending order
-  return(all[1:K,]$id)
+  ordered <- arrange(pt.data, ptDistance) #arrange in descending order
+  return(ordered[2:K,]$id)
 
   ### OR within certain distance D
-  all <- arrange(pt.data, ptDistance)
-  filter(all, ptDistance < D)
-  return(filter(all, ptDistance < 1)$id)
+  ordered <- arrange(pt.data, ptDistance)
+  filter(ordered, ptDistance < D)
+  return(filter(ordered, ptDistance < 10, ptDistance > 0)$id)
   #return vector of ids
   #remove first id which will always be ptId as distance = 0
 }

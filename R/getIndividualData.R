@@ -1,15 +1,16 @@
 #' getIndividualData.R
 #'
-#' Return a specified patient's demographic, PSA, biopsy, and treatment results
+#' tet a specified patient's demographic, PSA, biopsy, and treatment results to the console
+#'
 #'
 #' @param idInput Integer of patient record to be displayed
 #' @param patientDataframes Full
 #' @export
-getIndividualData<- function(idInput = 5, patientDataframes) {
+getIndividualData<- function(idInput = 5, patientDataframes, bx_data) {
   pt.data <- patientDataframes[[1]] #global variable patientDataframes put into temporary dataframes with names matching RJAGS prep
   psa.data <- patientDataframes[[2]]
   #bx.data <- bx_data
-  bx.full <- patientDataframes[[3]]
+  bx.data <- patientDataframes[[3]]
   #  bx.data <- bx_data
 
 
@@ -29,25 +30,31 @@ getIndividualData<- function(idInput = 5, patientDataframes) {
   #formattedDemo$dobCheck <-as.numeric(as.Date(formattedDemo$dob))
   formattedDemo <- formattedDemo[c("id", "age.dx", "vol.avg", "dob")]
   names(formattedDemo) <- c("Patient", "Age at Dx", "Avg Vol", "DOB")
-  #print(formattedDemo)
+  #print("Patient Id")
+  #print(formattedDemo$Patient)
+  #print("Age at Diagnosis")
+  #print(formattedDemo$'Age at Dx')
+  #print("DOB")
+  #print(formattedDemo$DOB)
+  #print("Average Prostate Volume")
+  #print(formattedDemo$'Avg Vol')
 
   formattedPsa <- filter(psa.data, id == idInput)
-  formattedPsa <- formattedPsa[c("age", "psa.date", "psa")]#add age
+  formattedPsa$visit <- as.Date(formattedPsa$psa.date.num, origin = "1970-01-01")
+  formattedPsa <- formattedPsa[c("age", "visit", "psa")]#add age
+  #formattedPsa$visit <- as.Date(formattedPsa$psa.date, origin = "1970-01-01")
   names(formattedPsa) <- c("Age", "Visit", "PSA")
 
 
-
-
-  formattedBx <- filter(bx.data, id == idInput)
-  #add age
-
-  for (i in 1:nrow(formattedBx)) {
-    bxDate <- as.Date(formattedBx$bx.date[i])
-    formattedBx$ageNum[i] <- bxDate - formattedDemo$DOB
-    formattedBx$age[i] <- formattedBx$ageNum[i]/365
-  }
-  formattedBx <- formattedBx[c("bx.date", "vol", "age")]
-  names(formattedBx) <- c("Visit", "Vol", "Age")
+  formattedBx <- filter(bx.data, id == idInput, bx.here == 1)
+  #for (i in 1:nrow(formattedBx)) {
+  #  bxDate <- as.Date(formattedBx$bx.date[i])
+  #  formattedBx$ageNum[i] <- bxDate - formattedDemo$DOB
+  #  formattedBx$age[i] <- formattedBx$ageNum[i]/365
+  #}
+  formattedBx$visit <- as.Date(formattedBx$bx.date.num, origin = "1970-01-01")
+  formattedBx <- formattedBx[c("visit", "bx.age", "bx.here", "surgery")]
+  names(formattedBx) <- c("Visit", "Age", "Biopsy", "Surgery")
 
 
 
@@ -63,13 +70,13 @@ getIndividualData<- function(idInput = 5, patientDataframes) {
     ageVal <- as.numeric(merged.data$Age[i])
     ageSmall <- round(ageVal, digits = 1)
     merged.data$Age[i] <- ageSmall
-    volVal <- as.numeric(merged.data$Vol[i])
-    volSmall <- round(volVal, digits = 1)
-    merged.data$Vol[i] <- volSmall
+    #volVal <- as.numeric(merged.data$Vol[i])
+    #volSmall <- round(volVal, digits = 1)
+    #merged.data$Vol[i] <- volSmall
 
-    if(is.na(merged.data$Vol[i])) {
-      merged.data$Vol[i] <- "-"
-    }
+    #if(is.na(merged.data$Vol[i])) {
+    #  merged.data$Vol[i] <- "-"
+    #}
 
     #if (merged.data$RC[i] == 0) {
     #  merged.data$RC[i] <- "N"
@@ -80,27 +87,36 @@ getIndividualData<- function(idInput = 5, patientDataframes) {
     if(is.na(merged.data$Age[i])) {
       merged.data$Age[i] <- "-"
     }
-    #if(is.na(merged.data$Age2[i])) {
-    #  merged.data$Age2[i] <- "-"
-    #}
+
     if(is.na(merged.data$PSA[i])) {
       merged.data$PSA[i] <- "-"
     }
-    #if(is.na(merged.data$Biopsy[i])) {
-    #  merged.data$Biopsy[i] <- "-"
-    #}
+    if(is.na(merged.data$Biopsy[i])) {
+      merged.data$Biopsy[i] <- "-"
+    }
+    if (merged.data$Biopsy[i] == 1) {
+      merged.data$Biopsy[i] <- "Y"
+    }
+    if (merged.data$Biopsy[i] == 0) {
+      merged.data$Biopsy[i] <- "N"
+    }
+    if(is.na(merged.data$Surgery[i])) {
+      merged.data$Surgery[i] <- "-"
+    }
+    if(merged.data$Surgery[i] == 0) {
+      merged.data$Surgery[i] <- "N"
+    }
+    if (merged.data$Surgery[i] == 1) {
+      merged.data$Surgery[i] <- "Y"
+    }
 
     #merged.data$PSA[i]
   }
 
 
 
-
-
-  #still need to add ages. visit date - dob = age, make new column and delete column from PSA age (but use this to test)
-  names(merged.data) <- c("Visit Date", "Patient Age", "PSA value", "Volume")
+  names(merged.data) <- c("Visit Date", "Patient Age", "PSA value", "Biopsy", "Surgery")
   return(merged.data)
-  #knitr::kable(merged.data, align = 'c')
 
   #ages are messed up, thinks biopsy at later time has younger patient age
 
