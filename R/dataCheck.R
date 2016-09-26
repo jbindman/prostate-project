@@ -1,14 +1,14 @@
 #' dataCheck.R
 #'
-#' Check if loaded patient data has values within acceptable range.
+#' Check if loaded patient data has values within acceptable range. See vignette for restrictions on data.
 #'
-#' @param surg.data One record per treatment received per patient containing treatment date and GS
-#' @param demo.data Demographic data, one record per patient ID containing DOB
-#' @param psa.data PSA data, one record per PSA test per patient containing date of PSA test
-#' @param bx.data One record per biopsy per patient containing reclassicfication, volume, and dx
+#' @param demo.data Patient-level data. This dataframe should contain one record (row) per patient. Variables (columns) must include a unique identifier (ID) and valid date of birth for each patient.
+#' @param psa.data PSA data. This dataframe should contain one record per PSA test (per patient). Variables must include patient ID, date of test, and total PSA observed.
+#' @param bx.data Biopsy data. This dataframe should contain one record per biopsy (per patient). Variables must include patient ID, date of biopsy, indicator of grade reclassication, and prostate volume (if assessed).
+#' @param surg.data Surgery data. This dataframe should contain one record per surgery performed. Variables must include patient ID, surgery date, and Gleason score (GS) assessed on entire specimen.
 #' @export
 
-dataCheck <- function (surg.data = surg_data, demo.data = demo_data, psa.data = psa_data, bx.data = bx_data) {
+dataCheck <- function (demo.data = demo_data, psa.data = psa_data, bx.data = bx_data, surg.data = surg_data) {
   #ADD NEW CHECKS
   library(dplyr)
   #checks demo.data

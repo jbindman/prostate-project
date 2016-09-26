@@ -4,19 +4,19 @@
 \alias{dataCheck}
 \title{dataCheck.R}
 \usage{
-dataCheck(surg.data = surg_data, demo.data = demo_data,
-  psa.data = psa_data, bx.data = bx_data)
+dataCheck(demo.data = demo_data, psa.data = psa_data, bx.data = bx_data,
+  surg.data = surg_data)
 }
 \arguments{
-\item{surg.data}{One record per treatment received per patient containing treatment date and GS}
+\item{demo.data}{Patient-level data. This dataframe should contain one record (row) per patient. Variables (columns) must include a unique identifier (ID) and valid date of birth for each patient.}
 
-\item{demo.data}{Demographic data, one record per patient ID containing DOB}
+\item{psa.data}{PSA data. This dataframe should contain one record per PSA test (per patient). Variables must include patient ID, date of test, and total PSA observed.}
 
-\item{psa.data}{PSA data, one record per PSA test per patient containing date of PSA test}
+\item{bx.data}{Biopsy data. This dataframe should contain one record per biopsy (per patient). Variables must include patient ID, date of biopsy, indicator of grade reclassication, and prostate volume (if assessed).}
 
-\item{bx.data}{One record per biopsy per patient containing reclassicfication, volume, and dx}
+\item{surg.data}{Surgery data. This dataframe should contain one record per surgery performed. Variables must include patient ID, surgery date, and Gleason score (GS) assessed on entire specimen.}
 }
 \description{
-Check if loaded patient data has values within acceptable range.
+Check if loaded patient data has values within acceptable range. See vignette for restrictions on data.
 }
 

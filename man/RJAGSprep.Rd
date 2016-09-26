@@ -7,27 +7,14 @@
 RJAGSprep(pt, IOP = TRUE)
 }
 \arguments{
-\item{pt}{Filled dataframe of formatted clinical data}
+\item{pt}{Dataframe of formatted active surveillance data created by the function fillPatientTables()}
 
-\item{IOP}{True if IOP}
+\item{IOP}{TRUE if biopsy and surgery occurences are informative of the underlying GS, FALSE if non-informative.}
 }
 \value{
-List of parameters for RJAGS prep
-
-
-WORKFLOW
-0. Load packages and  necessary data.
-1. Format pt-level data for JAGS run
-2. Format PSA data for JAGS run
-3. Format biopsy data for JAGS run
-4. Load libraries
-5. Define data to be sent to jags function
-6. Initialize model parameters
-7. Define parameters to be tracked
-8. Define other jags settings
-9. Write model definition
+List of arguments for running analysis using RJAGS: \code{jags_data} (data), \code{inits} (inits), \code{parameters.to.save} (parameters.to.save).
 }
 \description{
-Prep files for RJAGS by creating list of parameters for RJAGS run.
+Prepare necessary arguments for running prostate cancer later class analysis using RJAGS.
 }
 

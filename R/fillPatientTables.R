@@ -1,13 +1,13 @@
 #' fillPatientTables
 #'
-#' Load dataframes from four patient data files to create a list of formatted patient dataframes.
+#' Load dataframes from four patient data files generated in the course of Active Surveillance in order to create a list of formatted patient dataframes for analysis. See vignette for required variable names and format.
 #'
-#' @param surg.data One record per treatment received per patient containing treatment date and GS
-#' @param demo.data Demographic data, one record per patient ID containing DOB
-#' @param psa.data PSA data, one record per PSA test per patient containing date of PSA test
-#' @param bx.data One record per biopsy per patient containing reclassicfication, volume, and dx
-#' @param IOP True if IOP, false if latent class model
-#' @return List of three dataframes, pt.data, psa.data, bx.full
+#' @param demo.data Patient-level data. This dataframe should contain one record (row) per patient. Variables (columns) must include a unique identifier (ID) and valid date of birth for each patient.
+#' @param psa.data PSA data. This dataframe should contain one record per PSA test (per patient). Variables must include patient ID, date of test, and total PSA observed.
+#' @param bx.data Biopsy data. This dataframe should contain one record per biopsy (per patient). Variables must include patient ID, date of biopsy, indicator of grade reclassication, and prostate volume (if assessed).
+#' @param surg.data Surgery data. This dataframe should contain one record per surgery performed. Variables must include patient ID, surgery date, and Gleason score (GS) assessed on entire specimen.
+#' @param IOP TRUE if biopsy and surgery occurences are informative of the underlying GS, FALSE if non-informative.
+#' @return List of three dataframes for analysis: pt.data, psa.data, bx.full. See vignette for examples.
 #' @export
 # @details
 # 1. Load data, look at variables.

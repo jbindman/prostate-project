@@ -4,14 +4,14 @@
 \alias{closestK}
 \title{closestK}
 \usage{
-closestK(pt.id = 5, K = 50, D = 1)
+closestK(ptId = 198, K = 10, D = 1, patientDataframes)
 }
 \arguments{
-\item{pt.id}{Integer of patient record to be displayed}
-
 \item{K}{Number of nearby patients to return}
 
 \item{D}{Max distance between comparable patients}
+
+\item{pt.id}{Integer of patient record to be displayed}
 }
 \description{
 Find the distance between two patients

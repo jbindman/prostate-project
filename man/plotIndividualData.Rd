@@ -4,7 +4,7 @@
 \alias{plotIndividualData}
 \title{plotIndividualData}
 \usage{
-plotIndividualData(pt.id, what.data = "both", log.scale = T,
+plotIndividualData(pt.id = 60, what.data = "both", log.scale = T,
   plot.psad = F)
 }
 \arguments{

@@ -4,12 +4,14 @@
 \alias{distance}
 \title{distance}
 \usage{
-distance(pt1 = 5, pt2 = 38)
+distance(ptId, comp, distDataframe, stdev)
 }
 \arguments{
-\item{pt1}{Patient 1}
+\item{ptId}{Patient 1}
 
-\item{pt2}{Patient 2}
+\item{comp}{Patient 2, to be compared to}
+
+\item{distDataframe}{Dataframe of variables to be compared in distance function}
 }
 \description{
 Find the distance between two patients
