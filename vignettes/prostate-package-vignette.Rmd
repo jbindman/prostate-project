@@ -7,9 +7,12 @@ Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} ---
 
 To utilize the most current version of these functions, install the most recent code from github through the following commands.
 
-```
-install.packages("devtools")
-devtools::install_github("jbindman/prostate-project") 
+```{r}
+setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
+library(ProstatePackage)
+demo_data<-read.csv("julia-demo-data-IOP.csv")
+names(demo_data)
+#{r} denotes to run and print the code. it allows me to read in demo_data here, but if I add {r} to the next pieces of code, it is unable to Knit HTML. Additionally, there is some output from running the code that I don't want printed (see box with lines beginng ## just above)
 ```
 
 #Loading Data 
@@ -113,14 +116,13 @@ See documentation for R2jags for details on jags output.
 Use this function to print an individual's data from various clinical data sources.
 
 ```
-inputPatient <- ProstatePackage:::printIndividualData(idInput = 5, pt = ptDataframes)
+inputPatient <- ProstatePackage:::printIndividualData(pt.id = 5, pt = ptDataframes)
 ```
 The function returns and prints a readable formatted table of patient data. Required fields are:
 
 * pt.data Integer of patient record to be displayed
 * ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
 
-* Add picture of output
 
 
 #Plot Individual Data
@@ -138,5 +140,5 @@ The function plots various clinical data for an individual patiet. Required fiel
 * plot.psad Boolean TRUE if using PSAD, FALSE if not. FALSE default
 * ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
 
-* Add picture of plot
+
 
