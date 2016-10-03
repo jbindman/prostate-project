@@ -1,0 +1,72 @@
+---
+output: html_document
+---
+--- title: "Prostate Package Vignette" author: "Yates Coley & Julia Bindman" date: "`r Sys.Date()`" 
+output: rmarkdown::html_vignette vignette: > %\VignetteIndexEntry{Vignette
+Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} ---
+
+
+#Install Package
+
+To utilize the most current version of these functions, install the most recent code from github through the following commands.
+
+```
+install.packages("devtools")
+devtools::install_github("jbindman/prostate-project") 
+```
+
+#Loading Data 
+To analyze your code, you must first load in data from various clinical data sources. Load in data from csv files for demographic data, PSA data, biopsy data, and surgical data. Each excel file must be saved to your local directory. 
+
+```{r}
+#set working directory to your folder containing your clinical data sources
+setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
+library(ProstatePackage)
+#demographic data. one record per patient 
+demo_data<-read.csv("julia-demo-data-IOP.csv")
+#psa data. one record per PSA test per patient 
+psa_data<-read.csv("julia-psa-data-IOP.csv") 
+#bx data. one record per Biopsy test per patient
+bx_data<-read.csv("julia-bx-data-IOP.csv") 
+#surg.data. one record per treatment received per patient 
+surg_data<-read.csv("julia-surg-data-IOP.csv") 
+```
+
+#Shaping data
+Call function fillPatientTables to create dataframes based on combined data sources
+```{r, results = "hide"}
+#ptDataframes contains combined demographic data, PSA data, biopsy data, and surgical data
+ptDataframes <- ProstatePackage:::fillPatientTables(IOP = TRUE)
+```
+
+#RJAGS Prep
+
+Prepare data and arguments for RJAGS by calling RJAGSprep on filled dataframe of combined data sources
+
+```
+# Return RJAGS argument prep on formatted patient dataframes
+jagsPrep <- ProstatePackage:::RJAGSprep(ptDataframes, TRUE) #library call lmer and others
+
+```
+
+Run RJAGS on your data according to your desired specifications
+
+#Print Individual Data
+Use this function to print a summary of patient data, indexed by patient ID number and dataframe of combine patient data
+```{r}
+#Print Individual Data on Patient 5
+inputPatient <- ProstatePackage:::printIndividualData(5, ptDataframes)
+```
+
+#Plot Individual Data
+Use this function to plot a summary of patient data, indexed by patient ID number and dataframe of combine patient data
+```{r}
+#Plot Individual Data on Patient 5
+#inputPatient <- ProstatePackage:::plotIndividualData(5, patientDataframes = ptDataframes)
+```
+
+
+
+
+
+

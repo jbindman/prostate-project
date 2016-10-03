@@ -17,8 +17,8 @@
 # 5. Save data
 fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.data = bx_data, surg.data = surg_data, IOP = TRUE) { #default file names
 
-  dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
-  #add check to make sure IOP/not is right
+  #dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
+
 
 
   (n<-dim(demo.data)[1]) #1000 patients in this data

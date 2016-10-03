@@ -5,7 +5,7 @@
 \title{plotIndividualData}
 \usage{
 plotIndividualData(pt.id = 60, what.data = "both", log.scale = T,
-  plot.psad = F)
+  plot.psad = F, patientDataframes)
 }
 \arguments{
 \item{pt.id}{Patient whose data to print}

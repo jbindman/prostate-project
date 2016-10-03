@@ -1,0 +1,142 @@
+--- title: "Prostate Package Vignette" author: "Yates Coley & Julia Bindman" date: "`r Sys.Date()`" 
+output: rmarkdown::html_vignette vignette: > %\VignetteIndexEntry{Vignette
+Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} ---
+
+
+#Install Package
+
+To utilize the most current version of these functions, install the most recent code from github through the following commands.
+
+```
+install.packages("devtools")
+devtools::install_github("jbindman/prostate-project") 
+```
+
+#Loading Data 
+To analyze your code, you must first load in data from various clinical data sources. Load in data from .csv files for patient data, PSA data, biopsy data, and surgical data. Each .csv file must be saved to your local directory. Below, we describe the characteristics and variables of each dataset needed for input.
+
+### Patient-level data
+```
+demo_data<-read.csv("julia-demo-data-IOP.csv")
+names(demo_data)
+```
+This dataset should have one record (row) per patient. Required fields are:
+
+* id: Unique identifier for each patient
+* dob: Date of birth for each patient. Should be in form "%Y-%M-%D", i.e. "1950-01-30".
+* status.rc: Binary variable indicating if grade reclassification (RC) was observed on biopsy. 
+* status.tx: Binary variable indicating if patient underwent radical prostactomy ("surgery")
+* censor.dt.rc: Censoring date for time-until-RC. Equal to date of RC on biosy if status.rc==1. Equal to date of surgery, other treatment, other drop-out, or administrative censoring for patients without RC. Required format: "%Y-%M-%D".
+* censor.dt.tx: Censoring date for time-until-surgery. Equal to date of surgery if status.tx=1. Equal to date of other treatment, other loss to follow-up, or administrative censoring for patients without surgery. Note: patients with status.rc=1 are still under observation for surgery until other treatment, loss to follow, or administrative censoring. Required format: "%Y-%M-%D".
+
+Variable (column) names must be specified *exactly* as given above.
+
+### PSA data
+```
+psa_data<-read.csv("julia-psa-data-IOP.csv") 
+names(psa_data)
+```
+This dataset should have one record (row) per PSA test performed per patient. PSA tests prior to prostate cancer diagnosis should be included; PSA tests after surgery or other treatment should not be included. Required fields are:
+
+* id: Unique patient id
+* psa: Total PSA observed on test
+* psa.date: Date of PSA test. Required format: "%Y-%M-%D".
+
+Variable (column) names must be specified *exactly* as given above.
+
+### Biopsy data
+```
+bx_data<-read.csv("julia-bx-data-IOP.csv") 
+names(bx_data)
+```
+This dataset should have one record (row) per biopsy per patient prior to grade reclassification (RC), including diagnostic biopsy. Patients with RC on diagnostic biopsy are not eligible for active surveillance and should not be included in the analysis. No biopsies should occur after intial RC, surgery, or other treatment. Required fields are:
+
+* id: Unique patient identifier
+* bx.date: Date of biopsy. Required format: "%Y-%M-%D".
+* RC: Binary variable indicating if grade reclassification was observed on biopsy.
+* vol: Prostate volume (if assessed). Prostate volume does not need to be assessed at every biopsy, but each patient must have at least one volume measurement in the biopsy dataset. 
+
+Variable (column) names must be specified *exactly* as given above.
+
+### Surgery data
+```
+surg_data<-read.csv("julia-surg-data-IOP.csv") 
+names(surg_data)
+```
+This dataset should have one record (row) per surgery performed. Patients without radical prostatectomy should not be included in this dataset. Patients with other curative intervention (e.g., radiation) prior to surgery should not be included in this dataset. Required fields are:
+
+* id: Unique patient identifer.
+* GS: Binary indicator of Gleason score greater than 6 assigned on post-surgery pathological analysis.
+* surg.date: Date of surgery. Required format: "%Y-%M-%D".
+
+Variable (column) names must be specified *exactly* as given above.
+
+
+#Shaping data
+Call function fillPatientTables to create dataframes based on combined data sources.
+```
+ptDataframes <- ProstatePackage:::fillPatientTables(demo.data=demo_data, psa.data=psa_data, bx.data=bx_data, surg.data=surg_data, IOP = TRUE)
+```
+This function will check the input datasets to ensure data meet the requirements detailed above. If data are not formatted properly, error messages will be produced and the function will not return the necessary dataframes for proceeding with analysis.
+
+The IOP=TRUE option in this function indicates that the occurrence of biopsies and surgery may be informative of the underlying prostate cancer state to be predicted. To enforce the assumption that biopsy and surgical decisions are not informative, use IOP=FALSE. Required fields are:
+
+* demo_data Loaded data with one record (row) per patient
+* psa_data Loaded data with one record (row) per PSA test performed per patient.
+* bx_data Loaded data with one record (row) per biopsy per patient prior to grade reclassification (RC), including diagnostic biopsy.
+* surg_data Loaded dataset with have one record (row) per surgery performed.
+* IOP Boolean, TRUE if biopsy and surgery occurences are informative of the underlying GS, FALSE if non-informative. TRUE default
+
+Variable (column) names must be specified *exactly* as given above.
+
+#RJAGS Prep
+
+Next, RJAGSprep will take the formatted dataframe created by fillPatientTables as input and prepare necessary arguments to complete the analysis in RJAGS. 
+```
+jagsPrep <- RJAGSprep(pt=ptDataframes, IOP=TRUE)
+
+```
+Note that the JAGS model (model.file) is automatically written to your current working directory by RJAGSprep. Required fields are: 
+
+* ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
+* IOP Boolean, TRUE if biopsy and surgery occurences are informative of the underlying GS, FALSE if non-informative. TRUE default
+
+Finally, run the analysis with RJAGS according to desired specifications for chain length, burn-in, etc. (The example below runs a single short chain.)
+```
+library(R2jags)
+ex.jags<-jags(data=RJAGSprepfull$jags_data, inits=RJAGSprepfull$inits, parameters.to.save=RJAGSprepfull$parameters.to.save, model.file="IOP-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=1)
+```
+See documentation for R2jags for details on jags output.
+
+#Print Individual Data
+
+Use this function to print an individual's data from various clinical data sources.
+
+```
+inputPatient <- ProstatePackage:::printIndividualData(idInput = 5, ptDataframes)
+```
+The function returns and prints a readable formatted table of patient data. Required fields are:
+
+* idInput Integer of patient record to be displayed
+* ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
+
+* Add picture of output
+
+
+#Plot Individual Data
+
+Use this function to plot an individual's data.
+
+```
+plotIndividualData(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, ptDataframes){
+```
+The function plots various clinical data for an individual patiet. Required fields are:
+
+* pt.id Integer of patient record to be displayed
+* what.data Variable that says what clinical data source to plot. "Both" = plot both PSA and Biopsy data, "psa" = plot just PSA data, "biopsy" = plot just biopsy data
+* log.scale Boolean TRUE if using log scale, FALSE if not. TRUE default.
+* plot.psad Boolean TRUE if using PSAD, FALSE if not. FALSE default
+* ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
+
+* Add picture of plot
+

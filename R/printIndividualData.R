@@ -14,8 +14,6 @@ printIndividualData<- function(idInput = 5, patientDataframes, bx_data) {
   #  bx.data <- bx_data
 
 
-
-
   lapply(psa.data, class)
 
 

@@ -9,9 +9,10 @@
 #' @param plot.psad F
 #' @export
 
-plotBackgroundData<-function(pt.id = 6, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
+plotBackgroundData<-function(pt.id = 100, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
   
-  
+
+  #pt 100
   
   pt.data <- patientDataframes[[1]]
   psa.data <- patientDataframes[[2]]
@@ -23,11 +24,10 @@ plotBackgroundData<-function(pt.id = 6, what.data="both", log.scale=T, plot.psad
   fullBx <- subset(bx.full, id %in% closestPatients)
   
   #print background PSA
-  p <- ggplot(fullPsa, aes(x = age, y = psa)) + geom_point(colour = "grey") + geom_line(aes(group = id), colour="grey")
-  p + stat_quantile(quantiles = c(0.05,0.25, 0.5, 0.75, 0.95))
+  p <- ggplot(fullPsa, aes(x = age, y = psa)) + geom_point(colour = "black") + geom_line(aes(group = id), colour="grey") + stat_quantile(quantiles = c(0.05,0.25, 0.5, 0.75, 0.95))
   p
   #print background biopsy
-  #p <- ggplot(fullBx, aes(x = int.age, y = rc)) + geom_point(colour = "black") 
+  q <- ggplot(fullBx, aes(x = int.age, y = rc)) + geom_point(colour = "black") 
   #p <- p + geom_smooth(colour = "grey") 
   #p + geom_jitter(height = .25) #arbitrary jitter
   

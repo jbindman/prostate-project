@@ -9,7 +9,7 @@
 #' @param plot.psad F
 #' @export
 
-plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
+plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, patientDataframes){
 
 
 
@@ -18,7 +18,23 @@ plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psa
   bx.full <- patientDataframes[[3]]
   #bx.data <- bx_data
 
-  
+  closestK <- closestK(pt.id, patientDataframes = patientDataframes)
+  fullPsa <- subset(psa.data, id %in% closestK)
+  fullBx <- subset(bx.full, id %in% closestK) #doesn't pull right because of subj/id issue
+
+  #print background PSA
+  p <- ggplot(fullPsa, aes(x = age, y = psa)) + geom_point(colour = "grey") + geom_line(aes(group = id), colour="grey")
+  p + stat_quantile(quantiles = c(0.05,0.25, 0.5, 0.75, 0.95))
+  #print background biopsy
+  p <- ggplot(fullBx, aes(x = int.age, y = bx.here)) + geom_smooth(colour = "grey")
+
+  p <- ggplot(fullBx, aes(x = int.age, y = bx.here)) + geom_smooth(colour = "grey")
+  p + geom_jitter(height = .25, colour = fullBx$rc) #arbitrary jitter
+  #p <- ggplot(fullBx, aes(x = int.age, y = bx.here)) + geom_smooth(colour = "grey")
+
+  p <- ggplot(fullBx, aes(x = int.age[!is.na(fullBx$rc)], y = fullBx[!is.na(fullBx$rc)]))
+
+
 
   #subset PSA data
   psa.data.i<-psa.data[psa.data$id==pt.id,]
