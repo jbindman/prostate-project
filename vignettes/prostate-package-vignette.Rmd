@@ -75,7 +75,7 @@ Variable (column) names must be specified *exactly* as given above.
 #Shaping data
 Call function fillPatientTables to create dataframes based on combined data sources.
 ```
-ptDataframes <- ProstatePackage:::fillPatientTables(demo.data=demo_data, psa.data=psa_data, bx.data=bx_data, surg.data=surg_data, IOP = TRUE)
+ptDataframes <- ProstatePackage:::fillPatientTables(IOP = TRUE)
 ```
 This function will check the input datasets to ensure data meet the requirements detailed above. If data are not formatted properly, error messages will be produced and the function will not return the necessary dataframes for proceeding with analysis.
 
@@ -93,7 +93,7 @@ Variable (column) names must be specified *exactly* as given above.
 
 Next, RJAGSprep will take the formatted dataframe created by fillPatientTables as input and prepare necessary arguments to complete the analysis in RJAGS. 
 ```
-jagsPrep <- RJAGSprep(pt=ptDataframes, IOP=TRUE)
+jagsPrep <- RJAGSprep(pt = ptDataframes, IOP=TRUE)
 
 ```
 Note that the JAGS model (model.file) is automatically written to your current working directory by RJAGSprep. Required fields are: 
@@ -113,11 +113,11 @@ See documentation for R2jags for details on jags output.
 Use this function to print an individual's data from various clinical data sources.
 
 ```
-inputPatient <- ProstatePackage:::printIndividualData(idInput = 5, ptDataframes)
+inputPatient <- ProstatePackage:::printIndividualData(idInput = 5, pt = ptDataframes)
 ```
 The function returns and prints a readable formatted table of patient data. Required fields are:
 
-* idInput Integer of patient record to be displayed
+* pt.data Integer of patient record to be displayed
 * ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
 
 * Add picture of output
@@ -128,7 +128,7 @@ The function returns and prints a readable formatted table of patient data. Requ
 Use this function to plot an individual's data.
 
 ```
-plotIndividualData(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, ptDataframes){
+plotIndividualData(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, pt = ptDataframes){
 ```
 The function plots various clinical data for an individual patiet. Required fields are:
 

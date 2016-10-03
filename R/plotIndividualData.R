@@ -9,16 +9,16 @@
 #' @param plot.psad F
 #' @export
 
-plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, patientDataframes){
+plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, pt){
 
 
 
-  pt.data <- patientDataframes[[1]]
-  psa.data <- patientDataframes[[2]]
-  bx.full <- patientDataframes[[3]]
+  pt.data <- pt[[1]]
+  psa.data <- pt[[2]]
+  bx.full <- pt[[3]]
   #bx.data <- bx_data
 
-  closestK <- closestK(pt.id, patientDataframes = patientDataframes)
+  closestK <- closestK(pt.id, pt = pt)
   fullPsa <- subset(psa.data, id %in% closestK)
   fullBx <- subset(bx.full, id %in% closestK) #doesn't pull right because of subj/id issue
 

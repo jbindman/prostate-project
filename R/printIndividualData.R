@@ -3,27 +3,27 @@
 #' Print a specified patient's demographic, PSA, biopsy, and treatment results to the console
 #'
 #'
-#' @param idInput Integer of patient record to be displayed
-#' @param patientDataframes Full
+#' @param pt.id Integer of patient record to be displayed
+#' @param pt Full
 #' @export
-printIndividualData<- function(idInput = 5, patientDataframes, bx_data) {
-  pt.data <- patientDataframes[[1]] #global variable patientDataframes put into temporary dataframes with names matching RJAGS prep
-  psa.data <- patientDataframes[[2]]
+printIndividualData<- function(pt.id = 5, pt) {
+  pt.data <- pt[[1]] #global variable pt put into temporary dataframes with names matching RJAGS prep
+  psa.data <- pt[[2]]
   #bx.data <- bx_data
-  bx.data <- patientDataframes[[3]]
+  bx.data <- pt[[3]]
   #  bx.data <- bx_data
 
 
   lapply(psa.data, class)
 
 
-  #pt.data[pt.data$id == patient,] #actually works and is equiv #patientDataframes[[1]][patientDataframes[[1]]$id == patient,]
+  #pt.data[pt.data$id == patient,] #actually works and is equiv #pt[[1]][pt[[1]]$id == patient,]
   #psa.data[psa.data$id == patient,]
   #bx.data[bx.data$id == patient,]
   #library(dplyr)
 
   #print("Demographics Data: ")
-  formattedDemo <- filter(pt.data, id == idInput)
+  formattedDemo <- filter(pt.data, id == pt.id)
   formattedDemo$dob <- as.Date(formattedDemo$dob.num, origin="1970-01-01")
   #formattedDemo$dobCheck <-as.numeric(as.Date(formattedDemo$dob))
   formattedDemo <- formattedDemo[c("id", "age.dx", "dob", "vol.avg")]
@@ -44,14 +44,14 @@ printIndividualData<- function(idInput = 5, patientDataframes, bx_data) {
   formattedDemo$`Avg Prostate Volume` <- volSmall
   print(knitr::kable(formattedDemo, align = 'c'))
 
-  formattedPsa <- filter(psa.data, id == idInput)
+  formattedPsa <- filter(psa.data, id == pt.id)
   formattedPsa$visit <- as.Date(formattedPsa$psa.date.num, origin = "1970-01-01")
   formattedPsa <- formattedPsa[c("age", "visit", "psa")]#add age
   #formattedPsa$visit <- as.Date(formattedPsa$psa.date, origin = "1970-01-01")
   names(formattedPsa) <- c("Age", "Visit", "PSA")
 
 
-  formattedBx <- filter(bx.data, id == idInput, bx.here == 1)
+  formattedBx <- filter(bx.data, id == pt.id, bx.here == 1)
   #for (i in 1:nrow(formattedBx)) {
   #  bxDate <- as.Date(formattedBx$bx.date[i])
   #  formattedBx$ageNum[i] <- bxDate - formattedDemo$DOB
