@@ -23,8 +23,9 @@
 
 RJAGSprep <- function(pt, IOP = TRUE) {
 
-  #library("lme4")
-  #library("splines")
+  library("lme4")
+  library("splines")
+  library("Matrix")
 
   pt.data <- pt[[1]]
   psa.data <- pt[[2]]
