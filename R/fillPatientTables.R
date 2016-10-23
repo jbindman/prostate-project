@@ -18,13 +18,13 @@
 fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.data = bx_data, surg.data = surg_data, IOP = TRUE) { #default file names
 
   #dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
+  library(dplyr)
 
 
-
-  (n<-dim(demo.data)[1]) #1000 patients in this data
-  (n_psa<-dim(psa.data)[1]) #15083 PSA tests
-  (n_bx<-dim(bx.data)[1]) #3842 biopsy observations
-  (n_surg<-dim(surg.data)[1]) #183 patients received treatment
+  #(n<-dim(demo.data)[1]) #1000 patients in this data
+  #(n_psa<-dim(psa.data)[1]) #15083 PSA tests
+  #(n_bx<-dim(bx.data)[1]) #3842 biopsy observations
+  #(n_surg<-dim(surg.data)[1]) #183 patients received treatment
 
 
 

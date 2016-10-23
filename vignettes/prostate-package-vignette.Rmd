@@ -3,27 +3,12 @@ output: rmarkdown::html_vignette vignette: > %\VignetteIndexEntry{Vignette
 Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} ---
 
 
-#Install Package
-
-To utilize the most current version of these functions, install the most recent code from github through the following commands.
-
-```{r}
-#setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
-#library(ProstatePackage)
-#system.file("extdata/InputFiles/exampleData.csv", package="myPackage")
-
-#use absolute path
-#demo_data<-read.csv("julia-demo-data-IOP.csv")
-#names(demo_data)
-#{r} denotes to run and print the code. it allows me to read in demo_data here, but if I add {r} to the next pieces of code, it is unable to Knit HTML. Additionally, there is some output from running the code that I don't want printed (see box with lines beginng ## just above)
-```
-
 #Loading Data 
 To analyze your code, you must first load in data from various clinical data sources. Load in data from .csv files for patient data, PSA data, biopsy data, and surgical data. Each .csv file must be saved to your local directory. Below, we describe the characteristics and variables of each dataset needed for input.
 
 ### Patient-level data
-```{r}
-demo_data<-read.csv("julia-demo-data-IOP.csv")
+```{r, results = "hide"}
+demo_data<-read.csv("example-demo-data-IOP.csv")
 names(demo_data)
 ```
 This dataset should have one record (row) per patient. Required fields are:
@@ -38,8 +23,8 @@ This dataset should have one record (row) per patient. Required fields are:
 Variable (column) names must be specified *exactly* as given above.
 
 ### PSA data
-```{r}
-psa_data<-read.csv("julia-psa-data-IOP.csv") 
+```{r, results = "hide"}
+psa_data<-read.csv("example-psa-data-IOP.csv") 
 names(psa_data)
 ```
 This dataset should have one record (row) per PSA test performed per patient. PSA tests prior to prostate cancer diagnosis should be included; PSA tests after surgery or other treatment should not be included. Required fields are:
@@ -51,8 +36,8 @@ This dataset should have one record (row) per PSA test performed per patient. PS
 Variable (column) names must be specified *exactly* as given above.
 
 ### Biopsy data
-```
-bx_data<-read.csv("julia-bx-data-IOP.csv") 
+```{r, results = "hide"}
+bx_data<-read.csv("example-bx-data-IOP.csv") 
 names(bx_data)
 ```
 This dataset should have one record (row) per biopsy per patient prior to grade reclassification (RC), including diagnostic biopsy. Patients with RC on diagnostic biopsy are not eligible for active surveillance and should not be included in the analysis. No biopsies should occur after intial RC, surgery, or other treatment. Required fields are:
@@ -65,8 +50,8 @@ This dataset should have one record (row) per biopsy per patient prior to grade 
 Variable (column) names must be specified *exactly* as given above.
 
 ### Surgery data
-```
-surg_data<-read.csv("julia-surg-data-IOP.csv") 
+```{r, results = "hide"}
+surg_data<-read.csv("example-surg-data-IOP.csv") 
 names(surg_data)
 ```
 This dataset should have one record (row) per surgery performed. Patients without radical prostatectomy should not be included in this dataset. Patients with other curative intervention (e.g., radiation) prior to surgery should not be included in this dataset. Required fields are:
@@ -80,7 +65,8 @@ Variable (column) names must be specified *exactly* as given above.
 
 #Shaping data
 Call function fillPatientTables to create dataframes based on combined data sources.
-```
+```{r, results = "hide"}
+#need dplyr for filter with subj
 ptDataframes <- ProstatePackage:::fillPatientTables(IOP = TRUE)
 ```
 This function will check the input datasets to ensure data meet the requirements detailed above. If data are not formatted properly, error messages will be produced and the function will not return the necessary dataframes for proceeding with analysis.
