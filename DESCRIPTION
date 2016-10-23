@@ -15,7 +15,6 @@ Imports: bayesm,
          splines,
          dplyr,
          RCurl,
-Suggests: rmarkdown,
-            knitr
-
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 
