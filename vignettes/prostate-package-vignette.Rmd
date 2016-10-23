@@ -8,10 +8,13 @@ Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} ---
 To utilize the most current version of these functions, install the most recent code from github through the following commands.
 
 ```{r}
-setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
-library(ProstatePackage)
-demo_data<-read.csv("julia-demo-data-IOP.csv")
-names(demo_data)
+#setwd("/Users/jbindman/Desktop/JHU/Prostate/prostate-project")
+#library(ProstatePackage)
+#system.file("extdata/InputFiles/exampleData.csv", package="myPackage")
+
+#use absolute path
+#demo_data<-read.csv("julia-demo-data-IOP.csv")
+#names(demo_data)
 #{r} denotes to run and print the code. it allows me to read in demo_data here, but if I add {r} to the next pieces of code, it is unable to Knit HTML. Additionally, there is some output from running the code that I don't want printed (see box with lines beginng ## just above)
 ```
 
@@ -19,7 +22,7 @@ names(demo_data)
 To analyze your code, you must first load in data from various clinical data sources. Load in data from .csv files for patient data, PSA data, biopsy data, and surgical data. Each .csv file must be saved to your local directory. Below, we describe the characteristics and variables of each dataset needed for input.
 
 ### Patient-level data
-```
+```{r}
 demo_data<-read.csv("julia-demo-data-IOP.csv")
 names(demo_data)
 ```
@@ -35,7 +38,7 @@ This dataset should have one record (row) per patient. Required fields are:
 Variable (column) names must be specified *exactly* as given above.
 
 ### PSA data
-```
+```{r}
 psa_data<-read.csv("julia-psa-data-IOP.csv") 
 names(psa_data)
 ```
