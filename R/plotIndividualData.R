@@ -18,7 +18,7 @@ plotIndividualData<-function(pt.id = 60, what.data="both", log.scale=T, plot.psa
   bx.full <- pt[[3]]
   #bx.data <- bx_data
 
-  closestK <- closestK(pt.id, pt = pt)
+  closestK <- closestK(pt.id, pt, 25, 1)
   fullPsa <- subset(psa.data, id %in% closestK)
   fullBx <- subset(bx.full, id %in% closestK) #doesn't pull right because of subj/id issue
 

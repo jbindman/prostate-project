@@ -7,10 +7,10 @@
 #' @param K Number of nearby patients to return
 #' @param D Max distance between comparable patients
 #' @export
-closestK <- function(ptId = 6, K = 25, D = 1, patientDataframes) {
+closestK <- function(ptId = 6, pt, K = 25, D = 1) {
 
-
-  pt.data <- patientDataframes[[1]]
+  pt.data <-pt
+  #pt.data <- patientDataframes[[1]]
   pt.data$ptDistance <- vector(length = nrow(pt.data))
 
   #make a dataframe with one entry per person, containing age, length of follow up, and cal date dx
