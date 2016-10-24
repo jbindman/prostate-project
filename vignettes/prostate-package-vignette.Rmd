@@ -64,12 +64,11 @@ Variable (column) names must be specified *exactly* as given above.
 
 #Shaping data
 Call function fillPatientTables to create dataframes based on combined data sources.
-```{r}
-#functions work...
-ProstatePackage::writeJAGSmodel()
-#need dplyr for filter with subj
-ptDataframes <- ProstatePackage::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
+```{r, results = "hide"}
+ptDataframes <- ProstatePackage:::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
+#ProstatePackage:::writeJAGSmodel()
 ```
+
 This function will check the input datasets to ensure data meet the requirements detailed above. If data are not formatted properly, error messages will be produced and the function will not return the necessary dataframes for proceeding with analysis.
 
 The IOP=TRUE option in this function indicates that the occurrence of biopsies and surgery may be informative of the underlying prostate cancer state to be predicted. To enforce the assumption that biopsy and surgical decisions are not informative, use IOP=FALSE. Required fields are:
@@ -85,8 +84,8 @@ Variable (column) names must be specified *exactly* as given above.
 #RJAGS Prep
 
 Next, RJAGSprep will take the formatted dataframe created by fillPatientTables as input and prepare necessary arguments to complete the analysis in RJAGS. 
-```
-#jagsPrep <- ProstatePackage:::RJAGSprep(pt = ptDataframes, IOP=TRUE)
+```{r, results = "hide"}
+#jagsPrep <- ProstatePackage::RJAGSprep(pt = ptDataframes, IOP=TRUE)
 
 ```
 Note that the JAGS model (model.file) is automatically written to your current working directory by RJAGSprep. Required fields are: 
@@ -95,7 +94,7 @@ Note that the JAGS model (model.file) is automatically written to your current w
 * IOP Boolean, TRUE if biopsy and surgery occurences are informative of the underlying GS, FALSE if non-informative. TRUE default
 
 Finally, run the analysis with RJAGS according to desired specifications for chain length, burn-in, etc. (The example below runs a single short chain.)
-```
+``````{r, eval = FALSE}
 library(R2jags)
 ex.jags<-jags(data=RJAGSprepfull$jags_data, inits=RJAGSprepfull$inits, parameters.to.save=RJAGSprepfull$parameters.to.save, model.file="IOP-jags-model.txt", n.chains=1, n.iter=50, n.burnin=10, n.thin=1)
 ```
@@ -105,7 +104,7 @@ See documentation for R2jags for details on jags output.
 
 Use this function to print an individual's data from various clinical data sources.
 
-```
+```{r, eval = FALSE}
 inputPatient <- ProstatePackage:::printIndividualData(pt.id = 5, pt = ptDataframes)
 ```
 The function returns and prints a readable formatted table of patient data. Required fields are:
@@ -119,8 +118,8 @@ The function returns and prints a readable formatted table of patient data. Requ
 
 Use this function to plot an individual's data.
 
-```
-plotIndividualData(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, pt = ptDataframes){
+```{r, eval = FALSE}
+ProstatePackage::plotIndividualData(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, pt = ptDataframes)
 ```
 The function plots various clinical data for an individual patiet. Required fields are:
 
