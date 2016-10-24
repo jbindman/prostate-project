@@ -15,29 +15,26 @@
 # 3. Add relevant variables to PSA dataframe
 # 4. Start biopsy dataframe
 # 5. Save data
-fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.data = bx_data, surg.data = surg_data, IOP = TRUE) { #default file names
+fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRUE) { #default file names
 
   #dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
   library(dplyr)
 
 
-  #(n<-dim(demo.data)[1]) #1000 patients in this data
-  #(n_psa<-dim(psa.data)[1]) #15083 PSA tests
-  #(n_bx<-dim(bx.data)[1]) #3842 biopsy observations
-  #(n_surg<-dim(surg.data)[1]) #183 patients received treatment
-
-
-
+  (n<-dim(demo.data)[1]) #1000 patients in this data
+  (n_psa<-dim(psa.data)[1]) #15083 PSA tests
+  (n_bx<-dim(bx.data)[1]) #3842 biopsy observations
+  (n_surg<-dim(surg.data)[1]) #183 patients received treatment
 
   #define data frame
   pt.data<-as.data.frame(demo.data$id)
   names(pt.data)<-"id"
 
   pt.data$true.gs
-  pt.data$true.gs<-rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
+  pt.data$true.gs <- rep(NA,n) #post-surgery true GS observation; want it to be "NA" for patients without surgery
 
   if (IOP == TRUE) {
-    pt.data$surgery<-rep(0,n) #IOP ONLY
+    pt.data$surgery<-rep(0,n)
     for(i in 1:n){
       if(pt.data$id[i]%in%surg.data$id){
         pt.data$surgery[i]<-1
@@ -77,21 +74,16 @@ fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.dat
 
 
   #get diagnostic date
-  as.Date(bx.data$bx.date[1:10])
+  #as.Date(bx.data$bx.date[1:10])
   bx.data$bx.date.num<-as.numeric(as.Date(bx.data$bx.date))
-  bx.data$bx.date.num[1:10]
-  as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
-
-
+  #bx.data$bx.date.num[1:10]
+  #as.Date(bx.data$bx.date.num[1:10], origin="1970-01-01")
   #bx check
   for (i in bx.data$bx.date) {
     if  (as.Date(i) < "1970-01-01") {
       stop ("Patients must have BX dates in correct range ")
     }
   }
-
-
-
 
   pt.data$dx.date.num<-rep(0,n)
   for(i in 1:n){
@@ -440,11 +432,11 @@ fillPatientTables <- function(demo.data = demo_data, psa.data = psa_data, bx.dat
 
   }
 
-  #bx.full$id <- length(bx.full)
-  #for(i in bx.full$subj) {
-  #  idReturn <- filter(pt.data, subj == i)$id[1] #first match will give correct corresponding id
-  #  bx.full$id[bx.full$subj == i] <- idReturn
-  #}
+  bx.full$id <- length(bx.full)
+  for(i in bx.full$subj) {
+    idReturn <- filter(pt.data, subj == i)$id[1] #first match will give correct corresponding id
+    bx.full$id[bx.full$subj == i] <- idReturn
+  }
 
   patientDataframes<-list(pt.data=pt.data, psa.data=psa.data, bx.full=bx.full)
   return(patientDataframes)

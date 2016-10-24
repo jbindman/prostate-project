@@ -7,6 +7,7 @@
 #' @param IOP TRUE if biopsy and surgery occurences are informative of the underlying GS, FALSE if non-informative.
 #' @return List of arguments for running analysis using RJAGS: \code{jags_data} (data), \code{inits} (inits), \code{parameters.to.save} (parameters.to.save).
 #' @export
+#'
 #' WORKFLOW
 #' 0. Load packages and  necessary data.
 #' 1. Format pt-level data for JAGS run
@@ -20,7 +21,6 @@
 #' 9. Write model definition
 #'
 #' @export
-
 RJAGSprep <- function(pt, IOP = TRUE) {
 
   library("lme4")

@@ -4,12 +4,12 @@
 \alias{printIndividualData}
 \title{printIndividualData.R}
 \usage{
-printIndividualData(idInput = 5, patientDataframes, bx_data)
+printIndividualData(pt.id = 5, pt)
 }
 \arguments{
-\item{idInput}{Integer of patient record to be displayed}
+\item{pt.id}{Integer of patient record to be displayed}
 
-\item{patientDataframes}{Full}
+\item{pt}{Full}
 }
 \description{
 Print a specified patient's demographic, PSA, biopsy, and treatment results to the console
