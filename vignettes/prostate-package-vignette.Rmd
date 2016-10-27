@@ -64,9 +64,8 @@ Variable (column) names must be specified *exactly* as given above.
 
 #Shaping data
 Call function fillPatientTables to create dataframes based on combined data sources.
-```{r, results = "hide"}
+```{r, results = "hide", message = FALSE}
 ptDataframes <- ProstatePackage:::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
-#get rid of comments about attaching dplyr
 ```
 
 This function will check the input datasets to ensure data meet the requirements detailed above. If data are not formatted properly, error messages will be produced and the function will not return the necessary dataframes for proceeding with analysis.
@@ -84,7 +83,7 @@ Variable (column) names must be specified *exactly* as given above.
 #RJAGS Prep
 
 Next, RJAGSprep will take the formatted dataframe created by fillPatientTables as input and prepare necessary arguments to complete the analysis in RJAGS. 
-```{r, results = "hide"}
+```{r, results = "hide", message = FALSE}
 jagsPrep <- ProstatePackage::RJAGSprep(pt = ptDataframes, IOP=TRUE)
 ```
 Note that the JAGS model (model.file) is automatically written to your current working directory by RJAGSprep. Required fields are: 
