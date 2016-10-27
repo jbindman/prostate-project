@@ -9,7 +9,7 @@
 #' @export
 closestK <- function(ptId = 6, pt, K = 25, D = 1) {
 
-  pt.data <-pt
+  pt.data <-pt[[1]]
   #pt.data <- patientDataframes[[1]]
   pt.data$ptDistance <- vector(length = nrow(pt.data))
 
@@ -21,7 +21,7 @@ closestK <- function(ptId = 6, pt, K = 25, D = 1) {
   distDataframe$calDx <- as.Date(pt.data$dx.date.num, origin="1970-01-01")
   #slow, see if follow up time can be calculated faster
   for (i in distDataframe$id) {
-    ptMerged <- getIndividualData(i, patientDataframes)
+    ptMerged <- getIndividualData(i, ptDataframes)
     distDataframe$loft[distDataframe$id==i] <- ptMerged$`Patient Age`[nrow(ptMerged)]- distDataframe$ageDx[distDataframe$id==i] #for each patient, go through their merged dataframe and subtract last test date from diagnostic date, then convert to year
     #error in simulated data? shouldnt be any negative loft
 
