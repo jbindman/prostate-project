@@ -65,7 +65,7 @@ Variable (column) names must be specified *exactly* as given above.
 #Shaping data
 Call function fillPatientTables to create dataframes based on combined data sources.
 ```{r, results = "hide", message = FALSE}
-ptDataframes <- ProstatePackage:::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
+ptDataframes <- ProstatePackage::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
 ```
 
 This function will check the input datasets to ensure data meet the requirements detailed above. If data are not formatted properly, error messages will be produced and the function will not return the necessary dataframes for proceeding with analysis.
