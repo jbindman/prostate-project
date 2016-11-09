@@ -20,7 +20,7 @@ printIndividualData<- function(pt.id = 5, pt) {
   #pt.data[pt.data$id == patient,] #actually works and is equiv #pt[[1]][pt[[1]]$id == patient,]
   #psa.data[psa.data$id == patient,]
   #bx.data[bx.data$id == patient,]
-  #library(dplyr)
+  library(dplyr)
 
   #print("Demographics Data: ")
   formattedDemo <- dplyr::filter(pt.data, id == pt.id)
