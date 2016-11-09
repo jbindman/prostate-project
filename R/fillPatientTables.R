@@ -17,7 +17,7 @@
 fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRUE) { #default file names
 
   #dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
-  #library(dplyr)
+  library(dplyr)
 
 
   (n<-dim(demo.data)[1]) #1000 patients in this data
