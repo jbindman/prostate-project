@@ -23,7 +23,7 @@ printIndividualData<- function(pt.id = 5, pt) {
   #library(dplyr)
 
   #print("Demographics Data: ")
-  formattedDemo <- filter(pt.data, id == pt.id)
+  formattedDemo <- dplyr::filter(pt.data, id == pt.id)
   formattedDemo$dob <- as.Date(formattedDemo$dob.num, origin="1970-01-01")
   #formattedDemo$dobCheck <-as.numeric(as.Date(formattedDemo$dob))
   formattedDemo <- formattedDemo[c("id", "age.dx", "dob", "vol.avg")]
