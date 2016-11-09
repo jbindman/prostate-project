@@ -295,7 +295,8 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
 
   }
 
-  #IOP
+
+  #subj defined here
   if (IOP == TRUE) {
     bx.data$subj<-vector(length=n_bx)
     for(i in 1:n){
@@ -426,7 +427,7 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
 
   bx.full$id <- length(bx.full)
   for(i in bx.full$subj) {
-    idReturn <- filter(pt.data, subj == i)$id[1] #first match will give correct corresponding id
+    idReturn <- dplyr::filter(pt.data, subj == i)$id[1] #first match will give correct corresponding id
     bx.full$id[bx.full$subj == i] <- idReturn
   }
 
