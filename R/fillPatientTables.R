@@ -1,4 +1,3 @@
-#' fillPatientTables
 #'
 #' Load dataframes from four patient data files generated in the course of Active Surveillance in order to create a list of formatted patient dataframes for analysis. See vignette for required variable names and format.
 #'
@@ -421,16 +420,9 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
 
 
 
-    #I'm saving the workspace here so you can see what the data frames looked like when I finished, but you will want to define these objects in some simple, easy to understand, efficient way
-    #save(pt.data, psa.data, bx.full,file="IOP-data-shaping-work-space.RData")
-
-    #for(i in bx.full$subj) {
-    #  idReturn <- filter(bx.data, subj == i)$id[1] #first match will give correct corresponding id
-    #  bx.full$id[i] <- idReturn
-    #}
-
-
   }
+
+  #where are subjects going?!?
 
   bx.full$id <- length(bx.full)
   for(i in bx.full$subj) {

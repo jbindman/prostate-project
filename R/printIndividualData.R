@@ -14,7 +14,7 @@ printIndividualData<- function(pt.id = 5, pt) {
   #  bx.data <- bx_data
 
 
-  lapply(psa.data, class)
+  #lapply(psa.data, class)
 
 
   #pt.data[pt.data$id == patient,] #actually works and is equiv #pt[[1]][pt[[1]]$id == patient,]
@@ -58,8 +58,12 @@ printIndividualData<- function(pt.id = 5, pt) {
   #  formattedBx$age[i] <- formattedBx$ageNum[i]/365
   #}
   formattedBx$visit <- as.Date(formattedBx$bx.date.num, origin = "1970-01-01")
-  formattedBx <- formattedBx[c("visit", "bx.age", "bx.here", "surgery")]
+  formattedBx <- formattedBx[c("visit", "bx.age", "rc", "surgery")]
   names(formattedBx) <- c("Visit", "Age", "Biopsy", "Surgery")
+  #formattedBxnoSurg <- formattedBx[c("visit", "bx.age", "bx.here")]
+  #formattedSurg <- formattedBx[c("visit", "bx.age", "surgery")]
+  #names(formattedBxnoSurg) <- c("Visit", "Age", "Biopsy")
+  #names(formattedSurg) <- c("Visit", "Age", "Surgery")
 
 
 
@@ -100,16 +104,16 @@ printIndividualData<- function(pt.id = 5, pt) {
       merged.data$Biopsy[i] <- "-"
     }
     if (merged.data$Biopsy[i] == 1) {
-      merged.data$Biopsy[i] <- "Y"
+      merged.data$Biopsy[i] <- "Gleason > 6"
     }
     if (merged.data$Biopsy[i] == 0) {
-      merged.data$Biopsy[i] <- "N"
+      merged.data$Biopsy[i] <- "Reclassification = 0"
     }
     if(is.na(merged.data$Surgery[i])) {
       merged.data$Surgery[i] <- "-"
     }
     if(merged.data$Surgery[i] == 0) {
-      merged.data$Surgery[i] <- "N"
+      merged.data$Surgery[i] <- "-"
     }
     if (merged.data$Surgery[i] == 1) {
       merged.data$Surgery[i] <- "Y"

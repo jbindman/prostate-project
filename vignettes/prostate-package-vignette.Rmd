@@ -123,8 +123,9 @@ The function plots various clinical data for an individual patiet. Required fiel
 
 * pt.id Integer of patient record to be displayed
 * what.data Variable that says what clinical data source to plot. "Both" = plot both PSA and Biopsy data, "psa" = plot just PSA data, "biopsy" = plot just biopsy data
-* log.scale Boolean TRUE if using log scale, FALSE if not. TRUE default.
-* plot.psad Boolean TRUE if using PSAD, FALSE if not. FALSE default
+* log.scale Boolean TRUE if using log scale for PSA, FALSE if not. TRUE default.
+* plot.psad Boolean TRUE if using PSA Density instead of PSA, FALSE if not. FALSE default
+
 * ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
 
 
