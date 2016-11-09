@@ -44,14 +44,14 @@ printIndividualData<- function(pt.id = 5, pt) {
   formattedDemo$`Avg Prostate Volume` <- volSmall
   print(knitr::kable(formattedDemo, align = 'c'))
 
-  formattedPsa <- filter(psa.data, id == pt.id)
+  formattedPsa <- dplyr::filter(psa.data, id == pt.id)
   formattedPsa$visit <- as.Date(formattedPsa$psa.date.num, origin = "1970-01-01")
   formattedPsa <- formattedPsa[c("age", "visit", "psa")]#add age
   #formattedPsa$visit <- as.Date(formattedPsa$psa.date, origin = "1970-01-01")
   names(formattedPsa) <- c("Age", "Visit", "PSA")
 
 
-  formattedBx <- filter(bx.data, id == pt.id, bx.here == 1)
+  formattedBx <- dplyr::filter(bx.data, id == pt.id, bx.here == 1)
   #for (i in 1:nrow(formattedBx)) {
   #  bxDate <- as.Date(formattedBx$bx.date[i])
   #  formattedBx$ageNum[i] <- bxDate - formattedDemo$DOB
