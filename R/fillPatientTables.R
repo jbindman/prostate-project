@@ -15,7 +15,8 @@
 # 4. Start biopsy dataframe
 # 5. Save data
 fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRUE) { #default file names
-
+  
+  #vectorize
   #dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
   library(dplyr)
 
@@ -132,8 +133,6 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
   }
 
 
-  ########### WORKING SO FAR ##############
-
 
   #get average biopsy volume. Great volume leads to greater PSA
   pt.data$vol.avg<-vector(length=n)
@@ -150,7 +149,12 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
   pt.data$true.gs[1:300]
   pt.data$subj<-c(1:n)
 
+  #standardize prostate volume, so that mean= 0 and std dev=1
+  pt.data$vol.std <- as.vector(scale(pt.data$vol.avg)) #no longer 1d vector
+  
+  ########### WORKING SO FAR, pt.data complete ##############
 
+  
   #log-transform PSA observations, make PSA dates numeric, define pt age at time of PSA, add volume data and new subj identifier
 
   #log-PSA
@@ -194,8 +198,6 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
 
   #print(psa.data$age.std)
 ###### before this was IOP only but i think both
-  #standardize prostate volume, so that mean= 0 and std dev=1
-  pt.data$vol.std <- scale(pt.data$vol.avg)
 
 
   #standardize age so that mean age=0, sd=1

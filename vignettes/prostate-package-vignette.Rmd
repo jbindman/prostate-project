@@ -65,6 +65,7 @@ Variable (column) names must be specified *exactly* as given above.
 #Shaping data
 Call function fillPatientTables to create dataframes based on combined data sources.
 ```{r, results = "hide", message = FALSE}
+#having issues from remote download
 ptDataframes <- ProstatePackage::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
 ```
 
