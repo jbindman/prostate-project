@@ -21,6 +21,7 @@ printIndividualData<- function(pt.id = 5, pt) {
   #psa.data[psa.data$id == patient,]
   #bx.data[bx.data$id == patient,]
   library(dplyr)
+  library(knitr)
 
   #print("Demographics Data: ")
   formattedDemo <- dplyr::filter(pt.data, id == pt.id)

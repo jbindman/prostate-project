@@ -150,7 +150,7 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
   pt.data$subj<-c(1:n)
 
   #standardize prostate volume, so that mean= 0 and std dev=1
-  pt.data$vol.std <- as.vector(scale(pt.data$vol.avg)) #no longer 1d vector
+  pt.data$vol.std <- as.vector(scale(pt.data$vol.avg)) # 1d vector
   
   ########### WORKING SO FAR, pt.data complete ##############
 
@@ -201,7 +201,8 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
 
 
   #standardize age so that mean age=0, sd=1
-  psa.data$age.std <- scale(psa.data$age)
+
+  psa.data$age.std <- as.vector(scale(psa.data$age)) # 1d vector
 
   #pt-level prostate volume
   psa.data$vol.std <- vector(length = n_psa)
