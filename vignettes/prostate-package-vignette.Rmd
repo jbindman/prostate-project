@@ -1,10 +1,16 @@
 ---
-output: html_document
+title: "Prostate Package Vignette" 
+author: "Yates Coley & Julia Bindman" 
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Prostate cancer: individualized risk modeling}
+  %\VignetteEncoding{UTF-8}
+output:
+  rmarkdown::html_document:
+    number_sections: yes
+    toc: yes
 ---
---- title: "Prostate Package Vignette" author: "Yates Coley & Julia Bindman" date: "`r Sys.Date()`" 
-output: rmarkdown::html_vignette vignette: > %\VignetteIndexEntry{Vignette
-Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} ---
-
 
 #Loading Data 
 To analyze your code, you must first load in data from various clinical data sources. Load in data from .csv files for patient data, PSA data, biopsy data, and surgical data. Each .csv file must be saved to your local directory. Below, we describe the characteristics and variables of each dataset needed for input.
