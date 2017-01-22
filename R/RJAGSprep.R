@@ -19,6 +19,7 @@
 #' 8. Define other jags settings
 #' 9. Write model definition
 #'
+#' @importFrom bayesm rwishart
 #' @export
 RJAGSprep <- function(pt, IOP = TRUE) {
 
