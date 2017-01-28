@@ -9,7 +9,7 @@
 #' @param plot.psad F
 #' @export
 
-plotBackgroundData<-function(pt.id = 100, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
+plotBackgroundData<-function(pt.id = 100, patientDataframes, what.data="both", log.scale=T, plot.psad=F){ #add patientDataframes = ptDataframes
   
 
   #pt 100
@@ -19,7 +19,7 @@ plotBackgroundData<-function(pt.id = 100, what.data="both", log.scale=T, plot.ps
   bx.full <- patientDataframes[[3]]
   #bx.data <- bx_data
   
-  closestPatients <- closestK(pt.id, patientDataframes = patientDataframes)
+  #closestPatients <- closestK(pt.id, patientDataframes)
   fullPsa <- subset(psa.data, id %in% closestPatients)
   fullBx <- subset(bx.full, id %in% closestPatients)
   

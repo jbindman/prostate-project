@@ -19,7 +19,7 @@ distance <- function(ptId, comp, distDataframe, stdev) {
 
 getDistance <- function(x1, x2, stdev) {
     disVector <- 0
-    disVector = (x1-x2)^2/stdev
+    #disVector = (x1-x2)^2/stdev
     #doesnt become normalized, calDx is still much larger contirbutor to distance
     #disVector[3] <- disVector[3]/100 #trying to adjust scale
     return (sum(disVector))

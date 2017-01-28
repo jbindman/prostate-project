@@ -2,10 +2,9 @@
 % Please edit documentation in R/fillPatientTables.R
 \name{fillPatientTables}
 \alias{fillPatientTables}
-\title{fillPatientTables}
+\title{Load dataframes from four patient data files generated in the course of Active Surveillance in order to create a list of formatted patient dataframes for analysis. See vignette for required variable names and format.}
 \usage{
-fillPatientTables(demo.data = demo_data, psa.data = psa_data,
-  bx.data = bx_data, surg.data = surg_data, IOP = TRUE)
+fillPatientTables(demo.data, psa.data, bx.data, surg.data, IOP = TRUE)
 }
 \arguments{
 \item{demo.data}{Patient-level data. This dataframe should contain one record (row) per patient. Variables (columns) must include a unique identifier (ID) and valid date of birth for each patient.}

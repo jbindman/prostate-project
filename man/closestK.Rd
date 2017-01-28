@@ -4,7 +4,7 @@
 \alias{closestK}
 \title{closestK}
 \usage{
-closestK(ptId = 6, K = 25, D = 1, patientDataframes)
+closestK(ptId = 6, pt, K = 25, D = 1)
 }
 \arguments{
 \item{K}{Number of nearby patients to return}
