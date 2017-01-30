@@ -103,7 +103,7 @@ See documentation for R2jags for details on jags output.
 
 Use this function to print an individual's data from various clinical data sources.
 
-```{r}
+```{r, message = FALSE}
 inputPatient <- ProstatePackage:::printIndividualData(pt.id = 5, pt = ptDataframes)
 ```
 The function returns and prints a readable formatted table of patient data. Required fields are:
@@ -117,9 +117,12 @@ The function returns and prints a readable formatted table of patient data. Requ
 
 Use this function to plot an individual's data.
 
-```{r, eval = FALSE}
-ProstatePackage::plotIndividualData(pt.id = 60, what.data="both", log.scale=T, plot.psad=F, pt = ptDataframes)
+```{r}
+ProstatePackage::plotPtData(pt.id = 198, what.data="both", log.scale=T, plot.psad=F)
+ProstatePackage::plotPtData(pt.id = 200, what.data="psa", log.scale=F, plot.psad=T)
+ProstatePackage::plotPtData(pt.id = 250, what.data="both", log.scale=F, plot.psad=F)
 ```
+
 The function plots various clinical data for an individual patiet. Required fields are:
 
 * pt.id Integer of patient record to be displayed
