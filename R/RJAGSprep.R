@@ -24,6 +24,7 @@ RJAGSprep <- function(pt, IOP = TRUE) {
   library("lme4")
   library("splines")
   library("Matrix")
+  library("bayesm")
 
   pt.data <- pt[[1]]
   psa.data <- pt[[2]]

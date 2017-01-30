@@ -118,8 +118,9 @@ The function returns and prints a readable formatted table of patient data. Requ
 Use this function to plot an individual's data.
 
 ```{r}
+# Data for Patient ID 198
 ProstatePackage::plotPtData(pt.id = 198, what.data="both", log.scale=T, plot.psad=F)
-ProstatePackage::plotPtData(pt.id = 200, what.data="psa", log.scale=F, plot.psad=T)
+# Data for Patient ID 250
 ProstatePackage::plotPtData(pt.id = 250, what.data="both", log.scale=F, plot.psad=F)
 ```
 
@@ -130,7 +131,6 @@ The function plots various clinical data for an individual patiet. Required fiel
 * log.scale Boolean TRUE if using log scale for PSA, FALSE if not. TRUE default.
 * plot.psad Boolean TRUE if using PSA Density instead of PSA, FALSE if not. FALSE default
 
-* ptDataframes Shaped dataframe including demo_data, psa_data, bx_data, and surg_data
 
 
 
