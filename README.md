@@ -29,11 +29,6 @@ surg_data<-read.csv("julia-surg-data-IOP.csv")
 names(surg_data)
 
 
-#demo_data<-read.csv("julia-demo-data.csv")
-#psa_data<-read.csv("julia-psa-data.csv")
-#bx_data<-read.csv("julia-bx-data.csv")
-#surg_data<-read.csv("julia-tx-data.csv")
-
 3. Organize data frames from clinical patient sources
 # We want the patient data to include one record per patient and true GS
 # We may also put variables in this data frame to ease definition of variables in the PSA and BX data frame (date of dx, age dx, average prostate volume)

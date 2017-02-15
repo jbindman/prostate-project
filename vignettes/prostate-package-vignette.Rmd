@@ -104,7 +104,7 @@ See documentation for R2jags for details on jags output.
 Use this function to print an individual's data from various clinical data sources.
 
 ```{r, message = FALSE}
-inputPatient <- ProstatePackage:::printIndividualData(pt.id = 5, pt = ptDataframes)
+inputPatient <- ProstatePackage:::printIndividualData(pt.id = 198, pt = ptDataframes)
 ```
 The function returns and prints a readable formatted table of patient data. Required fields are:
 
