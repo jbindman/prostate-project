@@ -7,6 +7,7 @@
 #' @param pt Full
 #' @export
 printSubset<- function(pt.id = 5, pt = ptDataframes) {
+  #this version creates one large dataframe as Scott requested
   pt.data <- pt[[1]] #global variable pt put into temporary dataframes with names matching RJAGS prep
   psa.data <- pt[[2]]
   bx.data <- pt[[3]]
