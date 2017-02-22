@@ -33,7 +33,7 @@ names(surg_data)
 ptDataframes <- ProstatePackage::fillPatientTables(demo_data, psa_data, bx_data, surg_data, IOP = TRUE)
 
 
-inputPatient <- ProstatePackage:::printIndividualData(198, ptDataframes)
+inputPatient <- ProstatePackage::printIndividualData(198, ptDataframes)
 
 for (i in 1:200) {
   printIndividualData(i, ptDataframes)

@@ -108,7 +108,7 @@ printIndividualData<- function(pt.id = 5, pt) {
       merged.data$Biopsy[i] <- "Gleason > 6"
     }
     if (merged.data$Biopsy[i] == 0) {
-      merged.data$Biopsy[i] <- "Reclassification = 0"
+      merged.data$Biopsy[i] <- "Gleason ≤ 6"
     }
     if(is.na(merged.data$Surgery[i])) {
       merged.data$Surgery[i] <- "-"

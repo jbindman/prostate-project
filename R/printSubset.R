@@ -22,9 +22,7 @@ printSubset<- function(pt.id = 5, pt = ptDataframes) {
   formattedDemo <- formattedDemo[c("id", "age.dx", "dob", "vol.avg")]
 
 
-
-  closest100 <- c(5, 10, 20, 100, 200, 205) #should be a real function to find closest K patients to pt.id
-
+  closest100 <- seq(1, 100, by=1) #code later
 
   #print("Demographics Data: ")
   formattedPsa <- filter(psa.data, id %in% closest100)
