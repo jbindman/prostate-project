@@ -6,7 +6,7 @@
 #' @param pt.id Integer of patient record to be displayed
 #' @param pt Full
 #' @export
-printSubset<- function(pt.id = 5,  closest100 = seq(1, 100, by=1), pt = ptDataframes) {
+plotSubset<- function(pt.id = 5,  closest100 = seq(1, 100, by=1), pt = ptDataframes) {
   #this version creates one large dataframe as Scott requested
   pt.data <- pt[[1]] #global variable pt put into temporary dataframes with names matching RJAGS prep
   psa.data <- pt[[2]]

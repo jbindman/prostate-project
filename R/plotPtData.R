@@ -37,9 +37,6 @@ psa.data.i<-ptDataframes$psa.data[ptDataframes$psa.data$id==pt.id,]
 bx.data.i<-ptDataframes$bx.full[ptDataframes$bx.full$id==pt.id,]
 
 
-
-
-
 if(what.data=="both"){
 
 #log.scale<-T
