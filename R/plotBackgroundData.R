@@ -18,8 +18,8 @@ plotBackgroundData<-function(pt.id = 100, closest100 = seq(1, 100, by=1),  pt = 
   psa.data <- pt[[2]]
   bx.full <- pt[[3]]
   #bx.data <- bx_data
-  #library(splines)
-  #library(ggplot2)
+  library(splines)
+  library(ggplot2)
 
   #closest100 <- seq(1, 100, by=1)
   #closestPatients <- closestK(pt.id, patientDataframes)
@@ -53,49 +53,73 @@ plotBackgroundData<-function(pt.id = 100, closest100 = seq(1, 100, by=1),  pt = 
   multiplot(p,b)
 
 
-
-  b <- scale_x_continuous(limits=c(45, 90))
-
-  fullPsa$psa.avg = filter(fullPsa)
-  filter(fullPsa, id == 198)
-  mean(sub[,"psa"])
-
-
-  p + stat_smooth(span = .1)
-
-    fullPsa %>% group_by(id) %>%
-    summarise(`25%`=quantile(fullPsa$psa, probs=0.25),
-              `50%`=quantile(fullPsa$psa, probs=0.5),
-              `75%`=quantile(fullPsa$psa, probs=0.75),
-              avg=mean(mpg),
-              n=n())
-
-  #add individual
-  #print background biopsy
-  q <- ggplot(fullBx, aes(x = int.age, y = rc)) +
-    geom_line(aes(group = id), colour="blue", alpha = .5) +
-    geom_point(colour = "black", alpha = .01) + geom_jitter(height = .25) +
-    geom_point(data = individualBx, aes(x=int.age, y=rc, group=id, colour="red", show_guide = FALSE))
+  ageGroup <- seq(60, 79, by=.5) #subdivided into 3 month intervals
+  rcData <- data.frame(ageGroup)
+  rcData$rc <- 1
+  for (i in rcData$ageGroup) {
+    upper = i + .25
+   lower = i - .25
+   subset <- filter(bx.full, int.age > lower, int.age < upper, bx.here == 1) #fullBx subset
+   num0s <- length(which(subset$rc == "0"))
+   num1s <- length(which(subset$rc == "1"))
+   odds <- num1s/num0s
+   print(odds)
+   #rcData$num0s[ageGroup == i] <-num0s
+   #rcData$num1s[ageGroup == i] <-num1s
+   rcData$rc[ageGroup == i] <- odds
+  }
 
 
 
-  #p <- ggplot(fullBx, aes(x = int.age, y = bx.here)) + geom_smooth(colour = "grey")
-  #p + geom_jitter(height = .25, colour = fullBx$rc) #arbitrary jitter
-  #p + geom_jitter(fullBx, aes(x = int.age[!is.na(fullBx$rc)], y = fullBx[!is.na(fullBx$rc)]))
+  l <- ggplot(rcData, aes(x = ageGroup, y = rc)) + scale_y_log10() +
+    geom_point(colour = "black") + geom_line() +
+    geom_smooth(method='lm',formula=y~x)
+
+  l <- l + labs(title = "Odds of RC Over time", x = "Age at Visit", y = "log odds RC")
+
+  l <- l +
+    geom_point(data = rc, aes(x=int.age, y = c(.06)), color = "red", fill="red", shape = 25, size = 3) +
+    geom_point(data = norc, aes(x=int.age, y = c(.02)), color = "black", fill="black", shape = 18, size = 3)
 
 
-
-  #subset PSA data
-  #psa.data.i<-psa.data[psa.data$id==pt.id,]
-
-  #subset bx data
-  #pt.subj<-pt.data$subj[pt.data$id==pt.id] #if you go back and add id to the bx.full dataframe, we don't need this step
-  #bx.data.i<-bx.full[bx.full$subj==pt.subj & bx.full$bx.here==1 & !is.na(bx.full$bx.here),]
-
-  #r <- ggplot(individualPsa, aes(x = age, y = psa)) + geom_point(colour = "red") + geom_line(aes(group = pt.id), colour="red")
 
 
 
 }
 
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+
+  numPlots = length(plots)
+
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                     ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+
+  if (numPlots==1) {
+    print(plots[[1]])
+
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
 
