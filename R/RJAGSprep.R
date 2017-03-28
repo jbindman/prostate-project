@@ -209,8 +209,8 @@ RJAGSprep <- function(pt, IOP = TRUE) {
   }
 
 
-  ### 4. Define other jags settings?
-  # It is probably easier to let users define these settings themselves.
+  ### 4. Define other jags settings.
+  # Let users define these settings.
 
   # change length; burn-in; number thinned; number of chains
   n.iter <- 50000; n.burnin <- 25000; n.thin <- 20; n.chains <- 1

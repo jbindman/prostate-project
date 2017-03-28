@@ -1,7 +1,7 @@
 #rm(list=ls())
 
 
-#' Plot patient data using the "shaped" data. This function isn't necessary to prep the data and arguments for jags.
+#' #Yates's Base R Function. Plot patient data using the "shaped" data. This function isn't necessary to prep the data and arguments for jags.
 #'
 #' @param pt.id Integer of patient record to be displayed
 #' @param what.data Variable that says what clinical data source to plot. "Both" = plot both PSA and Biopsy data, "psa" = plot just PSA data, "biopsy" = plot just biopsy data
@@ -18,7 +18,7 @@
 #ls() #bx.full, psa.data, psa.data
 
 
-#pt.id<-1
+
 
 
 plotPtData<-function(pt.id, what.data="both", log.scale=T, plot.psad=F){

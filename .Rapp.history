@@ -209,3 +209,4 @@ ls
 ls()
 fillPatientTablesIOP()
 full <- fillPatientTablesIOP()
+load("/Users/jbindman/Desktop/JHU/Prostate/prostate-project/IOP-data-shaping-work-space.RData")

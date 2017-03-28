@@ -1,6 +1,6 @@
 #' plotIndividualData
 #'
-#' Find the distance between two patients.
+#' My working function for Biopsy and PSA
 #'
 #'
 #' @param pt.id Patient whose data to print
