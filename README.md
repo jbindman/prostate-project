@@ -49,5 +49,13 @@ jagsPrep <- RJAGSprep(ptDataframes, TRUE)
 
 #independently
 
-5. Preform Distance function
-closestK(inputPatient, ptDataframes)
+5. Plot from predictions
+
+meh <- c(1, 5, 19, 25)
+
+for (i in meh) {
+  sample <- getPredictions(i)
+  print(sample[2,])
+}
+
+
