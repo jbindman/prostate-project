@@ -31,12 +31,11 @@ inputPatient <- ProstatePackage::printIndividualData(198, ptDataframes)
 
 4. Prepare data and arguments for RJAGS by calling RJAGS on a required text file required for RJAGS use, as well as the formatted list patient.Dataframes.
 
-# Return RJAGS argument prep on formatted patient dataframes
 jagsPrep <- RJAGSprep(ptDataframes, TRUE)
 
 5. Execute RJAGS 
 
-#independently
+independently
 
 6. Plot from predictions
 plotPtData(pt.id, what.data="both", log.scale=T, plot.psad=F)
