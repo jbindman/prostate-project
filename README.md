@@ -1,11 +1,4 @@
-
-#rm(list=ls())
-#setwd("<your wd>")
-
-# prostate-project
-A single package synthesizing the work of Yates Coley
-
-#Complexities added include: tracking when patients have surgery
+Package includes functions to manipulate sample patient data for demographic data, biopsy results, PSA results, and surgical results for patients with low grade prostate cancer. Includes functions to prepare these data for analysis in RJAGS, as well as sample results from the RJAGS model to show patients' risk of indolent cancer. Functions for model visualizations can be preformed on patients' predicted risk of indolent cancer, both at individual visit dates as well as through cumulitive prediction trajectories. 
 
 
 1. Install package(s)
