@@ -92,60 +92,130 @@ plotBackgroundData<-function(pt.id = 100, closest1000 = seq(1, 1000, by=1),  pt 
                        axis.text = element_text(size = 18), panel.background = element_rect(fill = 'white', colour = 'black'),
                        panel.grid.major = element_line(color = 'gray'), panel.grid.minor = element_line(color = 'gray'))
 
-  try.ids <- pt.data$id[pt.data$surgery==0 & pt.data$status.rc==0][20:200]
-  initial <- data.frame(col1=NULL, col2=NULL, col3 = NULL, col4 = NULL, col5 = NULL)
+  try.ids <- seq(1, 100, 1)
+  #try.ids <- pt.data$id[pt.data$surgery==0 & pt.data$status.rc==0][20:200]
+  try.ids <- pt.data$id
+  full <- data.frame(col1=NULL, col2=NULL, col3 = NULL, col4 = NULL, col5 = NULL, col6 = NULL, col7 = NULL, col8 = NULL)
   for (i in 1:length(try.ids)) {
     print(i)
     prediction.data <- probability(try.ids[i])
-    temp <- data.frame(col1=prediction.data$col1, col2= prediction.data$ages, col3 = prediction.data$col2, col4 = try.ids[i], col5 = prediction.data$recBiopsy)
-    initial <- rbind(initial, temp)
+    temp <- data.frame(col1=prediction.data$col1, col2= prediction.data$ages, col3 = prediction.data$col2, col4 = try.ids[i], col5 = prediction.data$recBiopsy, col6 = prediction.data$recSurgery, col7 = prediction.data$ageFac, col8 = prediction.data$lastPred)
+    full <- rbind(full, temp)
   }
-  #never returns any 1s, im filtering to only look at patients that never reclassify....
-  # pt.data$id[pt.data$surgery==0 & pt.data$status.rc==0]
-  # visualizing biopsies on chart wont be super helpful because you cant see when people upgrade. prediction only works for peopel without surgery or rc
+  colnames(full) <- c("Date","Age","Probability", "ID", "Biopsy", "Surgery", "AgeFac", "LastPred")
+
+  #lastPredGS0 <- filter(full, LastPred==1) only look at ids from surg and no surg
+
+                        #, Surgery == -.02)$Probability
+  #articifically removing duplicates, should only be one lastpred per person but could be multiple people w same num
+  lastPredGS1 <- filter(full, LastPred==1, Surgery == 1.02)$Probability
+
+  #histogram 0s and 1s
+
+  lastPredGs0 <- filter(pt.data, true.gs == 0)$id
+  probabilitiesGs0 <- filter(full, ID %in% lastPredGs0, LastPred == 1)$Probability
+  hist(probabilitiesGs0)
+
+  lastPredGs1 <- filter(pt.data, true.gs == 1)$id
+  probabilitiesGs1 <- filter(full, ID %in% lastPredGs1, LastPred == 1)$Probability
+  hist(probabilitiesGs1)
+
+
+
+
+  lastPredGS1 <- filter(full, LastPred==1, Surgery == 1.02)$Probability
+
+
+
+  filter(gs0, LastPred  = 1)
+
+
+  ggplot(young, aes(x = Age, y = Probability)) + scale_x_continuous(limits=c(60, 78))  + #geom_point(colour = "gray", alpha = 0.5, size = .1) +
+    geom_line(aes(group = ID), colour="gray", alpha = .5) + stat_quantile(quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
+    stat_quantile(quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "red", alpha = .7)
+
   ggplot(full, aes(x = Age, y = Probability)) + scale_x_continuous(limits=c(60, 78))  + #geom_point(colour = "gray", alpha = 0.5, size = .1) +
     geom_line(aes(group = ID), colour="gray", alpha = .5) + stat_quantile(quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
     stat_quantile(quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "red", alpha = .7)
 
+    #60
+    agefac <- 1
+   #60-65
+     agefac <- 2
+    #65-70
+    agefac <- 3
+    #70-75
+    agefac <- 4
+    #older than 75
+    agefac <- 5
 
+    young <- subset(full, AgeFac == 2)
 
+    noBx <- subset(young, Biopsy == 2)
+    norc <- subset(young, Biopsy == 0)
+    rc <- subset(young, Biopsy == 1) #none in this category
 
+  noSurg <- subset(young, Surgery == 2)
+  gs0 <- subset(young, Surgery == -.02)
+  gs1 <- subset(young, Surgery == 1.02)$ID
 
-  #time ago
-  try.ids <- pt.data$id[pt.data$surgery==0 & pt.data$status.rc==0]
-  full <- data.frame(col1=NULL, col2=NULL, col3 = NULL, col4 = NULL)
-  i <- NULL
-  for (i in 1:length(try.ids)) {
-    print(i)
-    prediction.data <- probability(try.ids[i])
-    temp <- data.frame(col1=prediction.data$col1, col2= prediction.data$ages, col3 = prediction.data$col2, col4 = try.ids[i])
-    full <- rbind(full, temp)
-  }
-  colnames(full) <- c("Date","Age","Probability", "ID")
-
-  #years since test
-  today <- 10957 # jan 1st, 2000 (255567 #jan 1st 2040)
-  full$yearsSince <- (full$Date - today)/365
-
-
-  #prediction over time by yearsSince
-  y <- ggplot(initial, aes(x = yearsSince, y = Probability)) + scale_x_continuous(limits=c(0, 20))  + #geom_point(colour = "gray", alpha = 0.5, size = .1) +
-    geom_line(aes(group = ID), colour="grey", alpha = .5) + stat_quantile(quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
-    stat_quantile(quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "red", alpha = .7)
-  y <- y + labs(title = "Quantiles for Probability of Reclassifying by Time Since", x = "Years ago", y = "Probability")
-  #initial vs full
 
 
   #predictions over time by age
-  a <- ggplot(initial, aes(x = Age, y = Probability)) + scale_x_continuous(limits=c(60, 78))  + #geom_point(colour = "gray", alpha = 0.5, size = .1) +
-    geom_line(aes(group = ID), colour="gray", alpha = .5) + stat_quantile(quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
-    stat_quantile(quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "red", alpha = .7)
+  a <- ggplot(young, aes(x = Age, y = Probability)) + scale_x_continuous(limits=c(60, 70))  + #geom_point(colour = "gray", alpha = 0.5, size = .1) +
+    geom_line(aes(group = ID), colour="gray", alpha = .75) #+
+    #stat_quantile(quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
+    #stat_quantile(quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "red", alpha = .7)
+  a <- a + geom_point(data = norc, aes(x=Age, y = Probability), color = "blue", shape = 24, size = .6, alpha = .75) +
+    geom_point(data = rc, aes(x=Age, y = Probability), color = "red", fill = "red", shape = 24, size = 1, alpha = .75) #norc
 
-  a <- a + labs(title = "Quantiles for Probability of Reclassifying by Age", x = "Age of Visit", y = "Probability")
+  lastPredGs0 <- filter(pt.data, true.gs == 0)$id
+  healthy <- filter(young, ID %in% lastPredGs0)
+  lastPredGs1 <- filter(pt.data, true.gs == 1)$id
+  sick <- filter(young, ID %in% lastPredGs1)
+
+  a <- a + geom_line(data = healthy, aes(x = Age, y = Probability, group = ID), colour="blue", position=position_jitter(w=0.00, h=0.05), size = .4, alpha = .5)
+  a <- a + geom_line(data = sick, aes(x = Age, y = Probability, group = ID), colour="red", position=position_jitter(w=0.00, h=0.05), size = .4, alpha = .5)
+
+
+  a <- a + geom_line(data = gs1, aes(x = Age, y = Probability, group = ID), colour="red", position=position_jitter(w=0.00, h=0.05))
+  a <- a + geom_line(data = gs0, aes(x = Age, y = Probability, group = ID), colour="blue", position=position_jitter(w=0.00, h=0.05))
+
+  a <- a + labs(title = "P(Aggressive Cancer) for Sick Men Diagnosed Age 60-65 ", x = "Age of Visit", y = "Probability", size = 500)
   #initial vs full
 
+  a + theme(axis.text=element_text(size=16),
+              axis.title=element_text(size=18), plot.title = element_text(size=22))
 
 
+
+
+
+  #why does 29 shoot directly up instead of a year after?
+  t <- 29
+  test <- subset(full, ID == t)
+  a + geom_line(data = test, aes(x = Age, y = Probability, group = ID), colour="red")
+
+
+
+
+
+
+
+  short <- ggplot(NULL, aes(x = Age, y = Probability)) + scale_x_continuous(limits=c(60, 78)) +
+   geom_line(data = y.5, aes(group = ID), colour="blue", alpha = .15) +
+    stat_quantile(data = y.5, quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
+        stat_quantile(data = y.5, quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "blue", alpha = .7)
+
+  long <- ggplot(NULL, aes(x = Age, y = Probability)) + scale_x_continuous(limits=c(60, 78)) +
+    geom_line(data = y.10, aes(group = ID), colour="red", alpha = .15) +
+    stat_quantile(data = y.5, quantiles = c(0.05,0.25, 0.5), formula = (y ~ ns(x,2)), color = "black", alpha = .7) +
+        stat_quantile(data = y.10, quantiles = c(0.75, 0.95, .975), formula = (y ~ ns(x,2)), color = "red", alpha = .7)
+
+
+
+  short <- short + labs(title = "Probability of Reclassifying, Length of Follow up Time < 5 years", x = "Age of Visit", y = "Probability")
+  long <- long + labs(title = "Probability of Reclassifying, Length of Follow up Time 5-10 years", x = "Age of Visit", y = "Probability")
 
   ####
 

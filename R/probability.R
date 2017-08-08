@@ -39,16 +39,32 @@ probability<-function(pt.id){
 
 
   first <- filter(individualBx, bx.here == 1)$bx.date.num[1] #individualBx$bx.date.num[1]
+  lastBx <- tail(filter(individualBx, bx.here==1)$int.date.num, n = 1)
+  lastPsa <- 0 #tail(individualPsa$psa.date.num, n= 1) needs to accomodate continued PSA
 
+  last <- max(lastBx, lastPsa)
+  final <- 19000 #permanent number across all pt.id
 
-
-  last <- max(tail(filter(individualBx, bx.here == 1)$bx.date.num, n = 1), tail(individualPsa$psa.date.num, n= 1))
 
   years <- ceiling((last - first)/365) #= 6 years
   dates <- NULL
-  for (i in 1:years) {
-    dates <- append(dates, first+i*365)
+  i <- NULL
+  if (years != 0) {
+    for (i in 1:years) {
+      dates <- append(dates, first+i*365)
+    }
+  } else {
+    dates <- first+1
   }
+
+
+
+  #adding dates after visits stop
+  #dates2 <- NULL
+  #first <- tail(dates, n=1) + 365
+  #last <- #const date for all
+  #surg <-
+
 
   #dates <- individualBx$int.date.num #use once you can get rid of first entry
   #dates <- c(14186, 14916, 15281, 15646, 16011, 16741, 17471) #random biopsy dates for id 260
@@ -84,23 +100,25 @@ probability<-function(pt.id){
     pred_time.i <- get_eta_pred(psa, psa_age, vol,
                                 BX, bx_time_int, bx_int_date_num, bx_int_age, bx_num_prev_bx_start,
                                 RC, rc_age, rc_time, rc_date,
-                                SURG, surg_num_prev_bx_end, surg_prev_rc)
+                                SURG, surg_num_prev_bx_end, surg_prev_rc) #doesnt work for id = 14
 
 
     #biopsy addition
 
     recBiopsy <- filter(individualBx, int.date.num < (i + 300), int.date.num > (i - 300))
-    if (recBiopsy$bx.here == 1) {
-      if (recBiopsy$rc[1] == 0) {
+    if(length(recBiopsy$bx.here) == 0) {
+      x <- 2
+    } else if (is.na(recBiopsy$bx.here)) {
+      x <- 2
+    } else {
+      if (is.na(recBiopsy$rc[1])) {
+        x <- 2
+      } else if (recBiopsy$rc[1] == 0) {
         x <- 0
       } else if (recBiopsy$rc[1] == 1) {
         x <- 1 #never returns any 1s, im filtering to only look at patients that never reclassify....
-      } else {
-        x <- 2
       }
 
-    } else {
-      x <- 2
     }
 
     biopsyVar <- append(biopsyVar, x) #if recent biopsies were had
@@ -115,8 +133,129 @@ probability<-function(pt.id){
   dob_pt.id <- filter(pt.data, id == pt.id)$dob.num
   prediction.data$ages <- (dates - dob_pt.id)/365
   prediction.data$recBiopsy <- biopsyVar
+  prediction.data$recSurgery <- 2 #const no surgery
+  #prediction.data$years <- years
 
-  return(prediction.data)
+
+
+  surgery <- NULL
+  surg_pt.id <- NULL
+  gs <- NULL
+  surg_pt.id <- filter(pt.data, id == pt.id)
+  if (surg_pt.id$surgery == 0) {
+    surgery <- 0
+    gs <- 2 #0 taken
+    surg_date <- final + 500 #surgery date is recorded as final date MAKE EVEN BIGGER
+  } else if (surg_pt.id$surgery == 1) {
+    surgery <- 1
+    if (surg_pt.id$true.gs == 1) {
+      gs <- 1.02
+    } else if (surg_pt.id$true.gs == 0) {
+      gs <- -.02
+    }
+    surg_date <- surg_pt.id$censor.dt.tx.num
+    surg_date <- as.numeric(as.Date(filter(surg_data, id == pt.id)$surg.date[1])) #check for correct date
+  }
+
+  if (surgery == 0) {
+    recSurgery <- 2
+  } else if (surgery == 1) {
+    recSurgery <- gs
+  }
+
+
+  first2 <- tail(dates, n = 1)  #less than a year to account for all surgeries being exactly a year after last bx?
+  years2 <- ceiling((final - first2)/365) #= 6 years
+  dates2 <- first2+365 #first date shouldnt be here but one year later but this is when all surgeries are scheduled...
+  i2 <- NULL
+  for (i2 in 1:years2) {
+    dates2 <- append(dates2, first2+i2*365)
+  }
+
+  lastPred <- tail(prediction.data$col2, n = 1)
+
+  #prediction.data$lastPred <- 0
+  #tail(prediction.data, n = 1)
+  #prediction.data[tail(prediction.data, n = 1)$col1, lastPred] <- 2
+
+  prediction.data$lastPred <- 0
+  prediction.data[nrow(prediction.data), ncol(prediction.data)] <- 1
+
+  #for (i in prediction.data) {
+  #  if (i$col2 == lastPred) {
+  #    i$lastPred <- 1
+  #  }
+  #  else
+  #    i$lastPred <- 0
+  #}  #
+
+
+  #prediction.data2 <- data.frame(col1=dates2, col2=lastPred)
+
+
+
+  #predictions
+  predictions2 <- NULL
+  for (i in dates2) {
+    if (i > surg_date) {
+      predictions2 <- append(predictions2, gs)
+
+    } else
+      predictions2 <- append(predictions2, lastPred)
+  }
+
+  prediction.data2 <- data.frame(col1=dates2, col2=predictions2)
+
+  prediction.data2$ages <- (dates2 - dob_pt.id)/365
+  prediction.data2$recBiopsy <- 2  #const no biopsy
+  prediction.data2$recSurgery <- recSurgery
+  prediction.data2$lastPred <- 0
+
+
+  prediction.dataFull <- rbind(prediction.data, prediction.data2)
+
+
+
+  #add age faction
+  #find pt.data dob
+  #see what categories
+
+  age.dx_pt.id <- NULL
+  age.dx_pt.id <- filter(pt.data, id == pt.id)$age.dx
+  if (age.dx_pt.id <= 60) {
+    ageFaction <- 1
+  } else if (age.dx_pt.id > 60 & age.dx_pt.id <= 65 ) {
+    ageFaction <- 2
+  } else if (age.dx_pt.id > 65 & age.dx_pt.id <= 70 ) {
+    ageFaction <- 3
+  } else if (age.dx_pt.id > 70 & age.dx_pt.id <= 75 ) {
+    ageFaction <- 4
+  } else {
+    ageFaction <- 5
+  }
+
+  prediction.dataFull$ageFac <- ageFaction
+
+
+  # recSurgery
+  #0 - surgery GS 0
+  #1 - surgery GS q
+  #2 - no surgery
+
+  # recBiopsy
+  #0 - biopsy GS 0
+  #1 - biopsy GS q
+  #2 - no biopsy
+
+
+
+
+
+
+
+
+
+  return(prediction.dataFull)
 
   #p <- ggplot(prediction.data, aes(x=age, y=col2)) + geom_point(aes(x=age, y=col2)) + geom_line(aes(x=age, y=col2))
   #p <- p + labs(title = "Percent Chance of Aggressive Cancer", x = "Age", y = "P(Aggressive Tumor)")

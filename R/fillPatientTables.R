@@ -15,7 +15,7 @@
 # 4. Start biopsy dataframe
 # 5. Save data
 fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRUE) { #default file names
-  
+
   #vectorize
   #dataCheck(surg.data, demo.data, psa.data, bx.data) #do the checks need to be different?
   library(dplyr)
@@ -151,10 +151,8 @@ fillPatientTables <- function(demo.data, psa.data, bx.data, surg.data, IOP = TRU
 
   #standardize prostate volume, so that mean= 0 and std dev=1
   pt.data$vol.std <- as.vector(scale(pt.data$vol.avg)) # 1d vector
-  
-  ########### WORKING SO FAR, pt.data complete ##############
 
-  
+
   #log-transform PSA observations, make PSA dates numeric, define pt age at time of PSA, add volume data and new subj identifier
 
   #log-PSA

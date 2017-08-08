@@ -35,27 +35,19 @@ ptDataframes <- ProstatePackage::fillPatientTables(demo_data, psa_data, bx_data,
 
 inputPatient <- ProstatePackage::printIndividualData(198, ptDataframes)
 
-for (i in 1:200) {
-  printIndividualData(i, ptDataframes)
-}
 
-
-3. Prepare data and arguments for RJAGS by calling RJAGS on a required text file required for RJAGS use, as well as the formatted list patient.Dataframes.
+4. Prepare data and arguments for RJAGS by calling RJAGS on a required text file required for RJAGS use, as well as the formatted list patient.Dataframes.
 
 # Return RJAGS argument prep on formatted patient dataframes
 jagsPrep <- RJAGSprep(ptDataframes, TRUE)
 
-4. Execute RJAGS 
+5. Execute RJAGS 
 
 #independently
 
-5. Plot from predictions
+6. Plot from predictions
+plotPtData(pt.id, what.data="both", log.scale=T, plot.psad=F)
+plotBackgroundData(pt.id = 100, closest1000 = seq(1, 1000, by=1),  pt = ptDataframes, what.data="both", log.scale=T, plot.psad=F)
 
-meh <- c(1, 5, 19, 25)
-
-for (i in meh) {
-  sample <- getPredictions(i)
-  print(sample[2,])
-}
 
 
